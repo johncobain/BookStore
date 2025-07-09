@@ -1,0 +1,6 @@
+/home/john/workspace/BookStore/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IAuthenticationController.java
+/home/john/workspace/BookStore/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/ICore.java
+/home/john/workspace/BookStore/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IIOController.java
+/home/john/workspace/BookStore/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IPlugin.java
+/home/john/workspace/BookStore/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IPluginController.java
+/home/john/workspace/BookStore/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IUIController.java
