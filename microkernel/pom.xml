@@ -12,6 +12,7 @@
         <module>interfaces</module>
         <module>app</module>
         <module>plugins/myplugin</module>
+        <module>plugins/test-plugin</module>
         <!-- <module>plugins/user-plugin</module>
         <module>plugins/book-plugin</module>
         <module>plugins/loan-plugin</module>
@@ -19,7 +20,6 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
     </properties>
 </project>
