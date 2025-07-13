@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence 
+             https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+  
+  <!-- Persistence Unit compartilhada para todos os plugins -->
+  <persistence-unit name="bookstore-pu" transaction-type="RESOURCE_LOCAL">
+    
+    <!-- Entidades de todos os plugins -->
+    <class>br.edu.ifba.inf008.plugins.user.model.User</class>
+    <class>br.edu.ifba.inf008.plugins.book.model.Book</class>
+    <class>br.edu.ifba.inf008.plugins.loan.model.Loan</class>
+    <class>br.edu.ifba.inf008.plugins.report.model.Report</class>
+    
+    <properties>
+      <!-- Configuração do banco de dados -->
+      <property name="jakarta.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mariadb://127.0.0.1:3307/bookstore" />
+      <property name="jakarta.persistence.jdbc.user" value="root" />
+      <property name="jakarta.persistence.jdbc.password" value="root" />
+
+      <!-- Configuração do Hibernate -->
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDBDialect" />
+      <property name="hibernate.show_sql" value="true" />
+      <property name="hibernate.format_sql" value="true" />
+      <property name="hibernate.hbm2ddl.auto" value="update" />
+    </properties>
+  </persistence-unit>
+</persistence>

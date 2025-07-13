@@ -26,17 +26,6 @@ No arquivo `pom.xml` do seu user-plugin (e dos outros plugins), adicione as segu
         <version>3.4.0</version>
     </dependency>
 
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>22.0.1</version>
-    </dependency>
-
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-fxml</artifactId>
-        <version>22.0.1</version>
-    </dependency>
 </dependencies>
 ```
 

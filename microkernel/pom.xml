@@ -11,12 +11,10 @@
     <modules>
         <module>interfaces</module>
         <module>app</module>
-        <module>plugins/myplugin</module>
-        <module>plugins/test-plugin</module>
-        <!-- <module>plugins/user-plugin</module>
+        <module>plugins/user-plugin</module>
         <module>plugins/book-plugin</module>
         <module>plugins/loan-plugin</module>
-        <module>plugins/report-plugin</module> -->
+        <module>plugins/report-plugin</module>
     </modules>
 
     <properties>
