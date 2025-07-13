@@ -12,70 +12,75 @@ public abstract class BaseDAO<T, ID> implements IDAO<T, ID> {
 
   @Override
   public void save(T entity) {
-    EntityManager em = getEntityManager();
-    try{
-      em.getTransaction().begin();
-      em.persist(entity);
-      em.getTransaction().commit();
-    } catch (Exception e) {
-      em.getTransaction().rollback();
-      throw e;
-    } finally {
-      em.close();
+    try (EntityManager em = getEntityManager()) {
+      try{
+        em.getTransaction().begin();
+        em.persist(entity);
+        em.getTransaction().commit();
+      } catch (Exception e) {
+        em.getTransaction().rollback();
+        throw e;
+      } finally {
+        em.close();
+      }
     }
   }
 
   @Override
   public T findById(ID id) {
-    EntityManager em = getEntityManager();
-    try {
-      Class<T> entityClass = getEntityClass();
-      return em.find(entityClass, id);
-    } finally {
-      em.close();
+    try (EntityManager em = getEntityManager()) {
+      try {
+        Class<T> entityClass = getEntityClass();
+        return em.find(entityClass, id);
+      } finally {
+        em.close();
+      }
     }
   }
 
   @Override
   public List<T> findAll() {
-    EntityManager em = getEntityManager();
-    try {
-      Class<T> entityClass = getEntityClass();
-      String lpql = "SELECT e FROM " + entityClass.getSimpleName() + " e"; 
-      return em.createQuery(lpql, entityClass).getResultList();
-    } finally {
-      em.close();
+    try (EntityManager em = getEntityManager()) {
+      try {
+        Class<T> entityClass = getEntityClass();
+        String lpql = "SELECT e FROM " + entityClass.getSimpleName() + " e"; 
+        return em.createQuery(lpql, entityClass).getResultList();
+      } finally {
+        em.close();
+      }
     }
   }
 
   @Override
   public void update(T entity) {
-    EntityManager em = getEntityManager();
-    try {
-      em.getTransaction().begin();
-      em.merge(entity);
-      em.getTransaction().commit();
-    } catch (Exception e) {
-      em.getTransaction().rollback();
-      throw e;
-    } finally {
-      em.close();
+    try (EntityManager em = getEntityManager()) {
+      try {
+        em.getTransaction().begin();
+        em.merge(entity);
+        em.getTransaction().commit();
+      } catch (Exception e) {
+        em.getTransaction().rollback();
+        throw e;
+      } finally {
+        em.close();
+      }
     }
   }
 
   @Override
   public void delete(T entity) {
-    EntityManager em = getEntityManager();
-    try {
-      em.getTransaction().begin();
-      T managedEntity = em.merge(entity);
-      em.remove(managedEntity);
-      em.getTransaction().commit();
-    } catch (Exception e) {
-      em.getTransaction().rollback();
-      throw e;
-    } finally {
-      em.close();
+    try (EntityManager em = getEntityManager()) {
+      try {
+        em.getTransaction().begin();
+        T managedEntity = em.merge(entity);
+        em.remove(managedEntity);
+        em.getTransaction().commit();
+      } catch (Exception e) {
+        em.getTransaction().rollback();
+        throw e;
+      } finally {
+        em.close();
+      }
     }
   }
 
