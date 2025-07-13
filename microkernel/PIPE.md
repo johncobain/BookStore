@@ -47,8 +47,8 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 
 1. **Modelo de Dados**
 
-   - [ ] Criar classe `User.java` com anotações JPA (`@Entity`, `@Table`, `@Id`, `@Column`)
-   - [ ] Definir atributos: nome, email, dataDeRegistro
+   - [x] Criar classe `User.java` com anotações JPA (`@Entity`, `@Table`, `@Id`, `@Column`)
+   - [x] Definir atributos: nome, email, dataDeRegistro
 
 2. **Camada de Persistência**
 
