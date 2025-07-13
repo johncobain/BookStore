@@ -1,6 +1,5 @@
 package br.edu.ifba.inf008.shell;
 
-import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import javafx.application.Application;
 import javafx.geometry.Side;
@@ -14,9 +13,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class UIController extends Application implements IUIController
-{
-    private ICore core;
+public class UIController extends Application implements IUIController{
     private MenuBar menuBar;
     private TabPane tabPane;
     private static UIController uiController;
@@ -59,7 +56,7 @@ public class UIController extends Application implements IUIController
         // Criar o menu caso ele nao exista
         Menu newMenu = null;
         for (Menu menu : menuBar.getMenus()) {
-            if (menu.getText() == menuText) {
+            if (menu.getText().equals(menuText)) {
                 newMenu = menu;
                 break;
             }
