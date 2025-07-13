@@ -11,12 +11,12 @@ public class Core extends ICore
     private Core() {}
 
     public static boolean init() {
-	if (instance != null) {
-	    System.out.println("Fatal error: core is already initialized!");
-	    System.exit(-1);
-	}
+        if (instance != null) {
+            System.out.println("Fatal error: core is already initialized!");
+            System.exit(-1);
+        }
 
-	instance = new Core();
+	    instance = new Core();
         UIController.launch(UIController.class);
 
         return true;
