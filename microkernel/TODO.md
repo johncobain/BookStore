@@ -6,9 +6,11 @@
 
 - br.edu.ifba.inf008.plugins.user.ui (Classes do JavaFX: Controllers, FXML)
 
-- br.edu.ifba.inf008.plugins.user.persistence (Classes de acesso a dados, como UserDAO)
+- br.edu.ifba.inf008.plugins.user.persistence (Classes de acesso a dados, como UserDAO que estende BaseDAO)
 
-- br.edu.ifba.inf008.plugins.user.models (A classe User)
+- br.edu.ifba.inf008.plugins.user.model (A classe User com **referências fracas** para outros plugins)
+
+**🎯 IMPORTANTE:** Para garantir **modularidade real**, use apenas **IDs** para referenciar entidades de outros plugins, não objetos JPA diretos.
 
 ---
 
@@ -26,7 +28,11 @@ Neste módulo, você provavelmente não precisará criar novos controllers, mas 
 
 - IOController.java: Lida com operações de entrada e saída.
 
-O seu trabalho aqui é fazer com que o Core utilize esses controllers para montar a aplicação dinamicamente.
+- **BaseDAO.java**: Classe base genérica que implementa operações CRUD comuns. Todos os DAOs dos plugins devem estender esta classe.
+
+- **JPAUtil.java**: Utilitário centralizado para gerenciar EntityManagerFactory e fornecer EntityManager para os plugins.
+
+O seu trabalho aqui é fazer com que o Core utilize esses controllers para montar a aplicação dinamicamente, além de implementar a infraestrutura de persistência (BaseDAO, JPAUtil).
 
 ## Nos Módulos de Plugin
 
@@ -46,8 +52,9 @@ Para cada funcionalidade, você criará um conjunto completo de recursos no padr
 
 #### DAO (UserDAO.java)
 
-- **Função**: Isolar o acesso ao banco de dados para a tabela de usuários.
-- **Métodos**: salvar(User u), atualizar(User u), excluir(int id), buscarPorId(int id), listarTodos().
+- **Função**: Estender BaseDAO<User, Long> e implementar operações específicas de User.
+- **Métodos**: Herda save(), update(), delete(), findById(), findAll() do BaseDAO. Implementa métodos específicos como findByEmail().
+- **Implementação**: `public class UserDAO extends BaseDAO<User, Long> { ... }`
 
 #### Recurso - View (user-view.fxml)
 
@@ -66,8 +73,9 @@ Para cada funcionalidade, você criará um conjunto completo de recursos no padr
 
 #### DAO (BookDAO.java)
 
-- **Função**: Lidar com as operações de CRUD (Create, Read, Update, Delete) para a tabela de livros.
-- **Métodos**: salvar(Book b), atualizar(Book b), excluir(String isbn), listarTodos(), etc.
+- **Função**: Estender BaseDAO<Book, Long> para operações CRUD de livros.
+- **Métodos**: Herda operações básicas do BaseDAO. Implementa métodos específicos como findByIsbn(), findByTitle().
+- **Implementação**: `public class BookDAO extends BaseDAO<Book, Long> { ... }`
 
 #### Recurso - View (book-view.fxml)
 
@@ -83,12 +91,14 @@ Para cada funcionalidade, você criará um conjunto completo de recursos no padr
 #### Modelo (Loan.java)
 
 - **Função**: Representar a associação entre um usuário, um livro e as datas.
-- **Atributos**: id, um objeto User, um objeto Book, dataEmprestimo, dataDevolucao.
+- **Atributos**: id, **userId** (Long), **bookId** (Long), dataEmprestimo, dataDevolucao.
+- **⚠️ IMPORTANTE**: Usar **referências fracas** (IDs) em vez de objetos User/Book para manter independência dos plugins.
 
 #### DAO (LoanDAO.java)
 
-- **Função**: Gerenciar os registros na tabela de empréstimos.
-- **Métodos**: realizarEmprestimo(Loan l) (este método deve ser transacional: cria o registro de empréstimo E diminui a quantidade de cópias do livro), registrarDevolucao(int loanId) (aumenta a quantidade de cópias do livro), listarEmprestimosAtivos().
+- **Função**: Estender BaseDAO<Loan, Long> e gerenciar empréstimos.
+- **Métodos**: Herda operações básicas. Implementa createLoan(Long userId, Long bookId), findActiveLoans(), returnBook(Long loanId).
+- **Validações**: Implementar verificações opcionais de existência de User/Book com graceful degradation.
 
 #### Recurso - View (loan-view.fxml)
 
@@ -103,8 +113,10 @@ Para cada funcionalidade, você criará um conjunto completo de recursos no padr
 
 #### DAO (ReportDAO.java)
 
-- **Função**: Executar a consulta SQL específica para o relatório.
-- **Método**: gerarRelatorioLivrosEmprestados(). Este método fará uma consulta JOIN entre as tabelas loans, books e users para buscar o título do livro, o nome do usuário e a data do empréstimo.
+- **Função**: Estender BaseDAO para executar consultas específicas de relatório.
+- **Método**: gerarRelatorioLivrosEmprestados() usando JPQL com referências por ID.
+- **Exemplo**: `SELECT l.id, l.userId, l.bookId, l.loanDate FROM Loan l WHERE l.returnDate IS NULL`
+- **Resolução**: Buscar nomes de User/Book por ID quando necessário (com validação de plugin presente).
 
 #### Recurso - View (report-view.fxml)
 

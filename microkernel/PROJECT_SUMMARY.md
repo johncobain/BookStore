@@ -22,10 +22,12 @@ microkernel/
 ├── app/                          # 🎯 CORE - Microkernel
 │   ├── persistence.xml           # ✅ Configuração centralizada
 │   ├── JPAUtil.java              # ✅ Gerenciador de persistência
+│   ├── BaseDAO.java              # ✅ Classe base para DAOs
 │   └── Core, UIController, etc.  # ✅ Controladores do núcleo
 │
 ├── interfaces/                   # ✅ Contratos comuns
-│   └── IPlugin.java              # ✅ Interface para plugins
+│   ├── IPlugin.java              # ✅ Interface para plugins
+│   └── IDAO.java                 # ✅ Interface genérica DAO
 │
 └── plugins/                      # 🔌 PLUGINS MODULARES
     ├── user-plugin/              # ✅ Plugin de usuários
@@ -34,12 +36,31 @@ microkernel/
     └── report-plugin/            # ✅ Plugin de relatórios
 ```
 
-### ✅ **Sistema de Persistência Compartilhada:**
+### ✅ **Sistema de Persistência Modular:**
 
-- **Configuração única:** `/app/src/main/resources/META-INF/persistence.xml`
-- **Hibernate centralizado:** Dependências no `app/pom.xml`
-- **Delegação transparente:** Plugins usam `JPAUtil.getEntityManager()`
-- **Unidade única:** `"bookstore-pu"` para todos os plugins
+- **BaseDAO genérico:** `/app/src/main/java/.../persistence/BaseDAO.java`
+- **Interface IDAO:** `/interfaces/src/main/java/.../interfaces/IDAO.java`
+- **DAOs específicos:** Cada plugin estende BaseDAO para suas necessidades
+- **Referências fracas:** Plugins usam IDs em vez de objetos JPA para relacionamentos
+- **Verdadeira modularidade:** Qualquer plugin pode ser removido sem quebrar outros
+
+### ✅ **Arquitetura de Referências Fracas:**
+
+**Problema tradicional:**
+
+```java
+// ❌ Acoplamento forte
+@ManyToOne
+private User user;  // Se user-plugin for removido, quebra
+```
+
+**Solução implementada:**
+
+```java
+// ✅ Referência fraca
+@Column(name = "user_id") 
+private Long userId;  // Plugin independente
+```
 
 ## 🚀 Status Atual - SEMANA 1 CONCLUÍDA
 
@@ -94,19 +115,17 @@ public class User {
 
 ```java
 // user-plugin/src/main/java/.../persistence/UserDAO.java
-public class UserDAO {
-    public void save(User user) {
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
-            em.getTransaction().begin();
-            em.persist(user);
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
+public class UserDAO extends BaseDAO<User, Long> {
+    
+    @Override
+    protected Class<User> getEntityClass() {
+        return User.class;
     }
-
-    // findById(), findAll(), update(), delete()...
+    
+    // Métodos específicos de User
+    public List<User> findByEmail(String email) {
+        // Implementação específica usando EntityManager
+    }
 }
 ```
 
@@ -160,8 +179,9 @@ docker exec -it bookstore-mariadb mariadb -u root -p bookstore
 ### **Semana 3 - Replicação:**
 
 1. **User-plugin como template** - Copie e adapte para Book e Loan
-2. **Relacionamentos JPA** - Use `@ManyToOne` e `@OneToMany`
-3. **Transações** - Especialmente para Loan (empréstimo + diminuir estoque)
+2. **Referências fracas por ID** - Use `@Column` em vez de `@ManyToOne`
+3. **Validações opcionais** - Implementar graceful degradation para plugins ausentes
+4. **Transações independentes** - Cada plugin gerencia suas próprias transações
 
 ### **Semana 4 - Finalização:**
 
@@ -175,9 +195,10 @@ docker exec -it bookstore-mariadb mariadb -u root -p bookstore
 ### ✅ **Arquitetura Exemplar:**
 
 - **Separação de responsabilidades** clara
-- **Configuração centralizada** profissional
-- **Padrão de delegação** bem implementado
-- **Modularidade** real com plugins independentes
+- **Configuração centralizada** profissional  
+- **Modularidade real** com plugins completamente independentes
+- **Padrão BaseDAO** reutilizável e consistente
+- **Referências fracas** garantem verdadeira modularidade
 
 ### ✅ **Base Técnica Sólida:**
 
@@ -205,10 +226,11 @@ docker exec -it bookstore-mariadb mariadb -u root -p bookstore
 Um sistema completo de livraria que demonstra:
 
 - ✅ **Arquitetura de microkernel** implementada
-- ✅ **Plugins modulares** funcionais
-- ✅ **Persistência compartilhada** robusta
+- ✅ **Plugins verdadeiramente modulares** - removíveis sem quebrar o sistema
+- ✅ **Persistência baseada em padrões** com BaseDAO reutilizável
 - ✅ **Interface gráfica** intuitiva
 - ✅ **Operações CRUD** completas
+- ✅ **Referências fracas** entre plugins para máxima independência
 - ✅ **Relatórios** informativos
 
-**Você está no caminho certo para entregar um projeto de excelência!** 🚀
+**Diferencial:** Sistema onde qualquer plugin pode ser removido e o restante continua funcionando perfeitamente! 🚀
