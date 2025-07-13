@@ -137,10 +137,10 @@ mvn test
 
 ## 📖 Documentação
 
-- [`DATABASE_CONFIG.md`](microkernel/DATABASE_CONFIG.md) - Configuração detalhada do banco
-- [`PROJECT_SUMMARY.md`](microkernel/PROJECT_SUMMARY.md) - Visão geral e cronograma
-- [`HIBERNATE.md`](microkernel/HIBERNATE.md) - Configuração do Hibernate
-- [`PLUGIN.md`](microkernel/PLUGIN.md) - Guia de desenvolvimento de plugins
+- [`ARCHITECTURE.md`](microkernel/ARCHITECTURE.md) - Arquitetura e padrões do sistema
+- [`SETUP.md`](microkernel/SETUP.md) - Configuração do ambiente e instalação
+- [`DEVELOPMENT.md`](microkernel/DEVELOPMENT.md) - Desenvolvimento de plugins
+- [`UI_GUIDE.md`](microkernel/UI_GUIDE.md) - Interface gráfica e testes
 
 ## 🤝 Contribuindo
 

@@ -52,9 +52,9 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 
 2. **Camada de Persistência**
 
-   - [ ] Implementar `UserDAO.java` usando EntityManager
-   - [ ] Métodos: `save()`, `update()`, `delete()`, `findById()`, `findAll()`
-   - [ ] Gerenciar transações adequadamente
+   - [x] Implementar `UserDAO.java` usando EntityManager
+   - [x] Métodos: `save()`, `update()`, `delete()`, `findById()`, `findAll()`
+   - [x] Gerenciar transações adequadamente
 
 3. **Interface Gráfica**
 
@@ -68,9 +68,9 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
    - [ ] Criar menu/botão para acessar gestão de usuários
 
 5. **Testes Funcionais** (Recomendado)
-   - [ ] Criar `UserDAOTest.java`
-   - [ ] Testar cada operação CRUD
-   - [ ] Validar regras de negócio
+   - [x] Criar `UserDAOTest.java`
+   - [x] Testar cada operação CRUD
+   - [x] Validar regras de negócio
 
 **🚀 Resultado:** Desenvolvimento mais rápido que JDBC puro, menos propenso a erros.
 
@@ -161,73 +161,3 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 - [ ] Incluir instruções de execução
 
 ---
-
-## Detalhes de Implementação com Hibernate
-
-### Impacto por Semana
-
-#### Semana 1: Maior Investimento em Configuração
-
-- **Dependências:** Adicionar `hibernate-core` e `mariadb-java-client` nos POMs
-- **Configuração:** Criar `persistence.xml` com conexão e dialeto MariaDB
-- **Utilitários:** Implementar `JPAUtil` para gerenciar EntityManagerFactory
-- **Resultado:** 🧠 Maior esforço inicial, mas base sólida para desenvolvimento
-
-#### Semana 2: Foco em Mapeamento de Objetos
-
-- **Anotações JPA:** `@Entity`, `@Table`, `@Id`, `@Column` na classe User
-- **DAO Simplificado:** Usar `entityManager.persist()` em vez de SQL manual
-- **Resultado:** 🚀 Desenvolvimento mais rápido e menos propenso a erros
-
-#### Semana 3: Aceleração Massiva
-
-- **Reaproveitamento:** BookDAO baseado no UserDAO
-- **Relacionamentos:** Usar `@ManyToOne` para mapear Loan → User/Book
-- **Transações:** Hibernate gerencia automaticamente
-- **Resultado:** ⚡ Produtividade máxima na semana
-
-#### Semana 4: JPQL para Relatórios
-
-- **Consultas:** Usar JPQL em vez de SQL nativo
-- **Exemplo:** `SELECT b.titulo, u.name FROM Loan l JOIN l.book b JOIN l.user u`
-- **Resultado:** 📖 Pequena curva de aprendizado, resto igual
-
----
-
-## Como Incluir Testes Unitários (Recomendado)
-
-Para garantir os 0,5 pontos de testes funcionais e maior qualidade:
-
-### Abordagem Incremental
-
-#### Semana 2 (Plugin de Usuários)
-
-- Criar `UserDAOTest.java` após implementar UserDAO
-- Testar cada operação CRUD individualmente
-- **Vantagem:** Validar camada de dados antes da UI
-
-#### Semana 3 (Plugins de Livros e Empréstimos)
-
-- Repetir processo: `BookDAOTest.java` e `LoanDAOTest.java`
-- **Foco especial:** Testar regras de negócio no LoanDAO
-- Validar transações (empréstimo + diminuir estoque)
-
-### Exemplo de Estrutura de Teste
-
-```java
-@Test
-public void testSalvarUsuario() {
-    User user = new User("João", "joao@email.com");
-    userDAO.save(user);
-    assertNotNull(user.getId());
-}
-
-@Test
-public void testRealizarEmprestimo() {
-    // Testar se diminui estoque corretamente
-    int estoqueBefore = book.getQuantidadeCopiasDisponiveis();
-    loanDAO.realizarEmprestimo(loan);
-    int estoqueAfter = book.getQuantidadeCopiasDisponiveis();
-    assertEquals(estoqueBefore - 1, estoqueAfter);
-}
-```

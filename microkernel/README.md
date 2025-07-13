@@ -1,4 +1,6 @@
-# Build instructions
+# BookStore Microkernel
+
+## Build instructions
 
 mvn install
 
@@ -9,14 +11,14 @@ mvn exec:java -pl app
 ## New plugin creation instructions
 
 1. Create your plugin folder in "plugins"
-2. Add you new plugin submodule in main pom.xml:
+2. Add your new plugin submodule in main pom.xml:
 
    ```xml
        <modules>
            <module>interfaces</module>
            <module>app</module>
            <module>plugins/myplugin</module>
-           ADD IT HERE
+           <!-- ADD YOUR PLUGIN HERE -->
        </modules>
    ```
 
@@ -24,7 +26,7 @@ mvn exec:java -pl app
 4. Create your DAO extending BaseDAO<Entity, ID>:
 
    ```java
-   public class MyDAO extends BaseDAO<MyEntity, Long> {
+   public class MyDAO extends BaseDAO<MyEntity, Integer> {
        @Override
        protected Class<MyEntity> getEntityClass() {
            return MyEntity.class;
@@ -32,20 +34,27 @@ mvn exec:java -pl app
    }
    ```
 
-5. Use **weak references** (IDs only) to other plugins' entities
-6. Remember to use plugin's package conventions:
-
-   `br/edu/ifba/inf008/plugins/<YourPluginNameInCamelCase>.java`
-
-7. Run "mvn install" and "mvn exec:java -pl app"
+5. **Use core models:** Import from `br.edu.ifba.inf008.shell.model.*` (don't duplicate models)
+6. **Use weak references:** IDs only to other plugins' entities
+7. Remember plugin package conventions: `br/edu/ifba/inf008/plugins/<YourPluginNameInCamelCase>.java`
+8. Run "mvn install" and "mvn exec:java -pl app"
 
 ## Modular Architecture
 
-This project implements **true modularity** - any plugin can be removed without breaking the system:
+This project implements **true modularity** goal - plugins should be removable without breaking the system:
 
 - ✅ Plugins use BaseDAO for consistent CRUD operations
-- ✅ Entities reference other plugins by ID only (weak references)  
-- ✅ System gracefully degrades when plugins are missing
-- ✅ Compilation succeeds even with removed plugins
+- ⚠️ **Currently only User model** centralized (Book, Loan, Report pending)
+- ✅ System designed for graceful degradation when plugins are missing
+- ⚠️ **Full independence** pending completion of core models
 
-**📖 For details:** See [MODULAR_ARCHITECTURE.md](MODULAR_ARCHITECTURE.md)
+## Documentation
+
+� **Complete Documentation:**
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design patterns
+- **[SETUP.md](SETUP.md)** - Environment setup and configuration
+- **[DEVELOPMENT.md](DEVELOPMENT.md)** - Plugin development and best practices  
+- **[UI_GUIDE.md](UI_GUIDE.md)** - User interface development and testing
+
+**💡 Key Insight:** Models must be in core (not plugins) for true modularity. Plugins should only contain DAOs, Controllers, and Views.
