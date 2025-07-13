@@ -1,4 +1,4 @@
-# 📚 BookStore - Sistema de Livraria com Microkernel
+# 📚 BookStore Blackbird - Sistema de Livraria com Microkernel
 
 Sistema completo de gerenciamento de livraria desenvolvido com **arquitetura de microkernel** e **plugins modulares**. Projeto acadêmico que demonstra conceitos avançados de engenharia de software.
 
