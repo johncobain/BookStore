@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.plugins.user.model;
+package br.edu.ifba.inf008.shell.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -10,6 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * Entidade User - Representa um usuário no sistema de livraria.
+ * Esta entidade está no core para garantir que todos os plugins possam referenciar usuários
+ * sem dependências entre plugins.
+ */
 @Entity
 @Table(name = "users")
 public class User {
@@ -18,16 +23,19 @@ public class User {
   @Column(name = "user_id")
   private Integer userId;
 
+  @Column(name = "name", nullable = false, length = 255)
   private String name;
 
+  @Column(name = "email", nullable = false, unique = true, length = 255)
   private String email;
 
   @Column(name = "registered_at")
   private LocalDateTime registeredAt;
 
-   public User() {}
+  public User() {}
 
   public User(String name, String email) {
+      this();
       this.name = name;
       this.email = email;
       this.registeredAt = LocalDateTime.now();
@@ -85,7 +93,7 @@ public class User {
       sb.append(", name=").append(name);
       sb.append(", email=").append(email);
       sb.append(", registeredAt=").append(registeredAt);
-      sb.append('}');
+      sb.append("}");
       return sb.toString();
   }
 }

@@ -9,10 +9,10 @@
   <persistence-unit name="bookstore-pu" transaction-type="RESOURCE_LOCAL">
     
     <!-- Entidades de todos os plugins -->
-    <class>br.edu.ifba.inf008.plugins.user.model.User</class>
-    <class>br.edu.ifba.inf008.plugins.book.model.Book</class>
-    <class>br.edu.ifba.inf008.plugins.loan.model.Loan</class>
-    <class>br.edu.ifba.inf008.plugins.report.model.Report</class>
+    <class>br.edu.ifba.inf008.shell.model.User</class>
+    <class>br.edu.ifba.inf008.shell.model.Book</class>
+    <class>br.edu.ifba.inf008.shell.model.Loan</class>
+    <class>br.edu.ifba.inf008.shell.model.Report</class>
     
     <properties>
       <!-- Configuração do banco de dados -->
