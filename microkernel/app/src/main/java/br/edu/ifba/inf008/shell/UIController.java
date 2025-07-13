@@ -1,21 +1,18 @@
 package br.edu.ifba.inf008.shell;
 
-import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.interfaces.ICore;
-import br.edu.ifba.inf008.shell.PluginController;
-
+import br.edu.ifba.inf008.interfaces.IUIController;
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.application.Platform;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.Tab;
 import javafx.geometry.Side;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class UIController extends Application implements IUIController
 {
@@ -57,6 +54,7 @@ public class UIController extends Application implements IUIController
         Core.getInstance().getPluginController().init();
     }
 
+    @Override
     public MenuItem createMenuItem(String menuText, String menuItemText) {
         // Criar o menu caso ele nao exista
         Menu newMenu = null;
@@ -78,6 +76,7 @@ public class UIController extends Application implements IUIController
         return menuItem;
     }
 
+    @Override
     public boolean createTab(String tabText, Node contents) {
         Tab tab = new Tab();
         tab.setText(tabText);
