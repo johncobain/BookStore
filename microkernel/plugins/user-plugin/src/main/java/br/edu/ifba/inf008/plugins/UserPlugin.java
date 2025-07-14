@@ -1,35 +1,60 @@
 package br.edu.ifba.inf008.plugins;
 
+import java.io.IOException;
+
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.VBox;
 
 public class UserPlugin implements IPlugin {
   @Override
   public boolean init(){
-    System.out.println(">>>>>>>>> User Plugin has been loaded <<<<<<<<<");
+    System.out.println("🔌 UserPlugin...");
 
-    IUIController uiControler = ICore.getInstance().getUIController();
+    try{
+      IUIController uiController = ICore.getInstance().getUIController();
 
-    MenuItem menuItem = uiControler.createMenuItem("User", "Execute User Plugin");
+      MenuItem menuItem = uiController.createMenuItem("Management", "Users");
 
-    menuItem.setOnAction(event -> {
-      VBox content = new VBox(10);
-      content.setPadding(new Insets(20));
-      content.getChildren().addAll(
-        new Label("User Plugin Working!"),
-        new Label("This plugin was loaded by the microkernel!"),
-        new Label("Date/Time: " + java.time.LocalDateTime.now())
+      Runnable openUsersInterface = () -> {
+        System.out.println("🎯 Oppening Users Interface...");
+        try {
+          ClassLoader classLoader = getClass().getClassLoader();
+          FXMLLoader loader = new FXMLLoader(
+            classLoader.getResource("br/edu/ifba/inf008/plugins/user/ui/user-management.fxml")
+          );
+
+          loader.setClassLoader(classLoader);
+
+          Node content = loader.load();
+          uiController.createTab("👥 User Management", content);
+
+          System.out.println("✅ Interface loaded successfully!");
+        } catch(IOException e) {
+          System.err.println("❌ Error opening Users Interface: " + e.getMessage());
+          uiController.showAlert("Error", "Failed to open Users Interface: " + e.getMessage());
+        }
+      };
+
+      menuItem.setOnAction(e -> openUsersInterface.run());
+
+      uiController.addPluginCard(
+        "user-plugin", 
+        "👥", 
+        "User Management",
+        "Manage library users.",
+        openUsersInterface
       );
 
-      uiControler.createTab("User", content);
+      System.out.println("✅ UserPlugin initialized successfully!");
+      return true;
 
-      System.out.println("User Plugin executed - new tab created!");
-    });
-    return true;
+    } catch (Exception e) {
+      System.err.println("❌ Error initializing UserPlugin: " + e.getMessage());
+      return false;
+    }
   }
 }

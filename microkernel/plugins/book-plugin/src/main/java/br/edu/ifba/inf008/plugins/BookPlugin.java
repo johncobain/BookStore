@@ -11,25 +11,44 @@ import javafx.scene.layout.VBox;
 public class BookPlugin implements IPlugin {
   @Override
   public boolean init(){
-    System.out.println(">>>>>>>>> Book Plugin has been loaded <<<<<<<<<");
+    System.out.println("🔌 BookPlugin...");
 
-    IUIController uiControler = ICore.getInstance().getUIController();
+    try{
+      IUIController uiController = ICore.getInstance().getUIController();
 
-    MenuItem menuItem = uiControler.createMenuItem("Book", "Execute Book Plugin");
+      MenuItem menuItem = uiController.createMenuItem("Management", "Books");
 
-    menuItem.setOnAction(event -> {
-      VBox content = new VBox(10);
-      content.setPadding(new Insets(20));
-      content.getChildren().addAll(
-        new Label("Book Plugin Working!"),
-        new Label("This plugin was loaded by the microkernel!"),
-        new Label("Date/Time: " + java.time.LocalDateTime.now())
+      Runnable openBooksInterface = () -> {
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(20));
+        content.getChildren().addAll(
+          new Label("Book Plugin Working!"),
+          new Label("This plugin was loaded by the microkernel!"),
+          new Label("Date/Time: " + java.time.LocalDateTime.now())
+        );
+
+        uiController.createTab("📚 Book Management", content);
+
+        System.out.println("Book Plugin executed - new tab created!");
+      };
+
+      menuItem.setOnAction(e -> openBooksInterface.run());
+
+       uiController.addPluginCard(
+        "book-plugin",
+        "📚",
+        "Book Management",
+        "Manage your books.",
+        openBooksInterface
       );
 
-      uiControler.createTab("Book", content);
 
-      System.out.println("Book Plugin executed - new tab created!");
-    });
-    return true;
+      System.out.println("✅ BookPlugin initialized successfuly!");
+      return true;
+
+    } catch (Exception e) {
+      System.err.println("❌ Error initializing BookPlugin: " + e.getMessage());
+      return false;
+    }
   }
 }

@@ -11,25 +11,43 @@ import javafx.scene.layout.VBox;
 public class LoanPlugin implements IPlugin {
   @Override
   public boolean init(){
-    System.out.println(">>>>>>>>> Loan Plugin has been loaded <<<<<<<<<");
+    System.out.println("🔌 LoanPlugin...");
 
-    IUIController uiControler = ICore.getInstance().getUIController();
+    try{
+      IUIController uiController = ICore.getInstance().getUIController();
 
-    MenuItem menuItem = uiControler.createMenuItem("Loan", "Execute Loan Plugin");
+      MenuItem menuItem = uiController.createMenuItem("Management", "Loans");
 
-    menuItem.setOnAction(event -> {
-      VBox content = new VBox(10);
-      content.setPadding(new Insets(20));
-      content.getChildren().addAll(
-        new Label("Loan Plugin Working!"),
-        new Label("This plugin was loaded by the microkernel!"),
-        new Label("Date/Time: " + java.time.LocalDateTime.now())
+      Runnable openLoansInterface = () -> {
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(20));
+        content.getChildren().addAll(
+          new Label("Loan Plugin Working!"),
+          new Label("This plugin was loaded by the microkernel!"),
+          new Label("Date/Time: " + java.time.LocalDateTime.now())
       );
 
-      uiControler.createTab("Loan", content);
+      uiController.createTab("📋 Loan Management", content);
 
       System.out.println("Loan Plugin executed - new tab created!");
-    });
-    return true;
+      };
+
+      menuItem.setOnAction(e -> openLoansInterface.run());
+
+      uiController.addPluginCard(
+        "loan-plugin",
+        "📋",
+        "Loan Management",
+        "Track book loans.",
+        openLoansInterface
+      );
+
+      System.out.println("✅ LoanPlugin initialized successfully!");
+      return true;
+
+    } catch (Exception e) {
+      System.err.println("❌ Error initializing LoanPlugin: " + e.getMessage());
+      return false;
+    }
   }
 }
