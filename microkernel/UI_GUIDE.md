@@ -59,25 +59,463 @@ public class ExamplePlugin implements IPlugin {
 
 ### Ferramentas Recomendadas
 
-#### 1. IntelliJ IDEA + Scene Builder
+#### VS Code + Scene Builder: Configuração Completa
 
-**Scene Builder** é uma ferramenta visual para criar interfaces FXML:
+**VS Code** oferece uma excelente experiência para desenvolvimento JavaFX quando configurado adequadamente. Combinado com **Scene Builder**, proporciona um ambiente poderoso e eficiente.
+
+##### 1. Instalação do Scene Builder
 
 ```bash
-# Download Scene Builder
-# https://gluonhq.com/products/scene-builder/
+# Ubuntu/Debian - via Snap (recomendado)
+sudo snap install scenebuilder
 
-# Configurar no IntelliJ:
-# File → Settings → Languages & Frameworks → JavaFX
-# Path to SceneBuilder: /path/to/SceneBuilder
+# Ubuntu/Debian - via .deb
+wget https://download2.gluonhq.com/scenebuilder/17.0.0/install/linux/SceneBuilder-17.0.0.deb
+sudo dpkg -i SceneBuilder-17.0.0.deb
+
+# Fedora/CentOS/RHEL
+sudo rpm -i https://download2.gluonhq.com/scenebuilder/17.0.0/install/linux/SceneBuilder-17.0.0.rpm
+
+# Arch Linux
+yay -S scenebuilder
+
+# Verificar instalação
+which scenebuilder
+scenebuilder --version
 ```
 
-**Vantagens:**
+##### 2. Configuração do VS Code para JavaFX
 
-- Design visual drag-and-drop
-- Código FXML limpo e organizado
-- Separação entre UI e lógica
-- Preview em tempo real
+**Extensões Essenciais:**
+
+```bash
+# Instalar extensões via linha de comando
+code --install-extension vscjava.vscode-java-pack
+code --install-extension vscjava.vscode-maven
+code --install-extension ms-vscode.vscode-json
+code --install-extension bradlc.vscode-tailwindcss  # Para CSS
+code --install-extension formulahendry.code-runner
+```
+
+**Extensões Recomendadas:**
+
+- **Extension Pack for Java** (RedHat) - Pacote completo Java
+- **Maven for Java** - Suporte Maven integrado
+- **Debugger for Java** - Debug avançado
+- **Test Runner for Java** - Execução de testes
+- **Project Manager for Java** - Gerenciamento de projetos
+- **Language Support for Java** - IntelliSense Java
+- **XML** (Red Hat) - Suporte FXML aprimorado
+- **CSS Peek** - Navegação CSS
+- **Auto Rename Tag** - Renomeação automática de tags XML
+- **Bracket Pair Colorizer** - Destaque de brackets
+- **GitLens** - Git integrado avançado
+
+##### 3. Configuração do Workspace VS Code
+
+**Criar `.vscode/settings.json`:**
+
+```json
+{
+  "java.home": "/usr/lib/jvm/java-24-openjdk-amd64",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-24",
+      "path": "/usr/lib/jvm/java-24-openjdk-amd64",
+      "default": true
+    }
+  ],
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.checkProjectSettingsExclusions": false,
+  "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+  "java.saveActions.organizeImports": true,
+  "java.completion.favoriteStaticMembers": [
+    "org.junit.jupiter.api.Assertions.*",
+    "javafx.application.Platform.*"
+  ],
+  "files.associations": {
+    "*.fxml": "xml"
+  },
+  "xml.validation.enabled": true,
+  "xml.validation.namespaces.enabled": "always",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "maven.terminal.useJavaHome": true,
+  "maven.executable.path": "/usr/bin/mvn",
+  "code-runner.executorMap": {
+    "java": "cd $dir && mvn exec:java -pl app"
+  }
+}
+```
+
+**Criar `.vscode/launch.json`:**
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "BookStore Application",
+      "request": "launch",
+      "mainClass": "br.edu.ifba.inf008.App",
+      "projectName": "app",
+      "cwd": "${workspaceFolder}",
+      "vmArgs": [
+        "--module-path",
+        "/home/john/javafx/javafx-sdk-21.0.2/lib",
+        "--add-modules",
+        "javafx.controls,javafx.fxml,javafx.web"
+      ],
+      "args": [],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "java",
+      "name": "Debug BookStore",
+      "request": "launch",
+      "mainClass": "br.edu.ifba.inf008.App",
+      "projectName": "app",
+      "cwd": "${workspaceFolder}",
+      "vmArgs": [
+        "--module-path",
+        "/home/john/javafx/javafx-sdk-21.0.2/lib",
+        "--add-modules",
+        "javafx.controls,javafx.fxml,javafx.web",
+        "-Djavafx.verbose=true"
+      ],
+      "args": [],
+      "console": "integratedTerminal",
+      "stopOnEntry": false
+    }
+  ]
+}
+```
+
+**Criar `.vscode/tasks.json`:**
+
+```json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Clean and Compile",
+      "type": "shell",
+      "command": "mvn",
+      "args": ["clean", "compile"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": "$java"
+    },
+    {
+      "label": "Package Application",
+      "type": "shell",
+      "command": "mvn",
+      "args": ["clean", "package"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": "$java"
+    },
+    {
+      "label": "Run BookStore",
+      "type": "shell",
+      "command": "mvn",
+      "args": ["exec:java", "-pl", "app"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Tests",
+      "type": "shell",
+      "command": "mvn",
+      "args": ["test"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": "$java"
+    },
+    {
+      "label": "Open Scene Builder",
+      "type": "shell",
+      "command": "scenebuilder",
+      "args": ["${file}"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    }
+  ]
+}
+```
+
+##### 4. Integração Scene Builder com VS Code
+
+**Configurar abertura automática:**
+
+1. **Associar arquivos .fxml ao Scene Builder:**
+
+   ```bash
+   # Definir Scene Builder como editor padrão para .fxml
+   echo '[Default Applications]
+   application/fxml=scenebuilder.desktop' >> ~/.local/share/applications/mimeapps.list
+
+   # Criar entrada no menu de contexto
+   mkdir -p ~/.local/share/file-manager/actions
+   cat > ~/.local/share/file-manager/actions/scenebuilder.desktop << 'EOF'
+   [Desktop Entry]
+   Type=Action
+   Name=Open with Scene Builder
+   Icon=scenebuilder
+   Profiles=profile-zero;
+
+   [X-Action-Profile profile-zero]
+   Exec=scenebuilder %f
+   MimeTypes=application/xml;text/xml;
+   Name=Default profile
+   EOF
+   ```
+
+2. **Comando rápido no VS Code:**
+
+   ```json
+   // Em settings.json, adicionar:
+   "files.associations": {
+     "*.fxml": "xml"
+   },
+   "terminal.integrated.env.linux": {
+     "SCENE_BUILDER_HOME": "/snap/scenebuilder/current"
+   }
+   ```
+
+3. **Snippet para abrir Scene Builder:**
+
+```json
+// Em .vscode/settings.json
+"editor.quickSuggestions": {
+  "strings": true
+},
+"editor.suggest.snippetsPreventQuickSuggestions": false
+```
+
+**Criar `.vscode/fxml.code-snippets`:**
+
+```json
+{
+  "Open in Scene Builder": {
+    "prefix": "scenebuilder",
+    "body": [
+      "// Open current .fxml file in Scene Builder:",
+      "// Ctrl+Shift+P -> Tasks: Run Task -> Open Scene Builder"
+    ],
+    "description": "Reminder to open FXML in Scene Builder"
+  },
+  "FXML Template": {
+    "prefix": "fxml",
+    "body": [
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+      "",
+      "<?import javafx.geometry.Insets?>",
+      "<?import javafx.scene.control.*?>",
+      "<?import javafx.scene.layout.*?>",
+      "",
+      "<${1:VBox} xmlns=\"http://javafx.com/javafx/11.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\"",
+      "      fx:controller=\"${2:br.edu.ifba.inf008.controller.Controller}\">",
+      "   <children>",
+      "      $3",
+      "   </children>",
+      "   <padding>",
+      "      <Insets bottom=\"20.0\" left=\"20.0\" right=\"20.0\" top=\"20.0\" />",
+      "   </padding>",
+      "</${1:VBox}>"
+    ],
+    "description": "FXML template with controller"
+  },
+  "JavaFX Controller": {
+    "prefix": "fxcontroller",
+    "body": [
+      "package ${1:br.edu.ifba.inf008.controller};",
+      "",
+      "import javafx.fxml.FXML;",
+      "import javafx.fxml.Initializable;",
+      "import javafx.scene.control.*;",
+      "import javafx.event.ActionEvent;",
+      "",
+      "import java.net.URL;",
+      "import java.util.ResourceBundle;",
+      "",
+      "public class ${2:Controller} implements Initializable {",
+      "",
+      "    @Override",
+      "    public void initialize(URL url, ResourceBundle resourceBundle) {",
+      "        $3",
+      "    }",
+      "",
+      "}"
+    ],
+    "description": "JavaFX Controller template"
+  }
+}
+```
+
+##### 5. Workflow Recomendado VS Code + Scene Builder
+
+**Fluxo de Desenvolvimento:**
+
+1. **Criar Layout no Scene Builder:**
+
+   ```bash
+   # 1. Criar novo arquivo .fxml no VS Code
+   touch src/main/resources/fxml/new-interface.fxml
+
+   # 2. Abrir no Scene Builder via Command Palette:
+   # Ctrl+Shift+P -> Tasks: Run Task -> Open Scene Builder
+
+   # 3. Ou via terminal integrado:
+   scenebuilder src/main/resources/fxml/new-interface.fxml
+   ```
+
+2. **Definir Controller no Scene Builder:**
+
+   - **Controller class:** `br.edu.ifba.inf008.controller.NewController`
+   - **fx:id** para elementos que precisam de interação
+   - **onAction** para botões e eventos
+
+3. **Gerar Controller no VS Code:**
+
+   ```java
+   // Usar snippet fxcontroller
+   // Ctrl+Shift+P -> Insert Snippet -> JavaFX Controller
+   ```
+
+4. **Conectar campos FXML:**
+
+```java
+@FXML private TextField nameField;
+@FXML private Button saveButton;
+@FXML private TableView<User> dataTable;
+```
+
+##### 6. Atalhos Produtivos VS Code
+
+**Atalhos Customizados (keybindings.json):**
+
+```json
+[
+  {
+    "key": "ctrl+shift+s",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Open Scene Builder",
+    "when": "editorLangId == xml && resourceExtname == .fxml"
+  },
+  {
+    "key": "ctrl+shift+r",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Run BookStore"
+  },
+  {
+    "key": "ctrl+shift+t",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Run Tests"
+  },
+  {
+    "key": "ctrl+shift+b",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Clean and Compile"
+  }
+]
+```
+
+**Atalhos Úteis VS Code:**
+
+```bash
+Ctrl+Shift+P         # Command Palette
+Ctrl+P               # Quick Open File
+Ctrl+Shift+E         # Explorer
+Ctrl+Shift+F         # Search in Files
+Ctrl+Shift+G         # Source Control
+Ctrl+Shift+X         # Extensions
+Ctrl+`               # Terminal
+Ctrl+Shift+`         # New Terminal
+F5                   # Start Debugging
+Ctrl+F5              # Run Without Debugging
+Ctrl+Shift+D         # Debug View
+Ctrl+K Ctrl+S        # Keyboard Shortcuts
+Ctrl+,               # Settings
+```
+
+##### 7. Debug Configuration Avançada
+
+**Multi-module debugging:**
+
+```json
+{
+  "type": "java",
+  "name": "Debug with Hot Reload",
+  "request": "launch",
+  "mainClass": "br.edu.ifba.inf008.App",
+  "projectName": "app",
+  "vmArgs": [
+    "--module-path",
+    "/home/john/javafx/javafx-sdk-21.0.2/lib",
+    "--add-modules",
+    "javafx.controls,javafx.fxml,javafx.web",
+    "-Djavafx.verbose=true",
+    "-XX:+AllowRedefinitionToAddDeleteMethods"
+  ],
+  "console": "integratedTerminal",
+  "stopOnEntry": false,
+  "stepFilters": {
+    "skipClasses": ["java.*", "javax.*", "sun.*", "com.sun.*"],
+    "skipSynthetics": true
+  }
+}
+```
+
+**Vantagens VS Code + Scene Builder:**
+
+- **Leveza**: VS Code consome menos recursos que IDEs pesadas
+- **Extensibilidade**: Marketplace rico em extensões
+- **Git integrado**: GitLens oferece controle de versão avançado
+- **Terminal integrado**: Acesso direto ao shell
+- **Multi-projeto**: Suporte nativo a workspaces
+- **Customização**: Altamente configurável
+- **Gratuito**: Completamente free e open source
+- **Multi-plataforma**: Funciona em Linux, Windows, macOS
+- **Scene Builder**: Integração perfeita para design visual FXML
+- **Live reload**: Mudanças refletidas rapidamente
+- **IntelliSense**: Autocompletar Java robusto
+- **Debugging**: Debug visual poderoso
 
 #### 2. Estrutura de Projeto FXML
 
@@ -492,6 +930,245 @@ public class UserController implements Initializable {
 .titled-pane > .content {
   -fx-border-color: #bdc3c7;
   -fx-border-width: 0 1 1 1;
+}
+
+/* ========== ROOT STYLES ========== */
+.root {
+  -fx-font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+  -fx-font-size: 14px;
+  -fx-base: #ffffff;
+  -fx-background: #f5f5f5;
+}
+
+/* ========== HEADER ========== */
+.header-container {
+  -fx-background-color: linear-gradient(to bottom, #2c3e50, #34495e);
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 2, 0, 0, 1);
+}
+
+.app-bar {
+  -fx-padding: 10 20;
+  -fx-spacing: 15;
+}
+
+.app-title {
+  -fx-text-fill: white;
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+}
+
+.header-actions .icon-button {
+  -fx-background-color: transparent;
+  -fx-text-fill: white;
+  -fx-font-size: 16px;
+  -fx-padding: 8;
+  -fx-background-radius: 20;
+  -fx-min-width: 36px;
+  -fx-min-height: 36px;
+}
+
+.header-actions .icon-button:hover {
+  -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-bar {
+  -fx-background-color: #34495e;
+  -fx-padding: 0 20 5 20;
+  -fx-spacing: 0;
+}
+
+/* ========== SIDEBAR ========== */
+.side-panel {
+  -fx-background-color: white;
+  -fx-border-color: #e0e0e0;
+  -fx-border-width: 0 1 0 0;
+  -fx-padding: 20;
+}
+
+.side-section {
+  -fx-spacing: 10;
+  -fx-padding: 0 0 20 0;
+}
+
+.side-section-title {
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+  -fx-font-size: 12px;
+  -fx-padding: 0 0 5 0;
+}
+
+.quick-actions .quick-action-btn {
+  -fx-background-color: #ecf0f1;
+  -fx-text-fill: #2c3e50;
+  -fx-padding: 8 12;
+  -fx-background-radius: 6;
+  -fx-border-radius: 6;
+  -fx-alignment: CENTER_LEFT;
+  -fx-font-size: 13px;
+}
+
+.quick-actions .quick-action-btn:hover {
+  -fx-background-color: #3498db;
+  -fx-text-fill: white;
+}
+
+.stats-grid .stat-label {
+  -fx-text-fill: #7f8c8d;
+  -fx-font-size: 12px;
+}
+
+.stats-grid .stat-value {
+  -fx-text-fill: #2c3e50;
+  -fx-font-weight: bold;
+  -fx-font-size: 12px;
+}
+
+.activity-list {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+.activity-list .list-cell {
+  -fx-background-color: transparent;
+  -fx-text-fill: #7f8c8d;
+  -fx-font-size: 12px;
+  -fx-padding: 4 0;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+  -fx-background-color: #f8f9fa;
+}
+
+.welcome-pane {
+  -fx-background-color: white;
+}
+
+.welcome-content {
+  -fx-padding: 60;
+}
+
+.welcome-title {
+  -fx-font-size: 32px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+}
+
+.welcome-subtitle {
+  -fx-font-size: 16px;
+  -fx-text-fill: #7f8c8d;
+}
+
+.welcome-cards {
+  -fx-padding: 20 0;
+}
+
+.welcome-card {
+  -fx-background-color: white;
+  -fx-padding: 30;
+  -fx-background-radius: 10;
+  -fx-border-radius: 10;
+  -fx-border-color: #e0e0e0;
+  -fx-border-width: 1;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 4, 0, 0, 2);
+  -fx-min-width: 200;
+  -fx-spacing: 10;
+}
+
+.welcome-card:hover {
+  -fx-border-color: #3498db;
+  -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.3), 8, 0, 0, 4);
+}
+
+.card-icon {
+  -fx-font-size: 48px;
+}
+
+.card-title {
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+}
+
+.card-description {
+  -fx-font-size: 12px;
+  -fx-text-fill: #7f8c8d;
+  -fx-text-alignment: center;
+  -fx-wrap-text: true;
+}
+
+.card-button {
+  -fx-background-color: #3498db;
+  -fx-text-fill: white;
+  -fx-background-radius: 6;
+  -fx-border-radius: 6;
+  -fx-padding: 8 16;
+  -fx-font-weight: bold;
+}
+
+.card-button:hover {
+  -fx-background-color: #2980b9;
+}
+
+/* ========== TAB PANE ========== */
+.main-tab-pane {
+  -fx-background-color: white;
+}
+
+.main-tab-pane .tab-header-area {
+  -fx-background-color: #ecf0f1;
+  -fx-border-color: #bdc3c7;
+  -fx-border-width: 0 0 1 0;
+}
+
+.main-tab-pane .tab {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-padding: 10 20;
+}
+
+.main-tab-pane .tab:selected {
+  -fx-background-color: white;
+  -fx-border-color: #3498db;
+  -fx-border-width: 0 0 2 0;
+}
+
+.main-tab-pane .tab .tab-label {
+  -fx-text-fill: #2c3e50;
+  -fx-font-weight: bold;
+}
+
+/* ========== STATUS BAR ========== */
+.status-bar {
+  -fx-background-color: #ecf0f1;
+  -fx-border-color: #bdc3c7;
+  -fx-border-width: 1 0 0 0;
+  -fx-padding: 5 20;
+}
+
+.status-text {
+  -fx-text-fill: #7f8c8d;
+  -fx-font-size: 12px;
+}
+
+.connection-status {
+  -fx-font-size: 12px;
+}
+
+.time-label {
+  -fx-text-fill: #7f8c8d;
+  -fx-font-size: 12px;
+}
+
+/* ========== ANIMATIONS ========== */
+.welcome-card {
+  -fx-scale-x: 1;
+  -fx-scale-y: 1;
+}
+
+.welcome-card:hover {
+  -fx-scale-x: 1.02;
+  -fx-scale-y: 1.02;
 }
 ```
 
@@ -929,33 +1606,594 @@ class UserIntegrationTest {
 }
 ```
 
-### Executando Testes
+## Personalização da Tela Principal
+
+### Modificando o UIController
+
+O `UIController` é responsável pela janela principal da aplicação. Para personalizar a interface principal:
+
+#### 1. Localização dos Arquivos
 
 ```bash
-# Executar todos os testes
-mvn test
-
-# Executar apenas testes de DAO
-mvn test -Dtest="*DAO*Test"
-
-# Executar apenas testes de UI
-mvn test -Dtest="*Controller*Test"
-
-# Executar com relatório de cobertura
-mvn test jacoco:report
-
-# Executar testes em modo verbose
-mvn test -X
+app/src/main/java/br/edu/ifba/inf008/shell/UIController.java
+app/src/main/resources/fxml/main-window.fxml (criar se não existir)
+app/src/main/resources/css/main-style.css (criar se não existir)
 ```
 
-## Conclusão
+#### 2. Estrutura da Janela Principal Moderna
 
-Este guia fornece uma base sólida para desenvolver interfaces de usuário modernas e testáveis no sistema BookStore. As práticas apresentadas garantem:
+**Criar main-window.fxml:**
 
-- **Separação de responsabilidades** entre UI e lógica de negócio
-- **Interfaces responsivas** e acessíveis
-- **Código testável** com cobertura adequada
-- **Experiência de usuário** consistente entre plugins
-- **Manutenibilidade** a longo prazo
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
 
-Seguindo esses padrões, o desenvolvimento de novos plugins será mais rápido e consistente.
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.edu.ifba.inf008.shell.UIController"
+            stylesheets="@../css/main-style.css">
+
+    <!-- Header/Top Bar -->
+    <top>
+        <VBox styleClass="header-container">
+            <!-- App Bar -->
+            <HBox styleClass="app-bar" alignment="CENTER_LEFT">
+                <children>
+                    <ImageView fitHeight="32" fitWidth="32" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/bookstore-icon.png"/>
+                        </image>
+                    </ImageView>
+                    <Label styleClass="app-title" text="BookStore Blackbird"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <HBox styleClass="header-actions" spacing="10">
+                        <Button styleClass="icon-button" text="🔍"/>
+                        <Button styleClass="icon-button" text="⚙️"/>
+                        <Button styleClass="icon-button" text="👤"/>
+                    </HBox>
+                </children>
+            </HBox>
+
+            <!-- Navigation Bar -->
+            <HBox fx:id="navigationBar" styleClass="nav-bar">
+                <!-- Menus dos plugins serão adicionados aqui dinamicamente -->
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Sidebar/Left Panel -->
+    <left>
+        <VBox fx:id="sidePanel" styleClass="side-panel" prefWidth="250">
+            <children>
+                <!-- Quick Actions -->
+                <VBox styleClass="side-section">
+                    <Label styleClass="side-section-title" text="Quick Actions"/>
+                    <VBox styleClass="quick-actions" spacing="5">
+                        <Button styleClass="quick-action-btn" text="📚 New Book"/>
+                        <Button styleClass="quick-action-btn" text="👤 New User"/>
+                        <Button styleClass="quick-action-btn" text="📝 New Loan"/>
+                        <Button styleClass="quick-action-btn" text="📊 Reports"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Statistics -->
+                <VBox styleClass="side-section">
+                    <Label styleClass="side-section-title" text="Statistics"/>
+                    <GridPane styleClass="stats-grid" hgap="10" vgap="5">
+                        <Label styleClass="stat-label" text="Total Books:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <Label fx:id="totalBooksLabel" styleClass="stat-value" text="0" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label styleClass="stat-label" text="Active Loans:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <Label fx:id="activeLoansLabel" styleClass="stat-value" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label styleClass="stat-label" text="Users:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <Label fx:id="totalUsersLabel" styleClass="stat-value" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    </GridPane>
+                </VBox>
+
+                <!-- Recent Activity -->
+                <VBox styleClass="side-section" VBox.vgrow="ALWAYS">
+                    <Label styleClass="side-section-title" text="Recent Activity"/>
+                    <ListView fx:id="activityList" styleClass="activity-list"/>
+                </VBox>
+            </children>
+        </VBox>
+    </left>
+
+    <!-- Main Content Area -->
+    <center>
+        <VBox styleClass="main-content">
+            <!-- Welcome/Dashboard quando nenhuma aba está aberta -->
+            <StackPane fx:id="welcomePane" styleClass="welcome-pane">
+                <VBox styleClass="welcome-content" alignment="CENTER" spacing="20">
+                    <Label styleClass="welcome-title" text="Welcome to BookStore Blackbird"/>
+                    <Label styleClass="welcome-subtitle" text="Select an option from the menu to get started"/>
+
+                    <!-- Cards de ação rápida -->
+                    <HBox styleClass="welcome-cards" spacing="20" alignment="CENTER">
+                        <VBox styleClass="welcome-card" alignment="CENTER" spacing="10">
+                            <Label styleClass="card-icon" text="📚"/>
+                            <Label styleClass="card-title" text="Manage Books"/>
+                            <Label styleClass="card-description" text="Add, edit and organize your book catalog"/>
+                            <Button styleClass="card-button" text="Open Books"/>
+                        </VBox>
+
+                        <VBox styleClass="welcome-card" alignment="CENTER" spacing="10">
+                            <Label styleClass="card-icon" text="👥"/>
+                            <Label styleClass="card-title" text="Manage Users"/>
+                            <Label styleClass="card-description" text="Register and manage library users"/>
+                            <Button styleClass="card-button" text="Open Users"/>
+                        </VBox>
+
+                        <VBox styleClass="welcome-card" alignment="CENTER" spacing="10">
+                            <Label styleClass="card-icon" text="📋"/>
+                            <Label styleClass="card-title" text="Loan Management"/>
+                            <Label styleClass="card-description" text="Track book loans and returns"/>
+                            <Button styleClass="card-button" text="Open Loans"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </StackPane>
+
+            <!-- Tab Pane para conteúdo dos plugins -->
+            <TabPane fx:id="mainTabPane" styleClass="main-tab-pane" VBox.vgrow="ALWAYS">
+                <!-- Abas dos plugins serão adicionadas aqui -->
+            </TabPane>
+        </VBox>
+    </center>
+
+    <!-- Footer/Status Bar -->
+    <bottom>
+        <HBox styleClass="status-bar" alignment="CENTER_LEFT">
+            <Label fx:id="statusLabel" styleClass="status-text" text="Ready"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox styleClass="status-info" spacing="10">
+                <Label fx:id="connectionStatus" styleClass="connection-status" text="🟢 Connected"/>
+                <Label fx:id="timeLabel" styleClass="time-label" text=""/>
+            </HBox>
+        </HBox>
+    </bottom>
+</BorderPane>
+```
+
+#### 3. CSS Moderno (main-style.css)
+
+```css
+/* ========== ROOT STYLES ========== */
+.root {
+  -fx-font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+  -fx-font-size: 14px;
+  -fx-base: #ffffff;
+  -fx-background: #f5f5f5;
+}
+
+/* ========== HEADER ========== */
+.header-container {
+  -fx-background-color: linear-gradient(to bottom, #2c3e50, #34495e);
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 2, 0, 0, 1);
+}
+
+.app-bar {
+  -fx-padding: 10 20;
+  -fx-spacing: 15;
+}
+
+.app-title {
+  -fx-text-fill: white;
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+}
+
+.header-actions .icon-button {
+  -fx-background-color: transparent;
+  -fx-text-fill: white;
+  -fx-font-size: 16px;
+  -fx-padding: 8;
+  -fx-background-radius: 20;
+  -fx-min-width: 36px;
+  -fx-min-height: 36px;
+}
+
+.header-actions .icon-button:hover {
+  -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-bar {
+  -fx-background-color: #34495e;
+  -fx-padding: 0 20 5 20;
+  -fx-spacing: 0;
+}
+
+/* ========== SIDEBAR ========== */
+.side-panel {
+  -fx-background-color: white;
+  -fx-border-color: #e0e0e0;
+  -fx-border-width: 0 1 0 0;
+  -fx-padding: 20;
+}
+
+.side-section {
+  -fx-spacing: 10;
+  -fx-padding: 0 0 20 0;
+}
+
+.side-section-title {
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+  -fx-font-size: 12px;
+  -fx-padding: 0 0 5 0;
+}
+
+.quick-actions .quick-action-btn {
+  -fx-background-color: #ecf0f1;
+  -fx-text-fill: #2c3e50;
+  -fx-padding: 8 12;
+  -fx-background-radius: 6;
+  -fx-border-radius: 6;
+  -fx-alignment: CENTER_LEFT;
+  -fx-font-size: 13px;
+}
+
+.quick-actions .quick-action-btn:hover {
+  -fx-background-color: #3498db;
+  -fx-text-fill: white;
+}
+
+.stats-grid .stat-label {
+  -fx-text-fill: #7f8c8d;
+  -fx-font-size: 12px;
+}
+
+.stats-grid .stat-value {
+  -fx-text-fill: #2c3e50;
+  -fx-font-weight: bold;
+  -fx-font-size: 12px;
+}
+
+.activity-list {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+.activity-list .list-cell {
+  -fx-background-color: transparent;
+  -fx-text-fill: #7f8c8d;
+  -fx-font-size: 12px;
+  -fx-padding: 4 0;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+  -fx-background-color: #f8f9fa;
+}
+
+.welcome-pane {
+  -fx-background-color: white;
+}
+
+.welcome-content {
+  -fx-padding: 60;
+}
+
+.welcome-title {
+  -fx-font-size: 32px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+}
+
+.welcome-subtitle {
+  -fx-font-size: 16px;
+  -fx-text-fill: #7f8c8d;
+}
+
+.welcome-cards {
+  -fx-padding: 20 0;
+}
+
+.welcome-card {
+  -fx-background-color: white;
+  -fx-padding: 30;
+  -fx-background-radius: 10;
+  -fx-border-radius: 10;
+  -fx-border-color: #e0e0e0;
+  -fx-border-width: 1;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 4, 0, 0, 2);
+  -fx-min-width: 200;
+  -fx-spacing: 10;
+}
+
+.welcome-card:hover {
+  -fx-border-color: #3498db;
+  -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.3), 8, 0, 0, 4);
+}
+
+.card-icon {
+  -fx-font-size: 48px;
+}
+
+.card-title {
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+}
+
+.card-description {
+  -fx-font-size: 12px;
+  -fx-text-fill: #7f8c8d;
+  -fx-text-alignment: center;
+  -fx-wrap-text: true;
+}
+
+.card-button {
+  -fx-background-color: #3498db;
+  -fx-text-fill: white;
+  -fx-background-radius: 6;
+  -fx-border-radius: 6;
+  -fx-padding: 8 16;
+  -fx-font-weight: bold;
+}
+
+.card-button:hover {
+  -fx-background-color: #2980b9;
+}
+
+/* ========== TAB PANE ========== */
+.main-tab-pane {
+  -fx-background-color: white;
+}
+
+.main-tab-pane .tab-header-area {
+  -fx-background-color: #ecf0f1;
+  -fx-border-color: #bdc3c7;
+  -fx-border-width: 0 0 1 0;
+}
+
+.main-tab-pane .tab {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-padding: 10 20;
+}
+
+.main-tab-pane .tab:selected {
+  -fx-background-color: white;
+  -fx-border-color: #3498db;
+  -fx-border-width: 0 0 2 0;
+}
+
+.main-tab-pane .tab .tab-label {
+  -fx-text-fill: #2c3e50;
+  -fx-font-weight: bold;
+}
+
+/* ========== STATUS BAR ========== */
+.status-bar {
+  -fx-background-color: #ecf0f1;
+  -fx-border-color: #bdc3c7;
+  -fx-border-width: 1 0 0 0;
+  -fx-padding: 5 20;
+}
+
+.status-text {
+  -fx-text-fill: #7f8c8d;
+  -fx-font-size: 12px;
+}
+
+.connection-status {
+  -fx-font-size: 12px;
+}
+
+.time-label {
+  -fx-text-fill: #7f8c8d;
+  -fx-font-size: 12px;
+}
+
+/* ========== ANIMATIONS ========== */
+.welcome-card {
+  -fx-scale-x: 1;
+  -fx-scale-y: 1;
+}
+
+.welcome-card:hover {
+  -fx-scale-x: 1.02;
+  -fx-scale-y: 1.02;
+}
+```
+
+#### 4. Carregamento no Plugin
+
+```java
+public class UserPlugin implements IPlugin {
+
+    @Override
+    public boolean init() {
+        IUIController uiController = ICore.getInstance().getUIController();
+
+        MenuItem usersMenu = uiController.createMenuItem("Users", "Manage Users");
+
+        usersMenu.setOnAction(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/user-management.fxml")
+                );
+                Node content = loader.load();
+
+                // Aplicar CSS
+                content.getStylesheets().add(
+                    getClass().getResource("/css/styles.css").toExternalForm()
+                );
+
+                uiController.createTab("User Management", content);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                uiController.showAlert("Error", "Failed to load user interface: " + e.getMessage());
+            }
+        });
+
+        return true;
+    }
+}
+```
+
+---
+
+# ENGLISH SECTION: FXML ClassLoader Solution Guide
+
+## Critical Issue: ClassNotFoundException in Plugin FXML Loading
+
+### Problem Description
+
+When loading FXML files from plugin JARs, you may encounter:
+
+```
+Caused by: java.lang.ClassNotFoundException: br.edu.ifba.inf008.plugins.user.ui.UserViewController
+```
+
+This occurs because FXML loaders use the default context classloader, which doesn't have access to classes loaded by plugin-specific URLClassLoaders.
+
+### Root Cause
+
+In microkernel architectures:
+
+1. Plugins are loaded with separate URLClassLoaders
+2. FXMLLoader uses the context classloader by default
+3. Context classloader cannot see plugin-specific classes
+4. Controller instantiation fails during FXML loading
+
+### Solution: Explicit ClassLoader Configuration
+
+**Critical Fix**: Always set the classloader for FXMLLoader when loading from plugins:
+
+```java
+// ❌ WRONG - Will fail with ClassNotFoundException
+FXMLLoader loader = new FXMLLoader(
+    classLoader.getResource("path/to/fxml")
+);
+Node content = loader.load(); // Fails here
+
+// ✅ CORRECT - Works in plugin architecture
+ClassLoader classLoader = getClass().getClassLoader();
+FXMLLoader loader = new FXMLLoader(
+    classLoader.getResource("br/edu/ifba/inf008/plugins/user/ui/user-management.fxml")
+);
+loader.setClassLoader(classLoader); // Essential for plugins!
+Node content = loader.load(); // Works correctly
+```
+
+### Complete Working Plugin Example
+
+```java
+package br.edu.ifba.inf008.plugins;
+
+import java.io.IOException;
+import br.edu.ifba.inf008.interfaces.ICore;
+import br.edu.ifba.inf008.interfaces.IPlugin;
+import br.edu.ifba.inf008.interfaces.IUIController;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.MenuItem;
+
+public class UserPlugin implements IPlugin {
+    @Override
+    public boolean init() {
+        System.out.println("🔌 UserPlugin...");
+
+        try {
+            IUIController uiController = ICore.getInstance().getUIController();
+            MenuItem menuItem = uiController.createMenuItem("Users", "Manage Users");
+
+            menuItem.setOnAction(event -> {
+                System.out.println("🎯 Opening Users Interface...");
+                try {
+                    // Use the plugin's classloader for resource loading
+                    ClassLoader classLoader = getClass().getClassLoader();
+                    FXMLLoader loader = new FXMLLoader(
+                        classLoader.getResource("br/edu/ifba/inf008/plugins/user/ui/user-management.fxml")
+                    );
+
+                    // CRITICAL: Set classloader for controller instantiation
+                    loader.setClassLoader(classLoader);
+
+                    Node content = loader.load();
+                    uiController.createTab("👥 User Management", content);
+                    System.out.println("✅ Interface loaded successfully!");
+
+                } catch(IOException e) {
+                    System.err.println("❌ Error opening Users Interface: " + e.getMessage());
+                    e.printStackTrace();
+                    uiController.showAlert("Error", "Failed to open Users Interface: " + e.getMessage());
+                }
+            });
+
+            System.out.println("✅ UserPlugin initialized successfully!");
+            return true;
+        } catch (Exception e) {
+            System.err.println("❌ Error initializing UserPlugin: " + e.getMessage());
+            return false;
+        }
+    }
+}
+```
+
+### Testing the Solution
+
+Create unit tests to verify FXML loading works:
+
+```java
+@Test
+public void testFXMLLoading() {
+    // Initialize JavaFX toolkit
+    Platform.startup(() -> {});
+
+    assertDoesNotThrow(() -> {
+        ClassLoader classLoader = getClass().getClassLoader();
+        FXMLLoader loader = new FXMLLoader(
+            classLoader.getResource("br/edu/ifba/inf008/plugins/user/ui/user-management.fxml")
+        );
+
+        // Essential fix for plugin architectures
+        loader.setClassLoader(classLoader);
+
+        Node content = loader.load();
+        assertNotNull(content, "FXML content should be loaded successfully");
+
+        UserViewController controller = loader.getController();
+        assertNotNull(controller, "Controller should be instantiated");
+    });
+}
+```
+
+### VS Code + Scene Builder Workflow
+
+1. **Install Scene Builder**: Download from [Gluon](https://gluonhq.com/products/scene-builder/)
+2. **Create FXML**: In `src/main/resources` with proper package structure
+3. **Design in Scene Builder**: Right-click FXML → "Open with Scene Builder"
+4. **Set Controller**: In Scene Builder, specify the controller class
+5. **Implement Controller**: Create Java class with @FXML annotations
+6. **Test Integration**: Use the corrected classloader approach
+
+### Debugging Tips
+
+```bash
+# Verify FXML is in plugin JAR
+jar tf plugins/UserPlugin.jar | grep user-management.fxml
+
+# Check class inclusion
+jar tf plugins/UserPlugin.jar | grep UserViewController.class
+
+# Run with detailed output
+mvn exec:java -pl app
+```
+
+### Key Takeaways
+
+1. **Always use `loader.setClassLoader(classLoader)`** when loading FXML from plugins
+2. **Use the plugin's classloader** for both resource loading and controller instantiation
+3. **Test FXML loading independently** before full plugin integration
+4. **Verify resource inclusion** in plugin JARs during build process
+
+This solution resolves the ClassNotFoundException and enables seamless FXML integration in microkernel plugin architectures.
