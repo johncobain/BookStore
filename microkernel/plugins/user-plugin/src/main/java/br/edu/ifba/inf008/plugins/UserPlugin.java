@@ -28,13 +28,13 @@ public class UserPlugin implements IPlugin {
           );
 
           loader.setClassLoader(classLoader);
-
           Node content = loader.load();
           uiController.createTab("👥 User Management", content);
 
           System.out.println("✅ Interface loaded successfully!");
         } catch(IOException e) {
           System.err.println("❌ Error opening Users Interface: " + e.getMessage());
+          e.printStackTrace();
           uiController.showAlert("Error", "Failed to open Users Interface: " + e.getMessage());
         }
       };
