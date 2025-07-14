@@ -1,0 +1,231 @@
+.root {
+  -fx-font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+  -fx-font-size: 14px;
+  -fx-background-color: #f8f9fa;
+}
+
+.main-container {
+  -fx-background-color: #ffffff;
+  -fx-spacing: 0;
+}
+
+.welcome-content {
+  -fx-background-color: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+  -fx-alignment: center;
+}
+
+.welcome-title {
+  -fx-font-size: 36px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0, 0, 1);
+  -fx-padding: 0 0 10 0;
+}
+
+.welcome-subtitle {
+  -fx-font-size: 20px;
+  -fx-text-fill: #3498db;
+  -fx-font-weight: 500;
+  -fx-padding: 0 0 5 0;
+}
+
+.welcome-description {
+  -fx-font-size: 16px;
+  -fx-text-fill: #7f8c8d;
+  -fx-text-alignment: center;
+  -fx-padding: 0 0 20 0;
+}
+
+.welcome-section-title {
+  -fx-font-size: 24px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #34495e;
+  -fx-padding: 20 0 10 0;
+}
+
+.welcome-footer-text {
+  -fx-font-size: 12px;
+  -fx-text-fill: #95a5a6;
+  -fx-font-style: italic;
+  -fx-padding: 20 0 0 0;
+}
+
+.welcome-cards {
+  -fx-background-color: rgba(255, 255, 255, 0.8);
+  -fx-background-radius: 15;
+  -fx-padding: 40;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 10, 0, 0, 5);
+}
+
+.welcome-card {
+  -fx-background-color: white;
+  -fx-padding: 30;
+  -fx-background-radius: 12;
+  -fx-border-radius: 12;
+  -fx-border-color: #e1e8ed;
+  -fx-border-width: 1;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.08), 8, 0, 0, 4);
+  -fx-cursor: hand;
+  -fx-spacing: 15;
+}
+
+.welcome-card-hover {
+  -fx-border-color: #3498db;
+  -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.3), 12, 0, 0, 6);
+  -fx-scale-x: 1.05;
+  -fx-scale-y: 1.05;
+}
+
+.welcome-card-icon {
+  -fx-font-size: 48px;
+  -fx-padding: 0 0 10 0;
+}
+
+.welcome-card-title {
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+  -fx-text-alignment: center;
+  -fx-wrap-text: true;
+}
+
+.welcome-card-description {
+  -fx-font-size: 12px;
+  -fx-text-fill: #7f8c8d;
+  -fx-text-alignment: center;
+  -fx-wrap-text: true;
+}
+
+.tab-pane {
+  -fx-background-color: transparent;
+  -fx-tab-min-height: 40px;
+}
+
+.tab {
+  -fx-background-color: #ecf0f1;
+  -fx-text-base-color: #2c3e50;
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: 10 20;
+}
+
+.tab:selected {
+  -fx-background-color: #3498db;
+  -fx-text-base-color: white;
+}
+
+.tab .tab-label {
+  -fx-text-fill: inherit;
+}
+
+.menu-bar {
+  -fx-background-color: #34495e !important;
+  -fx-border-width: 0 0 1 0;
+  -fx-border-color: #1a252f;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 3, 0, 0, 1);
+}
+
+.menu-bar > .container > .menu > .label {
+  -fx-text-fill: white !important;
+  -fx-font-weight: bold !important;
+  -fx-font-size: 14px !important;
+}
+
+.menu-bar .menu {
+  -fx-background-color: transparent !important;
+  -fx-text-fill: white !important;
+}
+
+.menu-bar .menu .context-menu {
+  -fx-background-color: white;
+  -fx-border-color: #bdc3c7;
+  -fx-border-width: 1;
+  -fx-border-radius: 4;
+  -fx-background-radius: 4;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 4);
+  -fx-padding: 5;
+  -fx-min-width: 180;
+  -fx-max-width: 250;
+}
+
+.menu-bar .menu .label {
+  -fx-text-fill: black !important;
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: 10 15;
+}
+
+.menu-bar .menu {
+  -fx-text-fill: white;
+}
+
+.menu-bar .menu:hover {
+  -fx-background-color: #2c3e50;
+  -fx-cursor: hand;
+}
+
+.menu-bar .menu:showing {
+  -fx-background-color: #2c3e50;
+}
+
+.menu-bar .menu .menu-item {
+  -fx-background-color: transparent;
+  -fx-text-fill: #2c3e50;
+  -fx-padding: 10 15;
+  -fx-font-size: 13px;
+  -fx-border-radius: 3;
+  -fx-background-radius: 3;
+  -fx-min-width: 150;
+}
+
+.menu-bar .menu .menu-item:hover {
+  -fx-background-color: #3498db;
+  -fx-text-fill: white;
+}
+
+.menu-bar .menu .menu-item:focused {
+  -fx-background-color: #2980b9;
+  -fx-text-fill: white;
+}
+
+.menu-bar .menu .separator {
+  -fx-padding: 3 0;
+}
+
+.menu-bar .menu .separator .line {
+  -fx-border-color: #ecf0f1;
+  -fx-border-width: 1 0 0 0;
+}
+
+.context-menu {
+  -fx-background-color: white;
+  -fx-border-color: #bdc3c7;
+  -fx-border-width: 1;
+  -fx-border-radius: 4;
+  -fx-background-radius: 4;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 6, 0, 0, 3);
+  -fx-padding: 8;
+  -fx-min-width: 200;
+  -fx-max-height: 400;
+  -fx-pref-height: -1;
+}
+
+.context-menu .menu-item {
+  -fx-background-color: transparent;
+  -fx-text-fill: #2c3e50;
+  -fx-padding: 8 15;
+  -fx-font-size: 13px;
+  -fx-border-radius: 3;
+  -fx-background-radius: 3;
+  -fx-min-height: 30;
+}
+
+.context-menu .menu-item:hover {
+  -fx-background-color: #3498db;
+  -fx-text-fill: white;
+}
+
+.context-menu .menu-item:focused {
+  -fx-background-color: #2980b9;
+  -fx-text-fill: white;
+}
