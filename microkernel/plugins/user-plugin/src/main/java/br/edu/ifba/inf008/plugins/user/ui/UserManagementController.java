@@ -174,7 +174,6 @@ public class UserManagementController {
 
     private void handleUpdate(User user) {
         currentUser = user;
-        System.out.println("User Id: " + user.id());
         isUpdating = true;
         formNameField.setText(user.name());
         formEmailField.setText(user.email());

@@ -34,7 +34,6 @@ public class UserPlugin implements IPlugin {
           System.out.println("✅ Interface loaded successfully!");
         } catch(IOException e) {
           System.err.println("❌ Error opening Users Interface: " + e.getMessage());
-          e.printStackTrace();
           uiController.showAlert("Error", "Failed to open Users Interface: " + e.getMessage());
         }
       };
