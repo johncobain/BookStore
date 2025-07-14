@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="br.edu.ifba.inf008.plugins.user.ui.UserViewController">
+
+    <!-- <stylesheets>
+      <String fx:value="@css/user-styles.css" />
+    </stylesheets> -->
+
+    <padding>
+      <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+      
+    <Label text="Teste de Interface"/>
+    <TextField fx:id="nameField" promptText="Nome"/>
+    <Button fx:id="saveButton" text="Salvar" onAction="#handleSaveUser"/>
+    <Label fx:id="statusLabel" text="OK"/>
+    
+</VBox>
