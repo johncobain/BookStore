@@ -58,14 +58,14 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 
 3. **Interface Gráfica**
 
-   - [ ] Criar tela JavaFX para listagem de usuários
-   - [ ] Formulários de cadastro e edição
+   - [x] Criar tela JavaFX para listagem de usuários
+   - [x] Formulários de cadastro e edição
    - [ ] Conectar UI com DAO
 
 4. **Integração com Microkernel**
 
-   - [ ] Integrar plugin ao sistema principal
-   - [ ] Criar menu/botão para acessar gestão de usuários
+   - [x] Integrar plugin ao sistema principal
+   - [x] Criar menu/botão para acessar gestão de usuários
 
 5. **Testes Funcionais** (Recomendado)
    - [x] Criar `UserDAOTest.java`
