@@ -41,6 +41,13 @@ public class User {
       this.registeredAt = LocalDateTime.now();
   }
 
+  public User(Integer userId, String name, String email, LocalDateTime registeredAt) {
+    this.userId = userId;
+    this.name = name;
+    this.email = email;
+    this.registeredAt = registeredAt;
+  }
+
   public Integer getUserId() {
     return userId;
   }

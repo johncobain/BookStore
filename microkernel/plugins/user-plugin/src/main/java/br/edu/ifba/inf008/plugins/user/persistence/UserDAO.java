@@ -11,12 +11,25 @@ public class UserDAO extends BaseDAO<User, Integer> {
     return User.class;
   }
 
-  public User findByEmail(String email){
+  public User findByName(String nameSubstring){
     try (EntityManager em = getEntityManager()) {
       try {
         return em.createQuery(
-          "SELECT u FROM User u WHERE u.email = :email", User.class)
-          .setParameter("email", email)
+          "SELECT u FROM User u WHERE u.name LIKE :name", User.class)
+          .setParameter("name", "%" + nameSubstring + "%")
+          .getSingleResult();
+      } finally {
+        em.close();
+      }
+    }
+  }
+
+  public User findByEmail(String emailSubstring){
+    try (EntityManager em = getEntityManager()) {
+      try {
+        return em.createQuery(
+          "SELECT u FROM User u WHERE u.email LIKE :email", User.class)
+          .setParameter("email", "%" + emailSubstring + "%")
           .getSingleResult();
       } finally {
         em.close();

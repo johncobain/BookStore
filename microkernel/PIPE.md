@@ -60,7 +60,7 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 
    - [x] Criar tela JavaFX para listagem de usuários
    - [x] Formulários de cadastro e edição
-   - [ ] Conectar UI com DAO
+   - [x] Conectar UI com DAO
 
 4. **Integração com Microkernel**
 

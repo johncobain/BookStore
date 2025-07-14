@@ -44,7 +44,6 @@
                   <RadioButton text="Email" userData="email" selected="true" toggleGroup="$searchTypeToggleGroup"/>
                   <RadioButton text="Name" userData="name" toggleGroup="$searchTypeToggleGroup"/>
                 </HBox>
-                <CheckBox fx:id="includeInactiveCheckBox" text="Include Inactive Users" selected="false" />
                 <Button text="Search" onAction="#handleSearch" maxWidth="Infinity" styleClass="button-primary"/>
               </children>
             </VBox>

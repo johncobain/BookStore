@@ -1,15 +1,14 @@
 package br.edu.ifba.inf008.plugins.user.ui;
 
-import java.sql.Date;
-
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.plugins.user.persistence.UserDAO;
+import br.edu.ifba.inf008.shell.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -20,18 +19,17 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
 public class UserManagementController {
-    public record User(Integer id,String name, String email, Date registeredAt){}; //TODO: TEMP
+    UserDAO userDAO = new UserDAO();
 
     @FXML private TextField searchField;
     @FXML private ToggleGroup searchTypeToggleGroup;
-    @FXML private CheckBox includeInactiveCheckBox;
     @FXML private TextField formNameField;
     @FXML private TextField formEmailField;
     @FXML private Button saveButton;
     @FXML private ListView<User> userListView;
     
     private IUIController uiController;
-    private ObservableList<User> users = FXCollections.observableArrayList();
+    private final ObservableList<User> users = FXCollections.observableArrayList();
     private User currentUser = null;
     private boolean isUpdating = false;
     
@@ -40,19 +38,14 @@ public class UserManagementController {
     public void initialize() {
         this.uiController = ICore.getInstance().getUIController();
 
-        loadInitialData(); //TODO: TEMP
+        loadInitialData();
         userListView.setItems(users);
 
         configureUserCellFactory();
     }
 
     private void loadInitialData() {
-        users.addAll(
-            new User(1, "John Doe", "john.doe@example.com", new Date(System.currentTimeMillis())),
-            new User(2, "Jane Smith", "jane.smith@example.com", new Date(System.currentTimeMillis())),
-            new User(3, "Alice Johnson", "alice.johnson@example.com", new Date(System.currentTimeMillis())),
-            new User(4, "Bob Brown", "bob.brown@example.com", new Date(System.currentTimeMillis()))
-        );
+        users.addAll(userDAO.findAll());
     }
 
     private void configureUserCellFactory() { //TODO: When clicked on cell Show info
@@ -80,7 +73,7 @@ public class UserManagementController {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    label.setText(user.name() + " (" + user.email() + ")");
+                    label.setText(user.getName() + " (" + user.getEmail() + ")");
                     setGraphic(hbox);
 
                     deleteButton.setOnAction(event -> handleDelete(getItem()));
@@ -101,30 +94,40 @@ public class UserManagementController {
         } 
         
         if(isUpdating && currentUser != null) {
-            User updatedUser = new User(currentUser.id(), name, email, currentUser.registeredAt());
+            User updatedUser = new User(currentUser.getUserId(), name, email, currentUser.getRegisteredAt());
             int userIndex = users.indexOf(currentUser);
             if (userIndex == -1) {
                 this.uiController.showAlert("Error", "User not found for update.");
                 return;
             }
-            uiController.showConfirmation( //TODO: replace with actual DAO
+            uiController.showConfirmation(
                 "Update User", 
-                "Are you sure you want to update the user " + currentUser.name() + "?", 
+                "Are you sure you want to update the user " + currentUser.getName() + "?", 
                 () -> {
-                    users.set(userIndex, updatedUser);
-                    userListView.setItems(users);
-                    uiController.showAlert("Success", "User updated successfully!");
+                    try {
+                        userDAO.update(updatedUser);
+                        users.set(userIndex, updatedUser);
+                        userListView.setItems(users);
+                        uiController.showAlert("Success", "User updated successfully!");
+                    } catch (Exception e) {
+                        uiController.showAlert("Error", "Failed to update user: " + e.getMessage());
+                    }
                 }
             );
         } else {
-            User newUser = new User(1, name, email, new Date(System.currentTimeMillis()));
+            User newUser = new User(name, email);
             uiController.showConfirmation(
                 "Create User", 
-                "Are you sure you want to create the user " + newUser.name() + "?", 
+                "Are you sure you want to create the user " + newUser.getName() + "?", 
                 () -> {
-                    users.add(newUser);
-                    userListView.setItems(users);
-                    uiController.showAlert("Success", "User created successfully!");
+                    try {
+                        userDAO.save(newUser);
+                        users.add(newUser);
+                        userListView.setItems(users);
+                        uiController.showAlert("Success", "User created successfully!");
+                    } catch (Exception e) {
+                        uiController.showAlert("Error", "Failed to create user: " + e.getMessage());
+                    }
                 }
             );
         }
@@ -132,9 +135,8 @@ public class UserManagementController {
     }
 
     @FXML
-    private void handleSearch() {
+    private void handleSearch() {//TODO: Implement search functionality
         String query = searchField.getText().toLowerCase().trim();
-        boolean includeInactive = includeInactiveCheckBox.isSelected();
 
         if (query.isEmpty()) {
             userListView.setItems(users);
@@ -142,9 +144,9 @@ public class UserManagementController {
             ObservableList<User> filteredUsers = users.filtered(
                 user -> {
                     if (searchTypeToggleGroup.getSelectedToggle().getUserData().equals("email")) {
-                        return user.email().toLowerCase().contains(query);
+                        return user.getEmail().toLowerCase().contains(query);
                     } else {
-                        return user.name().toLowerCase().contains(query);
+                        return user.getName().toLowerCase().contains(query);
                     }
                 }
             );
@@ -164,10 +166,16 @@ public class UserManagementController {
     private void handleDelete(User user) {
         uiController.showConfirmation(
             "Delete User", 
-            "Are you sure you want to delete the user " + user.name() + "?", 
+            "Are you sure you want to delete the user " + user.getName() + "?", 
             () ->{
-                users.remove(user);
-                userListView.setItems(users);
+                try {
+                    userDAO.delete(user);
+                    users.remove(user);
+                    userListView.setItems(users);
+                    uiController.showAlert("Success", "User deleted successfully!");
+                } catch (Exception e) {
+                    uiController.showAlert("Error", "Failed to delete user: " + e.getMessage());
+                }
             }
         );
     }
@@ -175,13 +183,13 @@ public class UserManagementController {
     private void handleUpdate(User user) {
         currentUser = user;
         isUpdating = true;
-        formNameField.setText(user.name());
-        formEmailField.setText(user.email());
+        formNameField.setText(user.getName());
+        formEmailField.setText(user.getEmail());
         saveButton.setText("Update User");
     }
 
     private void handleInfo(User user) {
-        uiController.showAlert("User info", "Id: " + user.id() + "\nName: " + user.name() + "\nEmail: " + user.email() +
-            "\nRegistered At: " + user.registeredAt());
+        uiController.showAlert("User info", "Id: " + user.getUserId() + "\nName: " + user.getName() + "\nEmail: " + user.getEmail() +
+            "\nRegistered At: " + user.getRegisteredAt());
     }
 }
