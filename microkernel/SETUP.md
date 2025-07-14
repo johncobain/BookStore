@@ -416,17 +416,3 @@ mvn dependency:tree
 # Adicionar VM options
 --module-path /path/to/javafx/lib --add-modules javafx.controls,javafx.fxml
 ```
-
-## Checklist de Configuração
-
-- [ ] SDKMAN instalado
-- [ ] Java 24 configurado
-- [ ] Maven funcionando
-- [ ] Docker e docker-compose instalados
-- [ ] Container MariaDB rodando
-- [ ] Conexão com banco testada
-- [ ] Projeto compilando (`mvn clean install`)
-- [ ] Aplicação executando (`mvn exec:java -pl app`)
-- [ ] IDE configurada (opcional)
-
-Com todas essas configurações, o ambiente de desenvolvimento estará pronto para trabalhar com o sistema BookStore!
