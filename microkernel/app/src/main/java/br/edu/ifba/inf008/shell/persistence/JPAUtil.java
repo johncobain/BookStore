@@ -20,6 +20,13 @@ public class JPAUtil {
   public static Object getEntityManagerAsObject() {
     return FACTORY.createEntityManager();
   }
+  public static void warmUp() {
+    try (EntityManager em = getEntityManager()) {
+      em.createNativeQuery("SELECT 1").getSingleResult();
+    } catch (Exception e) {
+      System.err.println("Warning: Database warm-up failed: " + e.getMessage());
+    }
+  }
     
   public static void closeFactory() {
     if (FACTORY != null) {

@@ -10,11 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-/**
- * Entidade User - Representa um usuário no sistema de livraria.
- * Esta entidade está no core para garantir que todos os plugins possam referenciar usuários
- * sem dependências entre plugins.
- */
 @Entity
 @Table(name = "users")
 public class User {

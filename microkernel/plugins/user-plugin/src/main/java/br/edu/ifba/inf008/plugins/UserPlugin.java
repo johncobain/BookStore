@@ -5,6 +5,7 @@ import java.io.IOException;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.shell.persistence.JPAUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
@@ -13,6 +14,13 @@ public class UserPlugin implements IPlugin {
   @Override
   public boolean init(){
     System.out.println("🔌 UserPlugin...");
+    try {
+      System.out.println("🔗 Initializing database connection...");
+      JPAUtil.warmUp();
+      System.out.println("✅ Database connection initialized successfully!");
+    } catch (Exception e) {
+      System.err.println("⚠️  Warning: Could not initialize database connection: " + e.getMessage());
+    }
 
     try{
       IUIController uiController = ICore.getInstance().getUIController();
