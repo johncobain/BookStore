@@ -23,6 +23,10 @@
 
 ### Semana 3 (15-21/07): Plugins de Livros e Empréstimos
 
+#### Geral
+
+- [ ] **Docker**: Dockerizar toda a aplicação
+
 #### Book Plugin - Prioridade ALTA
 
 - [ ] **Modelo Book**: Entidade JPA com relacionamentos

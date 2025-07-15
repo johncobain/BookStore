@@ -45,18 +45,18 @@ public class UserDAOTest {
     if (createdUsers != null) {
       try (EntityManager em = TestJPAUtil.getEntityManager()) {
         em.getTransaction().begin();
-      for (User user : createdUsers) {
-        try {
-          if (user.getUserId() != null) {
-            User managed = em.find(User.class, user.getUserId());
-            if (managed != null) {
-              em.remove(managed);
+        for (User user : createdUsers) {
+          try {
+            if (user.getUserId() != null) {
+              User managed = em.find(User.class, user.getUserId());
+              if (managed != null) {
+                em.remove(managed);
+              }
             }
+          } catch (Exception e) {
+            System.err.println("Error cleaning user: " + user.getEmail() + " - " + e.getMessage());
           }
-        } catch (Exception e) {
-          System.err.println("Error cleaning user: " + user.getEmail() + " - " + e.getMessage());
         }
-      }
         em.getTransaction().commit();
       } catch (Exception e) {
       }
