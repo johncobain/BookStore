@@ -135,7 +135,7 @@ public class UserManagementController {
     }
 
     @FXML
-    private void handleSearch() {//TODO: Implement search functionality
+    private void handleSearch() {
         String query = searchField.getText().toLowerCase().trim();
 
         if (query.isEmpty()) {

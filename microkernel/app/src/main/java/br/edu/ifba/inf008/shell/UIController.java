@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.shell.util.IconHelper;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,6 +19,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -31,7 +34,7 @@ public class UIController extends Application implements IUIController{
     private FlowPane cardsContainer;
     private VBox welcomeContent;
 
-    private Map<String, VBox> pluginCards = new HashMap<>();
+    private final Map<String, VBox> pluginCards = new HashMap<>();
 
     public UIController() {
     }
@@ -48,6 +51,13 @@ public class UIController extends Application implements IUIController{
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("BookStore Blackbird");
+
+        Image appIcon = IconHelper.loadIcon("bookStore-icon.png");
+        if (appIcon != null) {
+            primaryStage.getIcons().add(appIcon);
+        } else {
+            System.out.println("⚠️ Application icon not found, using default");
+        }
 
         menuBar = new MenuBar();
         VBox vBox = new VBox(menuBar);
@@ -80,7 +90,7 @@ public class UIController extends Application implements IUIController{
     }
 
     private void createWelcomeTab(){
-        welcomeContent = new VBox(30);
+        welcomeContent = new VBox(10);
         welcomeContent.getStyleClass().add("welcome-content");
         welcomeContent.setAlignment(Pos.TOP_CENTER);
         welcomeContent.setPadding(new Insets(40, 20, 20, 20));
@@ -99,7 +109,7 @@ public class UIController extends Application implements IUIController{
     }
 
     private VBox createHeaderSection(){
-        VBox header = new VBox(15);
+        VBox header = new VBox();
         header.setAlignment(Pos.CENTER);
 
         Label title = new Label("📚 Welcome to BookStore Blackbird!");
@@ -108,10 +118,18 @@ public class UIController extends Application implements IUIController{
         Label subtitle = new Label("Your one-stop solution for managing books and users.");
         subtitle.getStyleClass().add("welcome-subtitle");
 
+ImageView logoIcon = IconHelper.createIconView("bookStore-icon-removebg.png", 64);
+
         Label description = new Label("Select a module below to start managing your bookstore");
         description.getStyleClass().add("welcome-description");
 
-        header.getChildren().addAll(title, subtitle, description);
+        if(logoIcon.getImage() != null) {
+            logoIcon.getStyleClass().add("welcome-header-icon");
+            header.getChildren().addAll(title, subtitle, logoIcon, description);
+        }else{
+            header.getChildren().addAll(title, subtitle, description);
+        }
+
         return header;
     }
     private VBox createCardsSection(){
@@ -138,9 +156,9 @@ public class UIController extends Application implements IUIController{
         return section;
     }
     private VBox createFooterSection(){
-        VBox footer = new VBox(10);
+        VBox footer = new VBox();
         footer.setAlignment(Pos.CENTER);
-        footer.setPadding(new Insets(20, 0, 0, 0));
+        footer.setPadding(new Insets(10, 0, 0, 0));
 
         Label footerText = new Label("Built with ❤️ by Andrey Gomes");
         footerText.getStyleClass().add("welcome-footer-text");
@@ -221,7 +239,6 @@ public class UIController extends Application implements IUIController{
 
     @Override
     public MenuItem createMenuItem(String menuText, String menuItemText) {
-        // Criar o menu caso ele nao exista
         Menu newMenu = null;
         for (Menu menu : menuBar.getMenus()) {
             if (menu.getText().equals(menuText)) {

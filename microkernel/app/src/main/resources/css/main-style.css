@@ -29,18 +29,24 @@
   -fx-padding: 0 0 5 0;
 }
 
+.welcome-header-icon {
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.3, 0, 2);
+  -fx-smooth: true;
+  -fx-preserve-ratio: true;
+}
+
 .welcome-description {
   -fx-font-size: 16px;
   -fx-text-fill: #7f8c8d;
   -fx-text-alignment: center;
-  -fx-padding: 0 0 20 0;
+  -fx-padding: 0;
 }
 
 .welcome-section-title {
   -fx-font-size: 24px;
   -fx-font-weight: bold;
   -fx-text-fill: #34495e;
-  -fx-padding: 20 0 10 0;
+  -fx-padding: 10 0 10 0;
 }
 
 .welcome-footer-text {
