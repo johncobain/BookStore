@@ -17,8 +17,8 @@
 
 - ✅ Modelo User implementado
 - ✅ UserDAO e operações CRUD
-- 🔄 Interface JavaFX para usuários
-- 🔄 Integração com microkernel
+- ✅ Interface JavaFX para usuários
+- ✅ Integração com microkernel
 
 #### Semana 3: Plugins de Livros e Empréstimos
 

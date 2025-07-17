@@ -1,0 +1,155 @@
+package br.edu.ifba.inf008.shell.model;
+
+import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "books")
+public class Book {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "book_id")
+  private Integer bookId;
+
+  @Column( nullable = false, length = 200)
+  private String title;
+
+  @Column(nullable = false, length = 100)
+  private String author;
+
+  @Column(nullable = false, unique = true, length = 20)
+  private String isbn;
+
+  @Column(name = "published_year")
+  private Integer publishedYear;
+
+  @Column(name = "copies_available")
+  private Integer copiesAvailable;
+
+  public Book() {}
+
+  public Book(String title, String author, String isbn, Integer publishedYear, Integer copiesAvailable) {
+    this.title = title;
+    this.author = author;
+    this.isbn = isbn;
+    this.publishedYear = publishedYear;
+    this.copiesAvailable = copiesAvailable;
+  }
+
+  public Book(Integer bookId, String title, String author, String isbn, Integer publishedYear, Integer copiesAvailable) {
+    this.bookId = bookId;
+    this.title = title;
+    this.author = author;
+    this.isbn = isbn;
+    this.publishedYear = publishedYear;
+    this.copiesAvailable = copiesAvailable;
+  }
+
+  public Integer getBookId() {
+    return bookId;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(String author) {
+    this.author = author;
+  }
+
+  public String getIsbn() {
+    return isbn;
+  }
+
+  public void setIsbn(String isbn) {
+    this.isbn = isbn;
+  }
+
+  public Integer getPublishedYear() {
+    return publishedYear;
+  }
+
+  public void setPublishedYear(Integer publishedYear) {
+    this.publishedYear = publishedYear;
+  }
+
+  public Integer getCopiesAvailable() {
+    return copiesAvailable;
+  }
+
+  public void setCopiesAvailable(Integer copiesAvailable) {
+    this.copiesAvailable = copiesAvailable;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 3;
+    hash = 73 * hash + Objects.hashCode(this.bookId);
+    hash = 73 * hash + Objects.hashCode(this.title);
+    hash = 73 * hash + Objects.hashCode(this.author);
+    hash = 73 * hash + Objects.hashCode(this.isbn);
+    hash = 73 * hash + Objects.hashCode(this.publishedYear);
+    hash = 73 * hash + Objects.hashCode(this.copiesAvailable);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Book other = (Book) obj;
+    if (!Objects.equals(this.title, other.title)) {
+      return false;
+    }
+    if (!Objects.equals(this.author, other.author)) {
+      return false;
+    }
+    if (!Objects.equals(this.isbn, other.isbn)) {
+      return false;
+    }
+    if (!Objects.equals(this.bookId, other.bookId)) {
+      return false;
+    }
+    if (!Objects.equals(this.publishedYear, other.publishedYear)) {
+      return false;
+    }
+    return Objects.equals(this.copiesAvailable, other.copiesAvailable);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Book{");
+    sb.append("bookId=").append(bookId);
+    sb.append(", title=").append(title);
+    sb.append(", author=").append(author);
+    sb.append(", isbn=").append(isbn);
+    sb.append(", publishedYear=").append(publishedYear);
+    sb.append(", copiesAvailable=").append(copiesAvailable);
+    sb.append('}');
+    return sb.toString();
+  }
+
+  
+}

@@ -18,10 +18,10 @@ public class User {
   @Column(name = "user_id")
   private Integer userId;
 
-  @Column(name = "name", nullable = false, length = 255)
+  @Column(nullable = false, length = 255)
   private String name;
 
-  @Column(name = "email", nullable = false, unique = true, length = 255)
+  @Column(nullable = false, unique = true, length = 255)
   private String email;
 
   @Column(name = "registered_at")
@@ -71,20 +71,41 @@ public class User {
     this.registeredAt = registeredAt;
   }
 
-  @Override
-  public boolean equals(Object o){
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    User user = (User) o;
-    return Objects.equals(userId, user.userId) && Objects.equals(email, user.email);
-  }
+  
+
 
   @Override
   public int hashCode() {
-      int hash = 7;
-      hash = 83 * hash + Objects.hashCode(this.userId);
-      hash = 83 * hash + Objects.hashCode(this.email);
-      return hash;
+    int hash = 3;
+    hash = 89 * hash + Objects.hashCode(this.userId);
+    hash = 89 * hash + Objects.hashCode(this.name);
+    hash = 89 * hash + Objects.hashCode(this.email);
+    hash = 89 * hash + Objects.hashCode(this.registeredAt);
+    return hash;
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final User other = (User) obj;
+    if (!Objects.equals(this.name, other.name)) {
+      return false;
+    }
+    if (!Objects.equals(this.email, other.email)) {
+      return false;
+    }
+    if (!Objects.equals(this.userId, other.userId)) {
+      return false;
+    }
+    return Objects.equals(this.registeredAt, other.registeredAt);
   }
 
   @Override
@@ -98,4 +119,5 @@ public class User {
       sb.append("}");
       return sb.toString();
   }
+
 }
