@@ -96,46 +96,26 @@ public class Book {
   }
 
   @Override
-  public int hashCode() {
-    int hash = 3;
-    hash = 73 * hash + Objects.hashCode(this.bookId);
-    hash = 73 * hash + Objects.hashCode(this.title);
-    hash = 73 * hash + Objects.hashCode(this.author);
-    hash = 73 * hash + Objects.hashCode(this.isbn);
-    hash = 73 * hash + Objects.hashCode(this.publishedYear);
-    hash = 73 * hash + Objects.hashCode(this.copiesAvailable);
-    return hash;
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+    Book book = (Book) obj;
+    
+    if (bookId != null && book.bookId != null) {
+      return Objects.equals(bookId, book.bookId);
+    }
+    
+    return Objects.equals(isbn, book.isbn);
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+  public int hashCode() {
+    if (bookId != null) {
+      return Objects.hash(bookId);
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final Book other = (Book) obj;
-    if (!Objects.equals(this.title, other.title)) {
-      return false;
-    }
-    if (!Objects.equals(this.author, other.author)) {
-      return false;
-    }
-    if (!Objects.equals(this.isbn, other.isbn)) {
-      return false;
-    }
-    if (!Objects.equals(this.bookId, other.bookId)) {
-      return false;
-    }
-    if (!Objects.equals(this.publishedYear, other.publishedYear)) {
-      return false;
-    }
-    return Objects.equals(this.copiesAvailable, other.copiesAvailable);
+    return Objects.hash(isbn);
   }
+
 
   @Override
   public String toString() {

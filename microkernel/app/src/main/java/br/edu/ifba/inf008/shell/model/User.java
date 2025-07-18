@@ -75,37 +75,16 @@ public class User {
 
 
   @Override
-  public int hashCode() {
-    int hash = 3;
-    hash = 89 * hash + Objects.hashCode(this.userId);
-    hash = 89 * hash + Objects.hashCode(this.name);
-    hash = 89 * hash + Objects.hashCode(this.email);
-    hash = 89 * hash + Objects.hashCode(this.registeredAt);
-    return hash;
-  }
-  
-  @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final User other = (User) obj;
-    if (!Objects.equals(this.name, other.name)) {
-      return false;
-    }
-    if (!Objects.equals(this.email, other.email)) {
-      return false;
-    }
-    if (!Objects.equals(this.userId, other.userId)) {
-      return false;
-    }
-    return Objects.equals(this.registeredAt, other.registeredAt);
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+    User user = (User) obj;
+    return Objects.equals(userId, user.userId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(userId);
   }
 
   @Override
