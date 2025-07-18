@@ -1,17 +1,26 @@
 package br.edu.ifba.inf008.plugins;
 
+import java.io.IOException;
+
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
+import br.edu.ifba.inf008.shell.persistence.JPAUtil;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.VBox;
 
 public class BookPlugin implements IPlugin {
   @Override
   public boolean init(){
     System.out.println("🔌 BookPlugin...");
+    try {
+      System.out.println("🔗 Initializing database connection...");
+      JPAUtil.warmUp();
+      System.out.println("✅ Database connection initialized successfully!");
+    } catch (Exception e) {
+      System.err.println("⚠️  Warning: Could not initialize database connection: " + e.getMessage());
+    }
 
     try{
       IUIController uiController = ICore.getInstance().getUIController();
@@ -19,17 +28,23 @@ public class BookPlugin implements IPlugin {
       MenuItem menuItem = uiController.createMenuItem("Management", "Books");
 
       Runnable openBooksInterface = () -> {
-        VBox content = new VBox(10);
-        content.setPadding(new Insets(20));
-        content.getChildren().addAll(
-          new Label("Book Plugin Working!"),
-          new Label("This plugin was loaded by the microkernel!"),
-          new Label("Date/Time: " + java.time.LocalDateTime.now())
-        );
+        System.out.println("🎯 Oppening Books Interface...");
+        try {
+          ClassLoader classLoader = getClass().getClassLoader();
+          FXMLLoader loader = new FXMLLoader(
+            classLoader.getResource("br/edu/ifba/inf008/plugins/book/ui/book-management.fxml")
+          );
+          
+          loader.setClassLoader(classLoader);
+          Node content = loader.load();
+          uiController.createTab("📚 Book Management", content);
 
-        uiController.createTab("📚 Book Management", content);
+          System.out.println("✅ Interface loaded successfully!");
+        } catch (IOException e) {
+          System.err.println("❌ Error opening Books interface: " + e.getMessage());
+          uiController.showAlert("Error", "Failed to open Books Interface: " + e.getMessage());
+        }
 
-        System.out.println("Book Plugin executed - new tab created!");
       };
 
       menuItem.setOnAction(e -> openBooksInterface.run());

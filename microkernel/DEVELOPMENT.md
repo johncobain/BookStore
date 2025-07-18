@@ -1,38 +1,5 @@
 # Guia de Desenvolvimento - BookStore
 
-## Pipeline de Desenvolvimento
-
-### Cronograma de Desenvolvimento (4 semanas)
-
-**Meta:** Sistema completo de livraria com arquitetura de microkernel
-
-#### Semana 1: Configuração e Base
-
-- ✅ Configuração do ambiente (SDKMAN, Java 24, Docker)
-- ✅ Configuração do Hibernate e persistência
-- ✅ Estrutura base dos plugins
-- ✅ Build system funcionando
-
-#### Semana 2: Plugin de Usuários (CRUD Completo)
-
-- ✅ Modelo User implementado
-- ✅ UserDAO e operações CRUD
-- ✅ Interface JavaFX para usuários
-- ✅ Integração com microkernel
-
-#### Semana 3: Plugins de Livros e Empréstimos
-
-- 🔄 Plugin de livros (Book model + DAO + UI)
-- 🔄 Plugin de empréstimos (Loan model + DAO + UI)
-- 🔄 Relacionamentos JPA entre entidades
-
-#### Semana 4: Finalização e Entrega
-
-- 🔄 Plugin de relatórios
-- 🔄 Refinamento da UI/UX
-- 🔄 Testes finais e documentação
-- 🔄 Preparação para entrega
-
 ## Criando um Novo Plugin
 
 ### 1. Estrutura Básica

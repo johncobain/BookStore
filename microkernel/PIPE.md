@@ -84,21 +84,21 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 
 1. **Estrutura Base**
 
-   - [ ] Usar `user-plugin` como template para `book-plugin`
-   - [ ] Criar `Book.java` com atributos: titulo, autor, isbn, anoPublicacao, quantidadeCopiasDisponiveis
-   - [ ] Implementar `BookDAO.java` (cópia adaptada do UserDAO)
+   - [x] Usar `user-plugin` como template para `book-plugin`
+   - [x] Criar `Book.java` com atributos: titulo, autor, isbn, anoPublicacao, quantidadeCopiasDisponiveis
+   - [x] Implementar `BookDAO.java` (cópia adaptada do UserDAO)
 
 2. **Interface e Integração**
-   - [ ] UI para gerenciamento de livros
-   - [ ] Integração com microkernel
+   - [x] UI para gerenciamento de livros
+   - [x] Integração com microkernel
 
 ### Plugin de Empréstimos
 
 1. **Modelo Complexo**
 
-   - [ ] Criar `Loan.java` com relacionamentos JPA (`@ManyToOne`)
-   - [ ] Mapear relações com User e Book
-   - [ ] Atributos: id, user, book, dataEmprestimo, dataDevolucao
+   - [x] Criar `Loan.java` com relacionamentos JPA (`@ManyToOne`)
+   - [x] Mapear relações com User e Book
+   - [x] Atributos: id, user, book, dataEmprestimo, dataDevolucao
 
 2. **Lógica de Negócio**
 
@@ -114,7 +114,7 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
    - [ ] Listagem de empréstimos ativos
 
 4. **Testes Funcionais**
-   - [ ] `BookDAOTest.java`
+   - [x] `BookDAOTest.java`
    - [ ] `LoanDAOTest.java` (especialmente importante para validar regras de negócio)
 
 **⚡ Resultado:** Aceleração massiva - Hibernate gerencia relacionamentos e transações automaticamente.

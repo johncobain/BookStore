@@ -30,25 +30,21 @@
   <left>
     <VBox spacing="20" prefWidth="400" styleClass="left-panel">
       <padding>
-        <Insets right="20"/>
+        <Insets right="15" left="15" bottom="10"/>
       </padding>
       <children>
-        <TitledPane text="Search User" animated="false" styleClass="titled-pane" >
-          <content>
-            <VBox spacing="10" styleClass="content-box">
-              <children>
-                <Label text="Email or Name:" />
-                <TextField fx:id="searchField" promptText="Enter email or name" />
-                
-                <HBox spacing="15">
-                  <RadioButton text="Email" userData="email" selected="true" toggleGroup="$searchTypeToggleGroup"/>
-                  <RadioButton text="Name" userData="name" toggleGroup="$searchTypeToggleGroup"/>
-                </HBox>
-                <Button text="Search" onAction="#handleSearch" maxWidth="Infinity" styleClass="button-primary"/>
-              </children>
-            </VBox>
-          </content>
-        </TitledPane>
+        <VBox spacing="10" styleClass="content-box">
+          <children>
+            <Label text="Search User:" />
+            <TextField fx:id="searchField" promptText="Enter email or name" />
+            
+            <HBox spacing="15">
+              <RadioButton text="Email" userData="email" selected="true" toggleGroup="$searchTypeToggleGroup"/>
+              <RadioButton text="Name" userData="name" toggleGroup="$searchTypeToggleGroup"/>
+            </HBox>
+            <Button text="Search" onAction="#handleSearch" maxWidth="Infinity" styleClass="button-primary"/>
+          </children>
+        </VBox>
         <TitledPane text="Create User" animated="false" styleClass="titled-pane" >
           <content>
             <VBox spacing="10" styleClass="content-box">

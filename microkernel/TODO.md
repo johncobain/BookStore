@@ -25,31 +25,29 @@
 
 #### Geral
 
-- [ ] **Docker**: Dockerizar toda a aplicação
+- [ ] Relacionamento com Loan (OneToMany) // ver se vale a pena
 
 #### Book Plugin - Prioridade ALTA
 
-- [ ] **Modelo Book**: Entidade JPA com relacionamentos
-  - [ ] Campos: title, author, isbn, publicationYear, availableCopies
-  - [ ] Relacionamento com Loan (OneToMany)
-  - [ ] Validações JPA
-- [ ] **BookDAO**: Implementar BaseDAO<Book, Long>
-  - [ ] findByTitle(String title)
-  - [ ] findByAuthor(String author)
-  - [ ] findByIsbn(String isbn)
+- [x] **Modelo Book**: Entidade JPA com relacionamentos
+  - [x] Campos: title, author, isbn, publicationYear, availableCopies
+  - [x] Validações JPA
+- [x] **BookDAO**: Implementar BaseDAO<Book, Long>
+  - [x] findByTitle(String title)
+  - [x] findByAuthor(String author)
+  - [x] findByIsbn(String isbn)
   - [ ] findAvailableBooks()
-- [ ] **Interface FXML**: Tela completa de gerenciamento
-  - [ ] Formulário de cadastro/edição
-  - [ ] Lista com busca por título/autor
+- [x] **Interface FXML**: Tela completa de gerenciamento
+  - [x] Formulário de cadastro/edição
+  - [x] Lista com busca por título/autor
   - [ ] Controle de exemplares disponíveis
-- [ ] **Testes**: BookDAOTest completo
+- [x] **Testes**: BookDAOTest completo
 
 #### Loan Plugin - Prioridade ALTA
 
-- [ ] **Modelo Loan**: Entidade JPA
-  - [ ] Relacionamentos: User (ManyToOne), Book (ManyToOne)
-  - [ ] Campos: loanDate, dueDate, returnDate, status
-  - [ ] Enum LoanStatus (ACTIVE, RETURNED, OVERDUE)
+- [x] **Modelo Loan**: Entidade JPA
+  - [x] Relacionamentos: User (ManyToOne), Book (ManyToOne)
+  - [x] Campos: loanDate, dueDate, returnDate
 - [ ] **LoanDAO**: Operações específicas
   - [ ] findByUser(User user)
   - [ ] findByBook(Book book)
@@ -141,7 +139,7 @@
 ### Funcionalidades (até 05/08)
 
 - [x] ✅ User CRUD (100%)
-- [ ] 🔄 Book CRUD (20%)
+- [x] ✅ Book CRUD (100%)
 - [ ] 🔄 Loan CRUD (10%)
 - [ ] 🔄 Basic Reports (0%)
 

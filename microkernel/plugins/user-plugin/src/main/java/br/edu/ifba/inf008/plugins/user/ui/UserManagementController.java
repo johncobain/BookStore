@@ -52,15 +52,15 @@ public class UserManagementController {
         userListView.setCellFactory(lv -> new ListCell<User>() {
             private final HBox hbox = new HBox(10);
             private final Label label = new Label();
-            private final Button deleteButton = new Button("🗑️");
-            private final Button updateButton = new Button("✏️");
             private final Button infoButton = new Button("ℹ️");
+            private final Button updateButton = new Button("✏️");
+            private final Button deleteButton = new Button("🗑️");
             private final Pane spacer = new Pane();
 
             {
                 HBox.setHgrow(spacer, Priority.ALWAYS);
                 hbox.setAlignment(Pos.CENTER_LEFT);
-                hbox.getChildren().addAll(label, spacer, deleteButton, updateButton, infoButton);
+                hbox.getChildren().addAll(label, spacer, infoButton, updateButton, deleteButton);
                 
                 deleteButton.getStyleClass().add("button-danger");
                 updateButton.getStyleClass().add("button-info");
@@ -86,10 +86,10 @@ public class UserManagementController {
 
     @FXML
     private void handleSave(){
-        String name = formNameField.getText();
-        String email = formEmailField.getText();
+        String name = formNameField.getText().trim();
+        String email = formEmailField.getText().trim();
         if(name.isEmpty() || email.isEmpty()) {
-            this.uiController.showAlert("Validation Error", "Name and Email cannot be empty.");
+            this.uiController.showAlert("Validation Error", "All fields must be filled.");
             return;
         } 
         
@@ -140,18 +140,18 @@ public class UserManagementController {
 
         if (query.isEmpty()) {
             userListView.setItems(users);
-        } else{
-            ObservableList<User> filteredUsers = users.filtered(
-                user -> {
-                    if (searchTypeToggleGroup.getSelectedToggle().getUserData().equals("email")) {
-                        return user.getEmail().toLowerCase().contains(query);
-                    } else {
-                        return user.getName().toLowerCase().contains(query);
-                    }
+            return;
+        } 
+        ObservableList<User> filteredUsers = users.filtered(
+            user -> {
+                if (searchTypeToggleGroup.getSelectedToggle().getUserData().equals("email")) {
+                    return user.getEmail().toLowerCase().contains(query);
+                } else {
+                    return user.getName().toLowerCase().contains(query);
                 }
-            );
-            userListView.setItems(filteredUsers);
-        }
+            }
+        );
+        userListView.setItems(filteredUsers);
     }
 
     @FXML

@@ -38,7 +38,7 @@
   background-color: #ffffff;
 }
 
-.user-list-view {
+.book-list-view {
   -fx-background-color: #ffffff;
   -fx-border-color: #cccccc;
 
@@ -46,7 +46,7 @@
   border-color: #cccccc;
 }
 
-.user-list-view .list-cell {
+.book-list-view .list-cell {
   -fx-padding: 10px;
   -fx-font-size: 14px;
   -fx-border-color: transparent transparent #e0e0e0 transparent;
@@ -58,7 +58,7 @@
   border-width: 1px;
 }
 
-.user-list-view .list-cell:hover {
+.book-list-view .list-cell:hover {
   -fx-background-color: #e8f0fe;
   -fx-cursor: hand;
 

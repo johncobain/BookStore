@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import java.net.URL?>
+
+<BorderPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.ifba.inf008.plugins.book.ui.BookManagementController">
+
+  <fx:define>
+    <ToggleGroup fx:id="searchTypeToggleGroup"/>
+  </fx:define>
+  <stylesheets>
+    <URL value="@css/book-styles.css" />
+  </stylesheets>
+
+  <padding>
+    <Insets bottom="25" left="25" right="25" top="25" />
+  </padding>
+
+  <left>
+    <VBox spacing="20" prefWidth="400" styleClass="left-panel">
+      <padding>
+        <Insets right="15" left="15" bottom="10"/>
+      </padding>
+      <children>
+        <VBox spacing="10" styleClass="content-box">
+          <children>
+            <Label text="Search Book:" />
+            <TextField fx:id="searchField" promptText="Enter title, author or ISBN" />
+
+            <HBox spacing="15">
+            <RadioButton text="Title" userData="title" selected="true" toggleGroup="$searchTypeToggleGroup"/>
+            <RadioButton text="Author" userData="author" toggleGroup="$searchTypeToggleGroup"/>
+            <RadioButton text="ISBN" userData="isbn" toggleGroup="$searchTypeToggleGroup"/>
+            </HBox>
+            <Button text="Search" onAction="#handleSearch" maxWidth="Infinity" styleClass="button-primary"/>
+          </children>
+        </VBox>
+        <TitledPane text="Create Book" animated="false" styleClass="titled-pane">
+          <content>
+            <VBox spacing="8" styleClass="content-box">
+              <children>
+                <Label text="Title:" />
+                <TextField fx:id="formTitleField" promptText="Enter book title" />
+                <Label text="Author:" />
+                <TextField fx:id="formAuthorField" promptText="Enter author name" />
+                <Label text="ISBN:" />
+                <TextField fx:id="formIsbnField" promptText="Enter ISBN" />
+
+                <HBox spacing="10">
+                  <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Year:" />
+                    <TextField fx:id="formYearField" promptText="Year" />
+                  </VBox>
+                  <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Copies:" />
+                    <TextField fx:id="formCopiesField" promptText="Copies" />
+                  </VBox>
+                </HBox>
+              </children>
+            </VBox>
+          </content>
+        </TitledPane>
+        <VBox spacing="8">
+          <Button fx:id="saveButton" text="Create User" onAction="#handleSave" maxWidth="Infinity" styleClass="button-success"/>
+          <Button fx:id="clearButton" text="Clear Form" onAction="#handleClear" maxWidth="Infinity" styleClass="button-primary"/>
+        </VBox>
+      </children>
+    </VBox>
+  </left>
+  <center>
+    <ListView fx:id="bookListView" styleClass="book-list-view"/>
+  </center>
+</BorderPane>
