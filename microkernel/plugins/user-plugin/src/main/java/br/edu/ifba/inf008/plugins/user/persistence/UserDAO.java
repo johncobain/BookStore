@@ -34,26 +34,12 @@ public class UserDAO extends BaseDAO<User, Integer> {
            System.getProperty("surefire.test.class.path") != null;
   }
 
-  public List<User> findByName(String nameSubstring){
+  public List<User> findAll(String searchField, String fieldSubString) {
     try (EntityManager em = getEntityManager()) {
       try {
         List<User> results = em.createQuery(
-          "SELECT u FROM User u WHERE u.name LIKE :name", User.class)
-          .setParameter("name", "%" + nameSubstring + "%")
-          .getResultList();
-        return results.isEmpty() ? null : results;
-      } finally {
-        em.close();
-      }
-    }
-  }
-
-  public List<User> findByEmail(String emailSubstring){
-    try (EntityManager em = getEntityManager()) {
-      try {
-        List<User> results = em.createQuery(
-          "SELECT u FROM User u WHERE u.email LIKE :email", User.class)
-          .setParameter("email", "%" + emailSubstring + "%")
+          "SELECT u FROM User u WHERE u." + searchField + " LIKE :field", User.class)
+          .setParameter("field", "%" + fieldSubString + "%")
           .getResultList();
         return results.isEmpty() ? null : results;
       } finally {

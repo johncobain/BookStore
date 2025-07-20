@@ -44,7 +44,12 @@
             <RadioButton text="Author" userData="author" toggleGroup="$searchTypeToggleGroup"/>
             <RadioButton text="ISBN" userData="isbn" toggleGroup="$searchTypeToggleGroup"/>
             </HBox>
-            <Button text="Search" onAction="#handleSearch" maxWidth="Infinity" styleClass="button-primary"/>
+            <HBox spacing="10" alignment="CENTER">
+              <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Button text="Search" onAction="#handleSearch" maxWidth="Infinity" styleClass="button-primary"/>
+              </VBox>
+              <CheckBox text="Available Only" userData="available" fx:id="availableOnlyCheckBox"/>
+            </HBox>
           </children>
         </VBox>
         <TitledPane text="Create Book" animated="false" styleClass="titled-pane">
@@ -73,7 +78,7 @@
           </content>
         </TitledPane>
         <VBox spacing="8">
-          <Button fx:id="saveButton" text="Create User" onAction="#handleSave" maxWidth="Infinity" styleClass="button-success"/>
+          <Button fx:id="saveButton" text="Create Book" onAction="#handleSave" maxWidth="Infinity" styleClass="button-success"/>
           <Button fx:id="clearButton" text="Clear Form" onAction="#handleClear" maxWidth="Infinity" styleClass="button-primary"/>
         </VBox>
       </children>

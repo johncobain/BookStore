@@ -1,5 +1,7 @@
 package br.edu.ifba.inf008.plugins.user.ui;
 
+import java.util.List;
+
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.plugins.user.persistence.UserDAO;
@@ -136,22 +138,22 @@ public class UserManagementController {
 
     @FXML
     private void handleSearch() {
-        String query = searchField.getText().toLowerCase().trim();
+        String field = searchField.getText().toLowerCase().trim();
 
-        if (query.isEmpty()) {
+        if (field.isEmpty()) {
+            users.setAll(userDAO.findAll());
             userListView.setItems(users);
             return;
         } 
-        ObservableList<User> filteredUsers = users.filtered(
-            user -> {
-                if (searchTypeToggleGroup.getSelectedToggle().getUserData().equals("email")) {
-                    return user.getEmail().toLowerCase().contains(query);
-                } else {
-                    return user.getName().toLowerCase().contains(query);
-                }
-            }
-        );
-        userListView.setItems(filteredUsers);
+        String searchType = searchTypeToggleGroup.getSelectedToggle().getUserData().toString();
+
+        List<User> searchResults = userDAO.findAll(searchType, field);
+        if (searchResults != null && !searchResults.isEmpty()) {
+            users.setAll(searchResults);
+        } else {
+            users.clear();
+        }
+        userListView.setItems(users);
     }
 
     @FXML

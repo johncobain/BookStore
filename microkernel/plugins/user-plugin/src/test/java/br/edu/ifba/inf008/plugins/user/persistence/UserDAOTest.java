@@ -98,7 +98,7 @@ public class UserDAOTest {
   void testFindUserByName(){
     User createdUser = saveAndTrack(testUser);
 
-    List<User> foundUsers = userDAO.findByName(createdUser.getName());
+    List<User> foundUsers = userDAO.findAll("name", createdUser.getName());
 
     assertNotNull(foundUsers, "Found users list should not be null");
     assertFalse(foundUsers.isEmpty(), "Found users list should not be empty");
@@ -112,7 +112,7 @@ public class UserDAOTest {
   void testFindUserByEmail(){
     User createdUser = saveAndTrack(testUser);
 
-    List<User> foundUsers = userDAO.findByEmail(createdUser.getEmail());
+    List<User> foundUsers = userDAO.findAll("email", createdUser.getEmail());
 
     assertNotNull(foundUsers, "Found users list should not be null");
     assertFalse(foundUsers.isEmpty(), "Found users list should not be empty");
@@ -127,7 +127,7 @@ public class UserDAOTest {
     saveAndTrack(new User("João Silva", "joao_" + System.currentTimeMillis() + "@test.com"));
     saveAndTrack(new User("João Santos", "joao2_" + System.currentTimeMillis() + "@test.com"));
 
-    List<User> foundByJoao = userDAO.findByName("João");
+    List<User> foundByJoao = userDAO.findAll("name", "João");
     assertNotNull(foundByJoao, "Found users list should not be null");
     assertTrue(foundByJoao.size() >= 2, "Should find at least 2 users with 'João'");
   }
@@ -138,7 +138,7 @@ public class UserDAOTest {
     saveAndTrack(new User("User 1", "admin_" + timestamp + "@company.com"));
     saveAndTrack(new User("User 2", "admin2_" + timestamp + "@company.com"));
 
-    List<User> foundByAdmin = userDAO.findByEmail("admin");
+    List<User> foundByAdmin = userDAO.findAll("email", "admin");
     assertNotNull(foundByAdmin, "Found users list should not be null");
     assertTrue(foundByAdmin.size() >= 2, "Should find at least 2 users with 'admin' in email");
   }

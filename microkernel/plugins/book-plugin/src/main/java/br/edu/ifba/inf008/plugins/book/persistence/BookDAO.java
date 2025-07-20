@@ -34,12 +34,12 @@ public class BookDAO extends BaseDAO<Book, Integer> {
            System.getProperty("surefire.test.class.path") != null;
   }
 
-  public List<Book> findByTitle(String titleSubstring){
+  public List<Book> findAll(String searchField, String fieldSubString) {
     try (EntityManager em = getEntityManager()) {
       try {
         List<Book> results = em.createQuery(
-          "SELECT b FROM Book b WHERE b.title LIKE :title", Book.class)
-          .setParameter("title", "%" + titleSubstring + "%")
+          "SELECT b FROM Book b WHERE b." + searchField + " LIKE :field", Book.class)
+          .setParameter("field", "%" + fieldSubString + "%")
           .getResultList();
         return results.isEmpty() ? null : results;
       } finally {
@@ -48,31 +48,32 @@ public class BookDAO extends BaseDAO<Book, Integer> {
     }
   }
 
-  public List<Book> findByAuthor(String authorSubstring){
+  public List<Book> findAvailableBooks(){
     try (EntityManager em = getEntityManager()) {
-      try {
+      try{
         List<Book> results = em.createQuery(
-          "SELECT b FROM Book b WHERE b.author LIKE :author", Book.class)
-          .setParameter("author", "%" + authorSubstring + "%")
+          "SELECT b FROM Book b WHERE b.copiesAvailable > 0", Book.class
+        )
           .getResultList();
         return results.isEmpty() ? null : results;
       } finally {
         em.close();
-      }
+      } 
     }
   }
 
-  public List<Book> findByIsbn(String isbnSubstring){
+  public List<Book> findAvailableBooks(String searchField, String fieldSubString) {
     try (EntityManager em = getEntityManager()) {
       try {
         List<Book> results = em.createQuery(
-          "SELECT b FROM Book b WHERE b.isbn LIKE :isbn", Book.class)
-          .setParameter("isbn", "%" + isbnSubstring + "%")
+          "SELECT b FROM Book b WHERE b.copiesAvailable > 0 AND b." + searchField + " LIKE :field", Book.class
+        )
+          .setParameter("field", "%" + fieldSubString + "%")
           .getResultList();
         return results.isEmpty() ? null : results;
       } finally {
         em.close();
-      }
+      } 
     }
   }
 }

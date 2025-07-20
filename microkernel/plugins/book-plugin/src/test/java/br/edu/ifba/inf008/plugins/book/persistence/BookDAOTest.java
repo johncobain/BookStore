@@ -99,7 +99,7 @@ public class BookDAOTest {
   void testFindBookByTitle(){
     Book createdBook = saveAndTrack(testBook);
 
-    List<Book> foundBooks = bookDAO.findByTitle(createdBook.getTitle());
+    List<Book> foundBooks = bookDAO.findAll("title", createdBook.getTitle());
 
     assertNotNull(foundBooks, "Found books list should not be null");
     assertFalse(foundBooks.isEmpty(), "Found books list should not be empty");
@@ -112,9 +112,9 @@ public class BookDAOTest {
   @Test
   void testFindBookByAuthor(){
     Book createdBook = saveAndTrack(testBook);
-    
-    List<Book> foundBooks = bookDAO.findByAuthor(createdBook.getAuthor());
-    
+
+    List<Book> foundBooks = bookDAO.findAll("author", createdBook.getAuthor());
+
     assertNotNull(foundBooks, "Found books list should not be null");
     assertFalse(foundBooks.isEmpty(), "Found books list should not be empty");
     assertTrue(foundBooks.size() >= 1, "Should find at least 1 book");
@@ -127,7 +127,7 @@ public class BookDAOTest {
     void testFindBookByIsbn(){
       Book createdBook = saveAndTrack(testBook);
   
-      List<Book> foundBooks = bookDAO.findByIsbn(createdBook.getIsbn());
+      List<Book> foundBooks = bookDAO.findAll("isbn", createdBook.getIsbn());
   
       assertNotNull(foundBooks, "Found books list should not be null");
       assertFalse(foundBooks.isEmpty(), "Found books list should not be empty");
@@ -142,7 +142,7 @@ public class BookDAOTest {
     saveAndTrack(new Book("Python Programming", "Author 1", "1234567890", 2022, 10));
     saveAndTrack(new Book("Java Programming", "Author 2", "0987654321", 2021, 5));
 
-    List<Book> foundByProgramming = bookDAO.findByTitle("Programming");
+    List<Book> foundByProgramming = bookDAO.findAll("title", "Programming");
     assertNotNull(foundByProgramming, "Found books list should not be null");
     assertTrue(foundByProgramming.size() >= 2, "Should find at least 2 books with 'Programming'");
   }
@@ -152,7 +152,7 @@ public class BookDAOTest {
     saveAndTrack(new Book("Book 1", "Author 1", "1234567890", 2022, 10));
     saveAndTrack(new Book("Book 2", "Author 2", "0987654321", 2021, 5));
 
-    List<Book> foundByAuthor = bookDAO.findByAuthor("Author");
+    List<Book> foundByAuthor = bookDAO.findAll("author", "Author");
     assertNotNull(foundByAuthor, "Found books list should not be null");
     assertTrue(foundByAuthor.size() >= 2, "Should find at least 2 books with 'Author' in author name");
   }
@@ -162,7 +162,7 @@ public class BookDAOTest {
     saveAndTrack(new Book("Book 1", "Author 1", "1234567890", 2022, 10));
     saveAndTrack(new Book("Book 2", "Author 2", "0987654123", 2021, 5));
 
-    List<Book> foundByIsbn = bookDAO.findByIsbn("123");
+    List<Book> foundByIsbn = bookDAO.findAll("isbn", "123");
     assertNotNull(foundByIsbn, "Found books list should not be null");
     assertTrue(foundByIsbn.size() >= 2, "Should find at least 2 books with '123' in ISBN");
   }
@@ -201,5 +201,35 @@ public class BookDAOTest {
     bookDAO.delete(createdBook);
     Book deletedBook = bookDAO.findById(createdBook.getBookId());
     assertNull(deletedBook, "Deleted book should be null");
+  }
+
+  @Test
+  void testFindAvailableBooks(){
+    saveAndTrack(new Book("Available Book 1", "Author 1", "1234567890", 2022, 10));
+    saveAndTrack(new Book("Available Book 2", "Author 2", "0987654321", 2021, 5));
+    saveAndTrack(new Book("Unavailable Book", "Author 3", "1122334455", 2020, 0));
+
+    List<Book> availableBooks = bookDAO.findAvailableBooks();
+    assertNotNull(availableBooks, "Available books list should not be null");
+    assertTrue(availableBooks.size() >= 2, "Should find at least 2 available books");
+    for (Book book : availableBooks) {
+      assertTrue(book.getCopiesAvailable() > 0, "All found books should have copies available");
+    }
+  }
+
+  @Test
+  void testFindAvailableBooksByTitle(){
+    saveAndTrack(new Book("Available Book 1", "Author 1", "1234567890", 2022, 10));
+    saveAndTrack(new Book("Available Book 2", "Author 2", "0987654321", 2021, 5));
+    saveAndTrack(new Book("Available 3", "Author 2", "0987654320", 2021, 5));
+    saveAndTrack(new Book("Unavailable Book", "Author 3", "1122334455", 2020, 0));
+
+    List<Book> availableBooks = bookDAO.findAvailableBooks("title", "Book");
+    assertNotNull(availableBooks, "Available books list should not be null");
+    assertTrue(availableBooks.size() >= 2, "Should find at least 2 available books with 'Book' in title");
+    for (Book book : availableBooks) {
+      assertTrue(book.getCopiesAvailable() > 0, "All found books should have copies available");
+    }
+    assertTrue(availableBooks.stream().noneMatch(b -> "Available 3".equals(b.getTitle())), "'Available 3' should not be in the available books list");
   }
 }

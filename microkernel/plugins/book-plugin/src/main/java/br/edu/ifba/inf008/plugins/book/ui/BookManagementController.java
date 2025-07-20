@@ -1,5 +1,7 @@
 package br.edu.ifba.inf008.plugins.book.ui;
 
+import java.util.List;
+
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.plugins.book.persistence.BookDAO;
@@ -9,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -23,6 +26,7 @@ public class BookManagementController {
 
   @FXML private TextField searchField;
   @FXML private ToggleGroup searchTypeToggleGroup;
+  @FXML private CheckBox availableOnlyCheckBox;
   @FXML private TextField formTitleField;
   @FXML private TextField formAuthorField;
   @FXML private TextField formIsbnField;
@@ -59,7 +63,7 @@ public class BookManagementController {
   }
 
   private void loadInitialData() {
-    books.addAll(bookDAO.findAll());
+    books.setAll(bookDAO.findAll());
   }
 
   private void configureBookCellFactory() {
@@ -164,25 +168,34 @@ public class BookManagementController {
 
   @FXML
   private void handleSearch(){
-    String query = searchField.getText().toLowerCase().trim();
+    String field = searchField.getText().toLowerCase().trim();
 
-    if (query.isEmpty()) {
+    if (field.isEmpty()) {
+      if(availableOnlyCheckBox.isSelected()) {
+        books.setAll(bookDAO.findAvailableBooks());
+      } else {
+        books.setAll(bookDAO.findAll());
+      }
       bookListView.setItems(books);
       return;
     }
+    String searchType = (String) searchTypeToggleGroup.getSelectedToggle().getUserData();
 
-    ObservableList<Book> filteredBooks = books.filtered(
-      book -> {
-        if (searchTypeToggleGroup.getSelectedToggle().getUserData().equals("title")){
-          return book.getTitle().toLowerCase().contains(query);
-        } else if (searchTypeToggleGroup.getSelectedToggle().getUserData().equals("author")) {
-          return book.getAuthor().toLowerCase().contains(query);
-        } else {
-          return book.getIsbn().toLowerCase().contains(query);
-        }
-      }
-    );
-    bookListView.setItems(filteredBooks);
+    List<Book> searchResults;
+
+    if(availableOnlyCheckBox.isSelected()) {
+      searchResults = bookDAO.findAvailableBooks(searchType, field);
+    } else {
+      searchResults = bookDAO.findAll(searchType, field);
+    }
+
+    if (searchResults != null && !searchResults.isEmpty()) {
+      books.setAll(searchResults);
+    } else {
+      books.clear();
+    }
+
+    bookListView.setItems(books);
   }
 
   @FXML
