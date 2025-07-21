@@ -16,9 +16,9 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.ifba.inf008.plugins.loan.ui.LoanManagementController">
 
-  <!-- <fx:define>
+  <fx:define>
     <ToggleGroup fx:id="searchTypeToggleGroup"/>
-  </fx:define> -->
+  </fx:define>
   <stylesheets>
     <URL value="@css/loan-styles.css" />
   </stylesheets>
@@ -28,6 +28,27 @@
   </padding>
     
   <left>
+    <VBox spacing="20" prefWidth="400" styleClass="left-panel">
+      <padding>
+        <Insets right="15" left="15" bottom="10"/>
+      </padding>
+      <VBox spacing="10" styleClass="content-box">
+        <children>
+          <Label text="Search Loan:" />
+          <TextField fx:id="searchField" promptText="Enter loan ID, borrower name or email" />
+          <HBox spacing="15">
+            <RadioButton text="Loan ID" userData="loanId" selected="true" toggleGroup="$searchTypeToggleGroup"/>
+            <RadioButton text="Borrower Name/Email" userData="borrowerName" toggleGroup="$searchTypeToggleGroup"/>
+          </HBox>
+          <HBox spacing="10" alignment="CENTER">
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+              <Button text="Search" onAction="#handleSearch" maxWidth="Infinity" styleClass="button-primary"/>
+            </VBox>
+            <CheckBox text="Active Loans Only" userData="activeLoans" fx:id="activeLoansCheckBox"/>
+          </HBox>
+        </children>
+      </VBox>
+    </VBox>
   </left>
   <center>
     <ListView fx:id="loanListView" styleClass="loan-list-view" />

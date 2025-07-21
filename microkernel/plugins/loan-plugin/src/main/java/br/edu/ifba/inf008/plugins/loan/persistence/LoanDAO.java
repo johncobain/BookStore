@@ -36,11 +36,34 @@ public class LoanDAO extends BaseDAO<Loan, Integer> {
            System.getProperty("surefire.test.class.path") != null;
   }
 
+  public List<Loan> findAll(String fieldSubString){
+    try (EntityManager em = getEntityManager()){
+      try{
+        List<Loan> results = em.createQuery(
+          "SELECT l FROM Loan l JOIN l.user u JOIN l.book b WHERE u.name LIKE :field OR u.email LIKE :field", Loan.class)
+          .setParameter("field", "%" + fieldSubString + "%")
+          .getResultList();
+        return results.isEmpty() ? null : results;
+      } finally {
+        em.close();
+      }
+    }
+  }
+
   public List<Loan> findActiveLoans() {
     try (EntityManager em = getEntityManager()) {
       return em.createQuery(
         "SELECT l FROM Loan l WHERE l.returnDate IS NULL", Loan.class
       ).getResultList();
+    }
+  }
+
+  public List<Loan> findActiveLoans(String fieldSubString) {
+    try (EntityManager em = getEntityManager()) {
+      return em.createQuery(
+        "SELECT l FROM Loan l JOIN l.user u WHERE l.returnDate IS NULL AND (u.name LIKE :field OR u.email LIKE :field)", Loan.class)
+        .setParameter("field", "%" + fieldSubString + "%")
+        .getResultList();
     }
   }
 
