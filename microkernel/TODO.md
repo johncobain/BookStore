@@ -26,7 +26,7 @@
 #### Geral
 
 - [ ] Relacionamento com Loan (OneToMany) // ver se vale a pena
-- [x] Refatorar os Controllers para usar mais o DAO
+- [ ] Ao deletar um Usuário que tiver um empréstimo, deletar o empréstimo e incrementar o contador de copias disponíveis no livro
 
 #### Book Plugin - Prioridade ALTA
 
@@ -49,11 +49,10 @@
 - [x] **Modelo Loan**: Entidade JPA
   - [x] Relacionamentos: User (ManyToOne), Book (ManyToOne)
   - [x] Campos: loanDate, dueDate, returnDate
-- [ ] **LoanDAO**: Operações específicas
-  - [ ] findByUser(User user)
-  - [ ] findByBook(Book book)
-  - [ ] findOverdueLoans()
-  - [ ] findActiveLoans()
+- [x] **LoanDAO**: Operações específicas
+  - [x] listUser()
+  - [x] listBooks()
+  - [x] findActiveLoans()
 - [ ] **Interface**: Gestão de empréstimos
   - [ ] Formulário de novo empréstimo
   - [ ] Lista de empréstimos ativos
