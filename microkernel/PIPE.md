@@ -102,10 +102,10 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 
 2. **Lógica de Negócio**
 
-   - [ ] Implementar `LoanDAO.java` com transações
-   - [ ] Método `realizarEmprestimo()`: criar empréstimo + diminuir estoque
-   - [ ] Método `registrarDevolucao()`: finalizar empréstimo + aumentar estoque
-   - [ ] Validações de disponibilidade
+   - [x] Implementar `LoanDAO.java` com transações
+   - [x] Método `realizarEmprestimo()`: criar empréstimo + diminuir estoque
+   - [x] Método `registrarDevolucao()`: finalizar empréstimo + aumentar estoque
+   - [x] Validações de disponibilidade
 
 3. **Interface Avançada**
 
@@ -115,7 +115,7 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 
 4. **Testes Funcionais**
    - [x] `BookDAOTest.java`
-   - [ ] `LoanDAOTest.java` (especialmente importante para validar regras de negócio)
+   - [x] `LoanDAOTest.java` (especialmente importante para validar regras de negócio)
 
 **⚡ Resultado:** Aceleração massiva - Hibernate gerencia relacionamentos e transações automaticamente.
 

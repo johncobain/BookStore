@@ -25,6 +25,7 @@
 
 #### Geral
 
+- [ ] Formatar datas no formato brasileiro
 - [ ] Relacionamento com Loan (OneToMany) // ver se vale a pena
 - [ ] Ao deletar um Usuário que tiver um empréstimo, deletar o empréstimo e incrementar o contador de copias disponíveis no livro
 

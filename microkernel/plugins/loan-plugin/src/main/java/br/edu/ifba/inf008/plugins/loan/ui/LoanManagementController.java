@@ -55,7 +55,7 @@ public class LoanManagementController {
         
         deleteButton.getStyleClass().add("button-danger");
         updateButton.getStyleClass().add("button-info");
-        returnButton.getStyleClass().add("button-confirm");
+        returnButton.getStyleClass().add("button-success");
       }
 
       @Override
