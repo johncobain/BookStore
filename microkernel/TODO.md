@@ -9,41 +9,25 @@
 - **Core Microkernel**: Sistema base funcionando
 - **Plugin System**: Carregamento dinâmico de plugins
 - **User Management**: CRUD completo com interface JavaFX
+- **Book Management**: CRUD completo com interface JavaFX
 - **Persistence Layer**: Hibernate + BaseDAO genérico
 - **UI Framework**: Interface modular com cards dinâmicos
 - **Documentation**: Arquitetura e guias de desenvolvimento
 
 ### 🔄 Em Progresso
 
-- **Book Plugin**: Interface básica criada, precisa de CRUD completo
 - **Loan Plugin**: Interface básica criada, precisa de funcionalidades
 - **Report Plugin**: Interface básica criada, precisa de implementação
 
 ## 📅 Cronograma Detalhado
 
-### Semana 3 (15-21/07): Plugins de Livros e Empréstimos
-
-#### Geral
+### Geral
 
 - [ ] Formatar datas no formato brasileiro
 - [ ] Relacionamento com Loan (OneToMany) // ver se vale a pena
 - [ ] Ao deletar um Usuário que tiver um empréstimo, deletar o empréstimo e incrementar o contador de copias disponíveis no livro
 
-#### Book Plugin - Prioridade ALTA
-
-- [x] **Modelo Book**: Entidade JPA com relacionamentos
-  - [x] Campos: title, author, isbn, publicationYear, availableCopies
-  - [x] Validações JPA
-- [x] **BookDAO**: Implementar BaseDAO<Book, Long>
-  - [x] findByTitle(String title)
-  - [x] findByAuthor(String author)
-  - [x] findByIsbn(String isbn)
-  - [x] findAvailableBooks()
-- [x] **Interface FXML**: Tela completa de gerenciamento
-  - [x] Formulário de cadastro/edição
-  - [x] Lista com busca por título/autor
-  - [x] Controle de exemplares disponíveis
-- [x] **Testes**: BookDAOTest completo
+### Semana 3 (15-21/07): Plugins de Livros e Empréstimos
 
 #### Loan Plugin - Prioridade ALTA
 
@@ -80,11 +64,6 @@
 - [ ] **Performance**: Otimizações de query e UI
 
 ## 🔧 Tarefas Técnicas Específicas
-
-### Banco de Dados
-
-- [x] **Database**: Configurar banco de dados (MariaDB)
-- [x] **Test Database**: Configurar banco separado para testes
 
 ### Infraestrutura
 
