@@ -1,6 +1,7 @@
 package br.edu.ifba.inf008.shell.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,11 +21,11 @@ public class Loan {
   @Column(name = "loan_id")
   private Integer loanId;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "book_id", nullable = false)
   private Book book;
 
@@ -92,53 +93,26 @@ public class Loan {
   }
 
   @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((loanId == null) ? 0 : loanId.hashCode());
-    result = prime * result + ((user == null) ? 0 : user.hashCode());
-    result = prime * result + ((book == null) ? 0 : book.hashCode());
-    result = prime * result + ((loanDate == null) ? 0 : loanDate.hashCode());
-    result = prime * result + ((returnDate == null) ? 0 : returnDate.hashCode());
-    return result;
-  }
+public boolean equals(Object obj) {
+  if (this == obj) return true;
+  if (obj == null || getClass() != obj.getClass()) return false;
+  Loan loan = (Loan) obj;
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Loan other = (Loan) obj;
-    if (loanId == null) {
-      if (other.loanId != null)
-        return false;
-    } else if (!loanId.equals(other.loanId))
-      return false;
-    if (user == null) {
-      if (other.user != null)
-        return false;
-    } else if (!user.equals(other.user))
-      return false;
-    if (book == null) {
-      if (other.book != null)
-        return false;
-    } else if (!book.equals(other.book))
-      return false;
-    if (loanDate == null) {
-      if (other.loanDate != null)
-        return false;
-    } else if (!loanDate.equals(other.loanDate))
-      return false;
-    if (returnDate == null) {
-      if (other.returnDate != null)
-        return false;
-    } else if (!returnDate.equals(other.returnDate))
-      return false;
-    return true;
+  if (loanId != null && loan.loanId != null) {
+    return loanId.equals(loan.loanId);
   }
+  return Objects.equals(user, loan.user) &&
+         Objects.equals(book, loan.book) &&
+         Objects.equals(loanDate, loan.loanDate);
+}
+
+@Override
+public int hashCode() {
+  if (loanId != null) {
+    return Objects.hash(loanId);
+  }
+  return Objects.hash(user, book, loanDate);
+}
 
   @Override
   public String toString() {
