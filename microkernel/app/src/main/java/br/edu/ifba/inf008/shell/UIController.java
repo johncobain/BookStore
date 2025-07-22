@@ -73,7 +73,7 @@ public class UIController extends Application implements IUIController{
 
         vBox.getChildren().addAll(tabPane);
 
-        Scene scene = new Scene(vBox, 1400, 800);
+        Scene scene = new Scene(vBox, 1400, 800);// TODO: 1280 x 720
         
         try{
             String cssPath = getClass().getResource("/css/main-style.css").toExternalForm();
