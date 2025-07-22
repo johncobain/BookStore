@@ -109,9 +109,9 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 
 3. **Interface Avançada**
 
-   - [ ] Formulário com ComboBox de usuários e livros
-   - [ ] Validação de cópias disponíveis
-   - [ ] Listagem de empréstimos ativos
+   - [x] Formulário com ComboBox de usuários e livros
+   - [x] Validação de cópias disponíveis
+   - [x] Listagem de empréstimos ativos
 
 4. **Testes Funcionais**
    - [x] `BookDAOTest.java`

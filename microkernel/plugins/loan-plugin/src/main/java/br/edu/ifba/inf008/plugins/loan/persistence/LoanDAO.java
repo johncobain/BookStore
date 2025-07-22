@@ -132,20 +132,48 @@ public class LoanDAO extends BaseDAO<Loan, Integer> {
         em.getTransaction().begin();
         
         Loan managedLoan = em.find(Loan.class, loan.getLoanId());
+        Book oldBook = em.find(Book.class, managedLoan.getBook().getBookId());
+        Book newBook = em.find(Book.class, loan.getBook().getBookId());
 
-        if (!managedLoan.getBook().equals(loan.getBook())) {
-          Book currentBook = em.find(Book.class, managedLoan.getBook().getBookId());
-          Book newBook = em.find(Book.class, loan.getBook().getBookId());
-          
-          if (newBook.getCopiesAvailable() > 0) {
-            
-            currentBook.setCopiesAvailable(currentBook.getCopiesAvailable() + 1);
-            newBook.setCopiesAvailable(newBook.getCopiesAvailable() - 1);
-            em.merge(currentBook);
+        boolean bookChanged = !oldBook.getBookId().equals(newBook.getBookId());
+        boolean wasReturned = managedLoan.getReturnDate() != null;
+        boolean isReturned = loan.getReturnDate() != null;
+
+        if (bookChanged) {
+          if (!wasReturned && isReturned) {
+            oldBook.setCopiesAvailable(oldBook.getCopiesAvailable() + 1);
+            em.merge(oldBook);
+          } else if (wasReturned && !isReturned) {
+            if (newBook.getCopiesAvailable() > 0) {
+              newBook.setCopiesAvailable(newBook.getCopiesAvailable() - 1);
+              em.merge(newBook);
+            } else {
+              em.getTransaction().rollback();
+              throw new IllegalStateException("No copies available for this book");
+            }
+          } else if (!wasReturned && !isReturned) {
+            oldBook.setCopiesAvailable(oldBook.getCopiesAvailable() + 1);
+            if (newBook.getCopiesAvailable() > 0) {
+              newBook.setCopiesAvailable(newBook.getCopiesAvailable() - 1);
+            } else {
+              em.getTransaction().rollback();
+              throw new IllegalStateException("No copies available for this book");
+            }
+            em.merge(oldBook);
             em.merge(newBook);
-          }else{
-            em.getTransaction().rollback();
-            throw new IllegalStateException("No copies available for this book");
+          }
+        } else {
+          if (!wasReturned && isReturned) {
+            oldBook.setCopiesAvailable(oldBook.getCopiesAvailable() + 1);
+            em.merge(oldBook);
+          } else if (wasReturned && !isReturned) {
+            if (oldBook.getCopiesAvailable() > 0) {
+              oldBook.setCopiesAvailable(oldBook.getCopiesAvailable() - 1);
+              em.merge(oldBook);
+            } else {
+              em.getTransaction().rollback();
+              throw new IllegalStateException("No copies available for this book");
+            }
           }
         }
 
@@ -165,9 +193,11 @@ public class LoanDAO extends BaseDAO<Loan, Integer> {
         em.getTransaction().begin();
         Loan managedLoan = em.find(Loan.class, loan.getLoanId());
 
-        Book book = em.find(Book.class, managedLoan.getBook().getBookId());
-        book.setCopiesAvailable(book.getCopiesAvailable() + 1);
-        em.merge(book);
+        if (loan.getReturnDate() == null){
+          Book book = em.find(Book.class, managedLoan.getBook().getBookId());
+          book.setCopiesAvailable(book.getCopiesAvailable() + 1);
+          em.merge(book);
+        }
 
         em.remove(managedLoan);
         

@@ -23,26 +23,8 @@
 
 ### Geral
 
-- [ ] Formatar datas no formato brasileiro
 - [ ] Relacionamento com Loan (OneToMany) // ver se vale a pena
 - [ ] Ao deletar um Usuário que tiver um empréstimo, deletar o empréstimo e incrementar o contador de copias disponíveis no livro
-
-### Semana 3 (15-21/07): Plugins de Livros e Empréstimos
-
-#### Loan Plugin - Prioridade ALTA
-
-- [x] **Modelo Loan**: Entidade JPA
-  - [x] Relacionamentos: User (ManyToOne), Book (ManyToOne)
-  - [x] Campos: loanDate, dueDate, returnDate
-- [x] **LoanDAO**: Operações específicas
-  - [x] listUser()
-  - [x] listBooks()
-  - [x] findActiveLoans()
-- [ ] **Interface**: Gestão de empréstimos
-  - [ ] Formulário de novo empréstimo
-  - [ ] Lista de empréstimos ativos
-  - [ ] Processo de devolução
-  - [ ] Indicadores de atraso
 
 ### Semana 4 (22-28/07): Finalização e Polimento
 
@@ -51,14 +33,12 @@
 - [ ] **Relatórios Básicos**:
   - [ ] Usuários mais ativos
   - [ ] Livros mais emprestados
-  - [ ] Empréstimos em atraso
   - [ ] Estatísticas gerais
 - [ ] **Exportação**: PDF ou CSV
 - [ ] **Filtros**: Por período, usuário, livro
 
 #### Melhorias Gerais - Prioridade BAIXA
 
-- [ ] **Autenticação**: Sistema completo de login
 - [ ] **Validações**: Input validation em todos os formulários
 - [ ] **Logs**: Sistema de logging estruturado
 - [ ] **Performance**: Otimizações de query e UI
@@ -75,7 +55,7 @@
 
 - [x] ✅ User CRUD (100%)
 - [x] ✅ Book CRUD (100%)
-- [ ] 🔄 Loan CRUD (10%)
+- [x] ✅ Loan CRUD (10%)
 - [ ] 🔄 Basic Reports (0%)
 
 > 🎯 **Meta Principal**: Sistema funcional completo até 05/08/2025 com todas as funcionalidades básicas implementadas e testadas.
