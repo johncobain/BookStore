@@ -2,6 +2,7 @@ package br.edu.ifba.inf008.plugins.loan.ui;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
@@ -10,9 +11,10 @@ import br.edu.ifba.inf008.shell.model.Loan;
 import br.edu.ifba.inf008.shell.model.User;
 import br.edu.ifba.inf008.shell.model.Book;
 import javafx.util.StringConverter;
-import java.time.format.DateTimeFormatter;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -57,76 +59,9 @@ public class LoanManagementController {
     loanListView.setItems(loans);
     configureLoanCellFactory();
 
-    userComboBox.setItems(FXCollections.observableArrayList(loanDAO.listUsers()));
-    bookComboBox.setItems(FXCollections.observableArrayList(loanDAO.listBooks()));
+    configureLoanComboBoxes();
 
-     userComboBox.setCellFactory(cb -> new ListCell<>() {
-      @Override
-      protected void updateItem(User user, boolean empty) {
-        super.updateItem(user, empty);
-        setText(empty || user == null ? null : user.getName() + " (" + user.getEmail() + ")");
-      }
-    });
-    userComboBox.setButtonCell(userComboBox.getCellFactory().call(null));
-
-    bookComboBox.setCellFactory(cb -> new ListCell<>() {
-      @Override
-      protected void updateItem(Book book, boolean empty) {
-        super.updateItem(book, empty);
-        setText(empty || book == null ? null : book.getTitle() + " (" + book.getAuthor() + ")");
-      }
-    });
-    bookComboBox.setButtonCell(bookComboBox.getCellFactory().call(null));
-
-    loanDatePicker.setValue(LocalDate.now());
-    loanDatePicker.setDayCellFactory(picker -> new DateCell() {
-      @Override
-      public void updateItem(LocalDate date, boolean empty){
-        super.updateItem(date,empty);
-        setDisable(empty || date.isAfter(LocalDate.now()));
-      }
-    });
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    loanDatePicker.setConverter(new StringConverter<LocalDate>() {
-      @Override
-      public String toString(LocalDate date) {
-        return date != null ? date.format(dateFormatter) : "";
-      }
-
-      @Override
-      public LocalDate fromString(String string) {
-        if (string == null || string.trim().isEmpty()) {
-          return null;
-        }
-        return LocalDate.parse(string, dateFormatter);
-      }
-    });
-
-    returnDatePicker.setValue(LocalDate.now());
-    returnDatePicker.setDayCellFactory(picker -> new DateCell() {
-      @Override
-      public void updateItem(LocalDate date, boolean empty){
-        super.updateItem(date,empty);
-        setDisable(empty || date.isBefore(loanDatePicker.getValue()));
-      }
-    });
-    returnDatePicker.setConverter(new StringConverter<LocalDate>() {
-      @Override
-      public String toString(LocalDate date) {
-        return date != null ? date.format(dateFormatter) : "";
-      }
-
-      @Override
-      public LocalDate fromString(String string) {
-        if (string == null || string.trim().isEmpty()) {
-          return null;
-        }
-        return LocalDate.parse(string, dateFormatter);
-      }
-    });
-
-    returnDatePicker.setVisible(false);
-    returnDateLabel.setVisible(false);
+    configureLoanDatePicker();
   }
 
   private void loadInitialData() {
@@ -175,6 +110,146 @@ public class LoanManagementController {
         }
       }
     });
+  }
+
+  private void configureLoanComboBoxes(){
+    List<User> users = loanDAO.listUsers();
+    List<Book> books = loanDAO.listBooks();
+    userComboBox.setItems(FXCollections.observableArrayList(users));
+    bookComboBox.setItems(FXCollections.observableArrayList(books));
+
+     userComboBox.setCellFactory(cb -> new ListCell<>() {
+      @Override
+      protected void updateItem(User user, boolean empty) {
+        super.updateItem(user, empty);
+        setText(empty || user == null ? null : user.getName() + " (" + user.getEmail() + ")");
+      }
+    });
+    userComboBox.setConverter(new StringConverter<User>() {
+      @Override
+      public String toString(User user) {
+        return user == null ? "" : user.getName();
+      }
+
+      @Override
+      public User fromString(String string) {
+        return users.stream()
+          .filter(u -> u.getName().equals(string))
+          .findFirst()
+          .orElse(null);
+      }
+    });
+    userComboBox.setButtonCell(userComboBox.getCellFactory().call(null));
+
+    bookComboBox.setCellFactory(cb -> new ListCell<>() {
+      @Override
+      protected void updateItem(Book book, boolean empty) {
+        super.updateItem(book, empty);
+        setText(empty || book == null ? null : book.getTitle() + " (" + book.getAuthor() + ")");
+      }
+    });
+    bookComboBox.setConverter(new StringConverter<Book>() {
+      @Override
+      public String toString(Book book) {
+        return book == null ? "" : book.getTitle();
+      }
+
+      @Override
+      public Book fromString(String string) {
+        return books.stream()
+          .filter(b -> b.getTitle().equals(string))
+          .findFirst()
+          .orElse(null);
+      }
+    });
+    bookComboBox.setButtonCell(bookComboBox.getCellFactory().call(null));
+
+    userComboBox.setEditable(true);
+    bookComboBox.setEditable(true);
+
+    FilteredList<User> filteredUsers = new FilteredList<>(FXCollections.observableArrayList(users), p -> true);
+      userComboBox.setItems(filteredUsers);
+      userComboBox.getEditor().textProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> {
+          if (userComboBox.getSelectionModel().getSelectedItem() == null ||
+                  !userComboBox.getSelectionModel().getSelectedItem().getName().equals(newVal)) {
+              filteredUsers.setPredicate(user -> user.getName().toLowerCase().contains(newVal.toLowerCase().trim()));
+          }
+      }));
+      
+      userComboBox.getEditor().setOnMouseClicked(e -> {
+          if (!userComboBox.isShowing()) {
+              userComboBox.show();
+          }
+      });
+
+      FilteredList<Book> filteredBooks = new FilteredList<>(FXCollections.observableArrayList(books), p -> true);
+      bookComboBox.setItems(filteredBooks);
+      bookComboBox.getEditor().textProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> {
+          if (bookComboBox.getSelectionModel().getSelectedItem() == null ||
+                  !bookComboBox.getSelectionModel().getSelectedItem().getTitle().equals(newVal)) {
+              filteredBooks.setPredicate(book -> book.getTitle().toLowerCase().contains(newVal.toLowerCase().trim()));
+          }
+      }));
+
+      bookComboBox.getEditor().setOnMouseClicked(e -> {
+          if (!bookComboBox.isShowing()) {
+              bookComboBox.show();
+          }
+      });
+  }
+
+  private void configureLoanDatePicker() {
+    loanDatePicker.setValue(LocalDate.now());
+    loanDatePicker.setDayCellFactory(picker -> new DateCell() {
+      @Override
+      public void updateItem(LocalDate date, boolean empty){
+        super.updateItem(date,empty);
+        setDisable(empty || date.isAfter(LocalDate.now()));
+      }
+    });
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    loanDatePicker.setConverter(new StringConverter<LocalDate>() {
+      @Override
+      public String toString(LocalDate date) {
+        return date != null ? date.format(dateFormatter) : "";
+      }
+
+      @Override
+      public LocalDate fromString(String string) {
+        if (string == null || string.trim().isEmpty()) {
+          return null;
+        }
+        return LocalDate.parse(string, dateFormatter);
+      }
+    });
+    loanDatePicker.setEditable(false);
+
+    returnDatePicker.setValue(LocalDate.now());
+    returnDatePicker.setDayCellFactory(picker -> new DateCell() {
+      @Override
+      public void updateItem(LocalDate date, boolean empty){
+        super.updateItem(date,empty);
+        setDisable(empty || date.isBefore(loanDatePicker.getValue()));
+      }
+    });
+    returnDatePicker.setConverter(new StringConverter<LocalDate>() {
+      @Override
+      public String toString(LocalDate date) {
+        return date != null ? date.format(dateFormatter) : "";
+      }
+
+      @Override
+      public LocalDate fromString(String string) {
+        if (string == null || string.trim().isEmpty()) {
+          return null;
+        }
+        return LocalDate.parse(string, dateFormatter);
+      }
+    });
+    returnDatePicker.setEditable(false);
+
+    returnDatePicker.setVisible(false);
+    returnDateLabel.setVisible(false);
   }
 
   @FXML
