@@ -23,7 +23,6 @@
 
 ### Geral
 
-- [ ] RegisteredAt em usuários
 - [ ] Ver se é viável transformar as listas em tabelas
 - [ ] Ao deletar um Usuário que tiver um empréstimo, deletar o empréstimo e incrementar o contador de copias disponíveis no livro
 

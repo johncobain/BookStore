@@ -1,5 +1,6 @@
 package br.edu.ifba.inf008.plugins.user.ui;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import br.edu.ifba.inf008.interfaces.ICore;
@@ -75,7 +76,7 @@ public class UserManagementController {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    label.setText("ID: " + user.getUserId() + " | " + user.getName() + " (" + user.getEmail() + ")");
+                    label.setText("ID: " + user.getUserId() + " | " + user.getName() + " (" + user.getEmail() + ") | Registro: " + formatDate(user.getRegisteredAt()));
                     setGraphic(hbox);
 
                     deleteButton.setOnAction(event -> handleDelete(getItem()));
@@ -192,6 +193,12 @@ public class UserManagementController {
 
     private void handleInfo(User user) {
         uiController.showAlert("User info", "Id: " + user.getUserId() + "\nName: " + user.getName() + "\nEmail: " + user.getEmail() +
-            "\nRegistered At: " + user.getRegisteredAt());
+            "\nRegistered At: " + formatDate(user.getRegisteredAt()));
+    }
+
+    private String formatDate(LocalDateTime date) {
+        if (date == null) return "N/A";
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        return formatter.format(date);
     }
 }
