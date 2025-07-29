@@ -169,32 +169,32 @@ public class LoanManagementController {
 
     FilteredList<User> filteredUsers = new FilteredList<>(FXCollections.observableArrayList(users), p -> true);
       userComboBox.setItems(filteredUsers);
-      userComboBox.getEditor().textProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> {
-          if (userComboBox.getSelectionModel().getSelectedItem() == null ||
-                  !userComboBox.getSelectionModel().getSelectedItem().getName().equals(newVal)) {
-              filteredUsers.setPredicate(user -> user.getName().toLowerCase().contains(newVal.toLowerCase().trim()));
-          }
+      userComboBox.getEditor().textProperty().addListener((obs, oldText, newText) -> Platform.runLater(() -> {
+        if (userComboBox.getSelectionModel().getSelectedItem() == null ||
+              !userComboBox.getSelectionModel().getSelectedItem().getName().equals(newText)) {
+          filteredUsers.setPredicate(user -> user.getName().toLowerCase().contains(newText.toLowerCase().trim()));
+        }
       }));
       
       userComboBox.getEditor().setOnMouseClicked(e -> {
-          if (!userComboBox.isShowing()) {
-              userComboBox.show();
-          }
+        if (!userComboBox.isShowing()) {
+          userComboBox.show();
+        }
       });
 
       FilteredList<Book> filteredBooks = new FilteredList<>(FXCollections.observableArrayList(books), p -> true);
       bookComboBox.setItems(filteredBooks);
-      bookComboBox.getEditor().textProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> {
+      bookComboBox.getEditor().textProperty().addListener((obs, oldText, newText) -> Platform.runLater(() -> {
           if (bookComboBox.getSelectionModel().getSelectedItem() == null ||
-                  !bookComboBox.getSelectionModel().getSelectedItem().getTitle().equals(newVal)) {
-              filteredBooks.setPredicate(book -> book.getTitle().toLowerCase().contains(newVal.toLowerCase().trim()));
+              !bookComboBox.getSelectionModel().getSelectedItem().getTitle().equals(newText)) {
+            filteredBooks.setPredicate(book -> book.getTitle().toLowerCase().contains(newText.toLowerCase().trim()));
           }
       }));
 
       bookComboBox.getEditor().setOnMouseClicked(e -> {
-          if (!bookComboBox.isShowing()) {
-              bookComboBox.show();
-          }
+        if (!bookComboBox.isShowing()) {
+          bookComboBox.show();
+        }
       });
   }
 
@@ -224,7 +224,7 @@ public class LoanManagementController {
     });
     loanDatePicker.setEditable(false);
 
-    returnDatePicker.setValue(LocalDate.now());
+    returnDatePicker.setValue(null);
     returnDatePicker.setDayCellFactory(picker -> new DateCell() {
       @Override
       public void updateItem(LocalDate date, boolean empty){
@@ -246,7 +246,18 @@ public class LoanManagementController {
         return LocalDate.parse(string, dateFormatter);
       }
     });
-    returnDatePicker.setEditable(false);
+    returnDatePicker.setEditable(true);
+    returnDatePicker.getEditor().textProperty().addListener((obs, oldText, newText) -> {
+      if (returnDatePicker.getEditor().getText().trim().isEmpty()) {
+        returnDatePicker.setValue(null);
+      }else {
+        try {
+          LocalDate parsedDate = LocalDate.parse(newText, dateFormatter);
+          returnDatePicker.setValue(parsedDate);
+        } catch (Exception e) {
+        }
+      }
+    });
 
     returnDatePicker.setVisible(false);
     returnDateLabel.setVisible(false);
@@ -258,20 +269,20 @@ public class LoanManagementController {
     Book selectedBook = bookComboBox.getValue();
     LocalDate selectedDate = loanDatePicker.getValue();
     LocalDate returnDate = returnDatePicker.getValue();
-    if (returnDatePicker.getEditor().getText().trim().isEmpty()) {
-      returnDate = null;
-    }
     if (selectedDate == null) {
-        uiController.showAlert("Invalid Date", "Please select a loan date.");
-        return;
+      uiController.showAlert("Invalid Date", "Please select a loan date.");
+      return;
     }
     if (selectedDate.isAfter(LocalDate.now())) {
-        uiController.showAlert("Invalid Date", "Loan date cannot be in the future.");
-        return;
+      uiController.showAlert("Invalid Date", "Loan date cannot be in the future.");
+      return;
     }
     if (returnDate != null && returnDate.isBefore(selectedDate)) {
-        uiController.showAlert("Invalid Date", "Return date cannot be before loan date.");
-        return;
+      uiController.showAlert("Invalid Date", "Return date cannot be before loan date.");
+      return;
+    }
+    if (returnDatePicker.getEditor().getText().trim().isEmpty()) {
+      returnDate = null;
     }
     if (selectedUser == null) {
       uiController.showAlert("Invalid User", "Please select a user.");
