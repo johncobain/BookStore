@@ -23,6 +23,7 @@
 
 ### Geral
 
+- [ ] RegisteredAt em usuários
 - [ ] Ver se é viável transformar as listas em tabelas
 - [ ] Ao deletar um Usuário que tiver um empréstimo, deletar o empréstimo e incrementar o contador de copias disponíveis no livro
 
@@ -35,6 +36,7 @@
   - [ ] Usuários mais ativos
   - [ ] Livros mais emprestados
   - [ ] Estatísticas gerais
+  - [ ] Título, autor, nome do usuário, data do empréstimo
 - [ ] **Exportação**: PDF ou CSV
 - [ ] **Filtros**: Por período, usuário, livro
 
