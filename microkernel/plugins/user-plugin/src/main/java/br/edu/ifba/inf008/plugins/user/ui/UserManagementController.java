@@ -50,7 +50,7 @@ public class UserManagementController {
         users.addAll(userDAO.findAll());
     }
 
-    private void configureUserCellFactory() { //TODO: When clicked on cell Show info
+    private void configureUserCellFactory() {
         userListView.setCellFactory(lv -> new ListCell<User>() {
             private final HBox hbox = new HBox(10);
             private final Label label = new Label();
@@ -75,7 +75,7 @@ public class UserManagementController {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    label.setText(user.getName() + " (" + user.getEmail() + ")");
+                    label.setText("ID: " + user.getUserId() + " | " + user.getName() + " (" + user.getEmail() + ")");
                     setGraphic(hbox);
 
                     deleteButton.setOnAction(event -> handleDelete(getItem()));

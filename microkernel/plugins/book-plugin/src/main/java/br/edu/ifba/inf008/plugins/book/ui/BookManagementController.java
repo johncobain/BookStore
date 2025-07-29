@@ -91,7 +91,7 @@ public class BookManagementController {
           setText(null);
           setGraphic(null);
       } else {
-          label.setText(book.getTitle() + " (" + book.getPublishedYear() + ") - " + book.getAuthor() + " - ISBN: " + book.getIsbn() + " - Copies: " + book.getCopiesAvailable());
+          label.setText("ID: " + book.getBookId() + " | " +book.getTitle() + " (" + book.getPublishedYear() + ") - " + book.getAuthor() + " - ISBN: " + book.getIsbn() + " - Copies: " + book.getCopiesAvailable());
           setGraphic(hbox);
 
           infoButton.setOnAction(event -> handleInfo(getItem()));
