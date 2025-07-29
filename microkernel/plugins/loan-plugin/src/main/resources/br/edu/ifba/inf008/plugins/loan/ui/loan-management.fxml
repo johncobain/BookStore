@@ -26,16 +26,16 @@
   </stylesheets>
 
   <padding>
-    <Insets bottom="25" left="25" right="25" top="25" />
+    <Insets bottom="15" left="15" right="15" top="15" />
   </padding>
     
   <left>
-    <VBox spacing="20" prefWidth="400" styleClass="left-panel">
+    <VBox spacing="10" prefWidth="400" styleClass="left-panel">
       <padding>
         <Insets right="15" left="15" bottom="10"/>
       </padding>
-        <children>
-          <VBox spacing="10" styleClass="content-box">
+      <children>
+        <VBox spacing="8" styleClass="content-box">
             <children>
               <Label text="Search Loan:" />
               <TextField fx:id="searchField" promptText="Enter loan ID, borrower name or email" />

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.shell.util.IconHelper;
+import static br.edu.ifba.inf008.shell.util.IconHelper.createIconView;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -52,7 +54,7 @@ public class UIController extends Application implements IUIController{
     public void start(Stage primaryStage) {
         primaryStage.setTitle("BookStore Blackbird");
 
-        Image appIcon = IconHelper.loadIcon("bookStore-icon.png");
+        Image appIcon = IconHelper.loadIcon("/icons/bookStore-icon.png");
         if (appIcon != null) {
             primaryStage.getIcons().add(appIcon);
         } else {
@@ -73,8 +75,8 @@ public class UIController extends Application implements IUIController{
 
         vBox.getChildren().addAll(tabPane);
 
-        Scene scene = new Scene(vBox, 1400, 800);// TODO: 1280 x 720
-        
+        Scene scene = new Scene(vBox, 1280, 720);
+
         try{
             String cssPath = getClass().getResource("/css/main-style.css").toExternalForm();
             scene.getStylesheets().add(cssPath);
@@ -93,7 +95,7 @@ public class UIController extends Application implements IUIController{
         welcomeContent = new VBox(10);
         welcomeContent.getStyleClass().add("welcome-content");
         welcomeContent.setAlignment(Pos.TOP_CENTER);
-        welcomeContent.setPadding(new Insets(40, 20, 20, 20));
+        welcomeContent.setPadding(new Insets(15, 15, 15, 15));
         welcomeContent.setFillWidth(true);
 
         VBox headerSection = createHeaderSection();
@@ -102,7 +104,7 @@ public class UIController extends Application implements IUIController{
 
         welcomeContent.getChildren().addAll(headerSection, cardsSection, footerSection);
 
-        Tab welcomeTab = new Tab("🏠 Home");
+        Tab welcomeTab = new Tab("Home");
         welcomeTab.setContent(welcomeContent);
         welcomeTab.setClosable(false);
         tabPane.getTabs().add(welcomeTab);
@@ -118,7 +120,7 @@ public class UIController extends Application implements IUIController{
         Label subtitle = new Label("Your one-stop solution for managing books and users.");
         subtitle.getStyleClass().add("welcome-subtitle");
 
-ImageView logoIcon = IconHelper.createIconView("bookStore-icon-removebg.png", 64);
+        ImageView logoIcon = IconHelper.createIconView("/icons/bookStore-icon-removebg.png", 64);
 
         Label description = new Label("Select a module below to start managing your bookstore");
         description.getStyleClass().add("welcome-description");
@@ -160,7 +162,10 @@ ImageView logoIcon = IconHelper.createIconView("bookStore-icon-removebg.png", 64
         footer.setAlignment(Pos.CENTER);
         footer.setPadding(new Insets(10, 0, 0, 0));
 
-        Label footerText = new Label("Built with ❤️ by Andrey Gomes");
+        Hyperlink footerText = new Hyperlink("Built with ❤️ by Andrey Gomes");
+        footerText.setOnAction(e -> {
+            getHostServices().showDocument("https://github.com/johncobain");
+        });
         footerText.getStyleClass().add("welcome-footer-text");
 
         footer.getChildren().add(footerText);
@@ -168,8 +173,9 @@ ImageView logoIcon = IconHelper.createIconView("bookStore-icon-removebg.png", 64
     }
 
     private void addDefaultCard() {
+        ImageView logo = createIconView("/icons/system.png");
         VBox defaultCard = createWelcomeCard(
-            "⚙️",
+            logo,
             "System Initializing",
             "Loading plugins...",
             null
@@ -177,9 +183,9 @@ ImageView logoIcon = IconHelper.createIconView("bookStore-icon-removebg.png", 64
         defaultCard.setId("default-card");
         cardsContainer.getChildren().add(defaultCard);
     }
-
+    
     @Override
-    public void addPluginCard(String pluginName, String icon, String title, String description, Runnable action){
+    public void addPluginCard(String pluginName, ImageView icon, String title, String description, Runnable action){
         cardsContainer.getChildren().removeIf(node -> "default-card".equals(node.getId()));
 
         VBox card = createWelcomeCard(icon, title, description, action);
@@ -201,16 +207,17 @@ ImageView logoIcon = IconHelper.createIconView("bookStore-icon-removebg.png", 64
         if(cardsContainer.getChildren().isEmpty()){
             addDefaultCard();
         }
-    }
+    }   
 
-    private VBox createWelcomeCard(String icon, String title, String description, Runnable action){
+    private VBox createWelcomeCard(ImageView icon, String title, String description, Runnable action){
         VBox card = new VBox(15);
         card.setAlignment(Pos.CENTER);
         card.setPrefWidth(220);
         card.setPrefHeight(200);
         card.getStyleClass().add("welcome-card");
 
-        Label iconLabel = new Label(icon);
+        Label iconLabel = new Label();
+        iconLabel.setGraphic(icon);
         iconLabel.getStyleClass().add("welcome-card-icon");
 
         Label titleLabel = new Label(title);
@@ -251,7 +258,6 @@ ImageView logoIcon = IconHelper.createIconView("bookStore-icon-removebg.png", 64
             menuBar.getMenus().add(newMenu);
         }
 
-        // Criar o menu item neste menu
         MenuItem menuItem = new MenuItem(menuItemText);
         newMenu.getItems().add(menuItem);
 

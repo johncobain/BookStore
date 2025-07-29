@@ -2,16 +2,24 @@
   -fx-font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
   -fx-font-size: 14px;
   -fx-background-color: #f8f9fa;
+
+  font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+  font-size: 14px;
+  background-color: #f8f9fa;
 }
 
 .main-container {
   -fx-background-color: #ffffff;
   -fx-spacing: 0;
+
+  background-color: #ffffff;
 }
 
 .welcome-content {
   -fx-background-color: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
   -fx-alignment: center;
+
+  background-color: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
 }
 
 .welcome-title {
@@ -50,22 +58,27 @@
 }
 
 .welcome-footer-text {
-  -fx-font-size: 12px;
+  -fx-font-size: 14px;
   -fx-text-fill: #95a5a6;
   -fx-font-style: italic;
   -fx-padding: 20 0 0 0;
+  -fx-cursor: hand;
+}
+
+.welcome-footer-text:hover {
+  -fx-text-fill: #519ea3;
 }
 
 .welcome-cards {
   -fx-background-color: rgba(255, 255, 255, 0.8);
   -fx-background-radius: 15;
-  -fx-padding: 40;
+  -fx-padding: 20;
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 10, 0, 0, 5);
 }
 
 .welcome-card {
   -fx-background-color: white;
-  -fx-padding: 30;
+  -fx-padding: 20;
   -fx-background-radius: 12;
   -fx-border-radius: 12;
   -fx-border-color: #e1e8ed;

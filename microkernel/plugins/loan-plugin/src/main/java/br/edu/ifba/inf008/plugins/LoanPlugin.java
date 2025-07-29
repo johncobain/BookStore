@@ -6,9 +6,11 @@ import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.shell.persistence.JPAUtil;
+import static br.edu.ifba.inf008.shell.util.IconHelper.createIconView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 
 public class LoanPlugin implements IPlugin {
   @Override
@@ -37,7 +39,7 @@ public class LoanPlugin implements IPlugin {
 
           loader.setClassLoader(classLoader);
           Node content = loader.load();            
-          uiController.createTab("📋 Loan Management", content);
+          uiController.createTab("Loan Management", content);
     
           System.out.println("✅ Interface loaded successfully!");
         } catch (IOException e) {
@@ -48,10 +50,14 @@ public class LoanPlugin implements IPlugin {
       };
 
       menuItem.setOnAction(e -> openLoansInterface.run());
-
+      ImageView logo = createIconView(
+        this.getClass(),
+        "/br/edu/ifba/inf008/plugins/loan/ui/icons/logo.png"
+      );
+      System.out.println("Logo loaded: " + (logo.getImage() != null));
       uiController.addPluginCard(
         "loan-plugin",
-        "📋",
+        logo,
         "Loan Management",
         "Track book loans.",
         openLoansInterface

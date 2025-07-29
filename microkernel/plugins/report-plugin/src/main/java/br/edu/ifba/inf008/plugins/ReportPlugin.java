@@ -3,9 +3,11 @@ package br.edu.ifba.inf008.plugins;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import static br.edu.ifba.inf008.shell.util.IconHelper.createIconView;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class ReportPlugin implements IPlugin {
@@ -27,16 +29,20 @@ public class ReportPlugin implements IPlugin {
           new Label("Date/Time: " + java.time.LocalDateTime.now())
         );
 
-        uiController.createTab("📊 Reports & Analytics", content);
+        uiController.createTab("Reports & Analytics", content);
 
         System.out.println("Report Plugin executed - new tab created!");
       };
 
       menuItem.setOnAction(e -> openReportsInterface.run());
-
-       uiController.addPluginCard(
+      ImageView logo = createIconView(
+        this.getClass(),
+        "/br/edu/ifba/inf008/plugins/report/ui/icons/logo.png"
+      );
+      System.out.println("Logo loaded: " + (logo.getImage() != null));
+      uiController.addPluginCard(
         "report-plugin",
-        "📊",
+        logo,
         "Reports & Analytics",
         "Generate detailed reports.",
         openReportsInterface

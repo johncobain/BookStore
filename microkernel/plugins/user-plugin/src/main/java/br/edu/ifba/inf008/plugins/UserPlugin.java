@@ -6,9 +6,11 @@ import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.shell.persistence.JPAUtil;
+import static br.edu.ifba.inf008.shell.util.IconHelper.createIconView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 
 public class UserPlugin implements IPlugin {
   @Override
@@ -37,7 +39,7 @@ public class UserPlugin implements IPlugin {
 
           loader.setClassLoader(classLoader);
           Node content = loader.load();
-          uiController.createTab("👥 User Management", content);
+          uiController.createTab("User Management", content);
 
           System.out.println("✅ Interface loaded successfully!");
         } catch(IOException e) {
@@ -47,10 +49,14 @@ public class UserPlugin implements IPlugin {
       };
 
       menuItem.setOnAction(e -> openUsersInterface.run());
-
+      ImageView logo = createIconView(
+        this.getClass(),
+        "/br/edu/ifba/inf008/plugins/user/ui/icons/logo.png"
+      );
+      System.out.println("Logo loaded: " + (logo.getImage() != null));
       uiController.addPluginCard(
-        "user-plugin", 
-        "👥", 
+        "user-plugin",
+        logo,
         "User Management",
         "Manage library users.",
         openUsersInterface

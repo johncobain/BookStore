@@ -2,6 +2,7 @@ package br.edu.ifba.inf008.interfaces;
 
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 
 public interface IUIController
 {
@@ -10,6 +11,6 @@ public interface IUIController
     public abstract void showAlert(String title, String message);
     public abstract void showConfirmation(String title, String message, Runnable onConfirm);
 
-    void addPluginCard(String pluginName, String icon, String title, String description, Runnable action);
+    void addPluginCard(String pluginName, ImageView icon, String title, String description, Runnable action);
     void removePluginCard(String pluginName);
 }
