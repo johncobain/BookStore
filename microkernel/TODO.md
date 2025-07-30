@@ -23,6 +23,11 @@
 
 ### Geral
 
+- [ ] Botão refresh
+- [ ] Clicar num card já aberto abre a tab correspondente
+- [ ] ComboBox ao inves de checkBox nas pesquisas
+- [ ] Informação em quem está sendo editado
+- [ ] Botões em cima das tabelas com texto ao invés de emoji na linha
 - [ ] Ver se é viável transformar as listas em tabelas
 - [ ] Ao deletar um Usuário que tiver um empréstimo, deletar o empréstimo e incrementar o contador de copias disponíveis no livro
 

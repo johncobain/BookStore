@@ -15,13 +15,10 @@ import javafx.scene.image.ImageView;
 public class UserPlugin implements IPlugin {
   @Override
   public boolean init(){
-    System.out.println("🔌 UserPlugin...");
     try {
-      System.out.println("🔗 Initializing database connection...");
       JPAUtil.warmUp();
-      System.out.println("✅ Database connection initialized successfully!");
     } catch (Exception e) {
-      System.err.println("⚠️  Warning: Could not initialize database connection: " + e.getMessage());
+      System.err.println("Warning: Could not initialize database connection: " + e.getMessage());
     }
 
     try{
@@ -30,7 +27,6 @@ public class UserPlugin implements IPlugin {
       MenuItem menuItem = uiController.createMenuItem("Management", "Users");
 
       Runnable openUsersInterface = () -> {
-        System.out.println("🎯 Oppening Users Interface...");
         try {
           ClassLoader classLoader = getClass().getClassLoader();
           FXMLLoader loader = new FXMLLoader(
@@ -41,9 +37,8 @@ public class UserPlugin implements IPlugin {
           Node content = loader.load();
           uiController.createTab("User Management", content);
 
-          System.out.println("✅ Interface loaded successfully!");
         } catch(IOException e) {
-          System.err.println("❌ Error opening Users Interface: " + e.getMessage());
+          System.err.println("Error opening Users Interface: " + e.getMessage());
           uiController.showAlert("Error", "Failed to open Users Interface: " + e.getMessage());
         }
       };
@@ -53,7 +48,6 @@ public class UserPlugin implements IPlugin {
         this.getClass(),
         "/br/edu/ifba/inf008/plugins/user/ui/icons/logo.png"
       );
-      System.out.println("Logo loaded: " + (logo.getImage() != null));
       uiController.addPluginCard(
         "user-plugin",
         logo,
@@ -61,12 +55,10 @@ public class UserPlugin implements IPlugin {
         "Manage library users.",
         openUsersInterface
       );
-
-      System.out.println("✅ UserPlugin initialized successfully!");
       return true;
 
     } catch (Exception e) {
-      System.err.println("❌ Error initializing UserPlugin: " + e.getMessage());
+      System.err.println("Error initializing UserPlugin: " + e.getMessage());
       return false;
     }
   }

@@ -1,0 +1,137 @@
+.page-container {
+  -fx-background-color: #f4f4f9;
+  background-color: #f4f4f9; /* For compatibility */
+}
+
+.left-panel {
+  -fx-background-color: #ffffff;
+  -fx-border-color: #e0e0e0;
+  -fx-border-width: 0 1px 0 0;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0, -5, 5);
+
+  background-color: #ffffff;
+  border-color: #e0e0e0;
+  border-width: 0 1px 0 0;
+}
+
+.titled-pane {
+  -fx-text-fill: #333333;
+
+  color: #333333;
+}
+
+.titled-pane > .title {
+  -fx-background-color: #e9e9ef;
+  -fx-border-color: #dcdcdc;
+  -fx-border-width: 1px;
+
+  background-color: #e9e9ef;
+  border-color: #dcdcdc;
+  border-width: 1px;
+}
+
+.content-box {
+  -fx-padding: 15px;
+  -fx-background-color: #ffffff;
+
+  padding: 15px;
+  background-color: #ffffff;
+}
+
+.report-list-view {
+  -fx-background-color: #ffffff;
+  -fx-border-color: #cccccc;
+
+  background-color: #ffffff;
+  border-color: #cccccc;
+}
+
+.report-list-view .list-cell {
+  -fx-padding: 10px;
+  -fx-font-size: 14px;
+  -fx-border-color: transparent transparent #e0e0e0 transparent;
+  -fx-border-width: 1px;
+
+  padding: 10px;
+  font-size: 14px;
+  border-color: transparent transparent #e0e0e0 transparent;
+  border-width: 1px;
+}
+
+.report-list-view .list-cell:hover {
+  -fx-background-color: #e8f0fe;
+  -fx-cursor: hand;
+
+  background-color: #e8f0fe;
+  cursor: pointer;
+}
+
+.button-primary {
+  -fx-background-color: #4285f4;
+  -fx-text-fill: #ffffff;
+  -fx-font-weight: bold;
+
+  background-color: #4285f4;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.button-primary:hover {
+  -fx-background-color: #357ae8;
+  -fx-cursor: hand;
+
+  background-color: #357ae8;
+  cursor: pointer;
+}
+
+.button-success {
+  -fx-background-color: #34a853;
+  -fx-text-fill: #ffffff;
+  -fx-font-weight: bold;
+
+  background-color: #34a853;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.button-success:hover {
+  -fx-background-color: #2c8f45;
+
+  background-color: #2c8f45;
+}
+
+.button-danger {
+  -fx-background-color: #ea4335;
+  -fx-text-fill: #ffffff;
+  -fx-background-radius: 5em;
+  -fx-min-width: 30px;
+  -fx-min-height: 30px;
+
+  background-color: #ea4335;
+  color: #ffffff;
+  min-width: 30px;
+  min-height: 30px;
+}
+.button-danger:hover {
+  -fx-background-color: #d43729;
+
+  background-color: #d43729;
+}
+
+.button-info {
+  -fx-background-color: #fbbc05;
+  -fx-text-fill: white;
+  -fx-background-radius: 5em;
+  -fx-min-width: 30px;
+  -fx-min-height: 30px;
+
+  background-color: #fbbc05;
+  color: white;
+  min-width: 30px;
+  min-height: 30px;
+}
+.button-info:hover {
+  -fx-background-color: #e6ac00;
+
+  background-color: #e6ac00;
+}

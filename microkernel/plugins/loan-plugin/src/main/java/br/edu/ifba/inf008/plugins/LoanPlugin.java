@@ -15,13 +15,10 @@ import javafx.scene.image.ImageView;
 public class LoanPlugin implements IPlugin {
   @Override
   public boolean init(){
-    System.out.println("🔌 LoanPlugin...");
     try {
-      System.out.println("🔗 Initializing database connection...");
       JPAUtil.warmUp();
-      System.out.println("✅ Database connection initialized successfully!");
     } catch (Exception e) {
-      System.err.println("⚠️  Warning: Could not initialize database connection: " + e.getMessage());
+      System.err.println("Warning: Could not initialize database connection: " + e.getMessage());
     }
 
     try{
@@ -30,7 +27,6 @@ public class LoanPlugin implements IPlugin {
       MenuItem menuItem = uiController.createMenuItem("Management", "Loans");
 
       Runnable openLoansInterface = () -> {
-        System.out.println("🎯 Opening Loans Interface...");
         try {
           ClassLoader classLoader = getClass().getClassLoader();
           FXMLLoader loader = new FXMLLoader(
@@ -40,10 +36,9 @@ public class LoanPlugin implements IPlugin {
           loader.setClassLoader(classLoader);
           Node content = loader.load();            
           uiController.createTab("Loan Management", content);
-    
-          System.out.println("✅ Interface loaded successfully!");
+
         } catch (IOException e) {
-          System.err.println("❌ Error loading Loans Interface: " + e.getMessage());
+          System.err.println("Error loading Loans Interface: " + e.getMessage());
           uiController.showAlert("Error", "Failed to open Loans Interface: " + e.getMessage());
         }
 
@@ -54,7 +49,6 @@ public class LoanPlugin implements IPlugin {
         this.getClass(),
         "/br/edu/ifba/inf008/plugins/loan/ui/icons/logo.png"
       );
-      System.out.println("Logo loaded: " + (logo.getImage() != null));
       uiController.addPluginCard(
         "loan-plugin",
         logo,
@@ -62,12 +56,10 @@ public class LoanPlugin implements IPlugin {
         "Track book loans.",
         openLoansInterface
       );
-
-      System.out.println("✅ LoanPlugin initialized successfully!");
       return true;
 
     } catch (Exception e) {
-      System.err.println("❌ Error initializing LoanPlugin: " + e.getMessage());
+      System.err.println("Error initializing LoanPlugin: " + e.getMessage());
       return false;
     }
   }

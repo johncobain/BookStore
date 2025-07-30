@@ -1,19 +1,25 @@
 package br.edu.ifba.inf008.plugins;
 
+import java.io.IOException;
+
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.shell.persistence.JPAUtil;
 import static br.edu.ifba.inf008.shell.util.IconHelper.createIconView;
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 
 public class ReportPlugin implements IPlugin {
   @Override
   public boolean init(){
-    System.out.println("🔌 ReportPlugin...");
+    try {
+      JPAUtil.warmUp();
+    } catch (Exception e) {
+      System.err.println("Warning: Could not initialize database connection: " + e.getMessage());
+    }
 
     try{
       IUIController uiController = ICore.getInstance().getUIController();
@@ -21,17 +27,20 @@ public class ReportPlugin implements IPlugin {
       MenuItem menuItem = uiController.createMenuItem("Management", "Reports");
 
       Runnable openReportsInterface = () -> {
-        VBox content = new VBox(10);
-        content.setPadding(new Insets(20));
-        content.getChildren().addAll(
-          new Label("Report Plugin Working!"),
-          new Label("This plugin was loaded by the microkernel!"),
-          new Label("Date/Time: " + java.time.LocalDateTime.now())
-        );
+        try {
+          ClassLoader classLoader = getClass().getClassLoader();
+          FXMLLoader loader = new FXMLLoader(
+            classLoader.getResource("br/edu/ifba/inf008/plugins/report/ui/report-management.fxml")
+          );
 
-        uiController.createTab("Reports & Analytics", content);
-
-        System.out.println("Report Plugin executed - new tab created!");
+          loader.setClassLoader(classLoader);
+          Node content = loader.load();
+          uiController.createTab("Report Management", content);
+    
+        } catch (IOException e) {
+          System.err.println("Error loading Report Management Interface: " + e.getMessage());
+          uiController.showAlert("Error", "Failed to open Report Management Interface: " + e.getMessage());
+        }
       };
 
       menuItem.setOnAction(e -> openReportsInterface.run());
@@ -39,7 +48,6 @@ public class ReportPlugin implements IPlugin {
         this.getClass(),
         "/br/edu/ifba/inf008/plugins/report/ui/icons/logo.png"
       );
-      System.out.println("Logo loaded: " + (logo.getImage() != null));
       uiController.addPluginCard(
         "report-plugin",
         logo,
@@ -47,11 +55,10 @@ public class ReportPlugin implements IPlugin {
         "Generate detailed reports.",
         openReportsInterface
       );
-      System.out.println("✅ ReportPlugin initialized successfuly!");
       return true;
 
     } catch (Exception e) {
-      System.err.println("❌ Error initializing ReportPlugin: " + e.getMessage());
+      System.err.println("Error initializing ReportPlugin: " + e.getMessage());
       return false;
     }
   }

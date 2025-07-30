@@ -15,13 +15,10 @@ import javafx.scene.image.ImageView;
 public class BookPlugin implements IPlugin {
   @Override
   public boolean init(){
-    System.out.println("🔌 BookPlugin...");
     try {
-      System.out.println("🔗 Initializing database connection...");
       JPAUtil.warmUp();
-      System.out.println("✅ Database connection initialized successfully!");
     } catch (Exception e) {
-      System.err.println("⚠️  Warning: Could not initialize database connection: " + e.getMessage());
+      System.err.println("Warning: Could not initialize database connection: " + e.getMessage());
     }
 
     try{
@@ -30,7 +27,6 @@ public class BookPlugin implements IPlugin {
       MenuItem menuItem = uiController.createMenuItem("Management", "Books");
 
       Runnable openBooksInterface = () -> {
-        System.out.println("🎯 Oppening Books Interface...");
         try {
           ClassLoader classLoader = getClass().getClassLoader();
           FXMLLoader loader = new FXMLLoader(
@@ -41,9 +37,8 @@ public class BookPlugin implements IPlugin {
           Node content = loader.load();
           uiController.createTab("Book Management", content);
 
-          System.out.println("✅ Interface loaded successfully!");
         } catch (IOException e) {
-          System.err.println("❌ Error opening Books interface: " + e.getMessage());
+          System.err.println("Error opening Books interface: " + e.getMessage());
           uiController.showAlert("Error", "Failed to open Books Interface: " + e.getMessage());
         }
 
@@ -54,7 +49,6 @@ public class BookPlugin implements IPlugin {
         this.getClass(),
         "/br/edu/ifba/inf008/plugins/book/ui/icons/logo.png"
       );
-      System.out.println("Logo loaded: " + (logo.getImage() != null));
       uiController.addPluginCard(
         "book-plugin",
         logo,
@@ -62,13 +56,10 @@ public class BookPlugin implements IPlugin {
         "Manage your books.",
         openBooksInterface
       );
-
-
-      System.out.println("✅ BookPlugin initialized successfuly!");
       return true;
 
     } catch (Exception e) {
-      System.err.println("❌ Error initializing BookPlugin: " + e.getMessage());
+      System.err.println("Error initializing BookPlugin: " + e.getMessage());
       return false;
     }
   }
