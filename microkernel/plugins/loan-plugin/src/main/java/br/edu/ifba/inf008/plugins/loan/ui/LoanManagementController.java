@@ -199,6 +199,8 @@ public class LoanManagementController {
   }
 
   private void configureLoanDatePicker() {
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
     loanDatePicker.setValue(LocalDate.now());
     loanDatePicker.setDayCellFactory(picker -> new DateCell() {
       @Override
@@ -207,7 +209,6 @@ public class LoanManagementController {
         setDisable(empty || date.isAfter(LocalDate.now()));
       }
     });
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     loanDatePicker.setConverter(new StringConverter<LocalDate>() {
       @Override
       public String toString(LocalDate date) {
@@ -216,10 +217,7 @@ public class LoanManagementController {
 
       @Override
       public LocalDate fromString(String string) {
-        if (string == null || string.trim().isEmpty()) {
-          return null;
-        }
-        return LocalDate.parse(string, dateFormatter);
+        return string != null && !string.isEmpty() ? LocalDate.parse(string, dateFormatter) : null;
       }
     });
     loanDatePicker.setEditable(false);

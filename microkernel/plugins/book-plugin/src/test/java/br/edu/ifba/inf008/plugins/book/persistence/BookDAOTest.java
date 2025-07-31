@@ -27,7 +27,6 @@ public class BookDAOTest {
       throw new RuntimeException("Book was not properly saved - no ID assigned");
     }
     createdBooks.add(book);
-    System.out.println("✅ Saved book: " + book.getTitle() + " with ID: " + book.getBookId());
     return book;
   }
 

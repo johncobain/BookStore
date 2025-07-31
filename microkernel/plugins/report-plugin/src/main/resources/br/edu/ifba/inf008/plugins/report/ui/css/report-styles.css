@@ -3,7 +3,8 @@
   background-color: #f4f4f9; /* For compatibility */
 }
 
-.left-panel {
+.left-panel,
+.center-panel {
   -fx-background-color: #ffffff;
   -fx-border-color: #e0e0e0;
   -fx-border-width: 0 1px 0 0;
@@ -38,32 +39,12 @@
   background-color: #ffffff;
 }
 
-.report-list-view {
-  -fx-background-color: #ffffff;
-  -fx-border-color: #cccccc;
+.title {
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
 
-  background-color: #ffffff;
-  border-color: #cccccc;
-}
-
-.report-list-view .list-cell {
-  -fx-padding: 10px;
-  -fx-font-size: 14px;
-  -fx-border-color: transparent transparent #e0e0e0 transparent;
-  -fx-border-width: 1px;
-
-  padding: 10px;
-  font-size: 14px;
-  border-color: transparent transparent #e0e0e0 transparent;
-  border-width: 1px;
-}
-
-.report-list-view .list-cell:hover {
-  -fx-background-color: #e8f0fe;
-  -fx-cursor: hand;
-
-  background-color: #e8f0fe;
-  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .button-primary {
@@ -84,54 +65,20 @@
   cursor: pointer;
 }
 
-.button-success {
+.button-export {
   -fx-background-color: #34a853;
   -fx-text-fill: #ffffff;
   -fx-font-weight: bold;
+  -fx-cursor: hand;
 
   background-color: #34a853;
   color: #ffffff;
   font-weight: bold;
+  cursor: pointer;
 }
 
-.button-success:hover {
+.button-export:hover {
   -fx-background-color: #2c8f45;
 
   background-color: #2c8f45;
-}
-
-.button-danger {
-  -fx-background-color: #ea4335;
-  -fx-text-fill: #ffffff;
-  -fx-background-radius: 5em;
-  -fx-min-width: 30px;
-  -fx-min-height: 30px;
-
-  background-color: #ea4335;
-  color: #ffffff;
-  min-width: 30px;
-  min-height: 30px;
-}
-.button-danger:hover {
-  -fx-background-color: #d43729;
-
-  background-color: #d43729;
-}
-
-.button-info {
-  -fx-background-color: #fbbc05;
-  -fx-text-fill: white;
-  -fx-background-radius: 5em;
-  -fx-min-width: 30px;
-  -fx-min-height: 30px;
-
-  background-color: #fbbc05;
-  color: white;
-  min-width: 30px;
-  min-height: 30px;
-}
-.button-info:hover {
-  -fx-background-color: #e6ac00;
-
-  background-color: #e6ac00;
 }

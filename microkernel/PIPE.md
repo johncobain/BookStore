@@ -128,10 +128,9 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 ### Plugin de Relatórios
 
 1. **Implementação**
-   - [ ] Criar `report-plugin`
-   - [ ] Implementar `ReportDAO.java` com consultas JPQL
-   - [ ] Query exemplo: `SELECT b.titulo, u.name FROM Loan l JOIN l.book b JOIN l.user u WHERE ...`
-   - [ ] UI para exibição de relatórios
+   - [x] Criar `report-plugin`
+   - [x] Implementar `ReportDAO.java` com consultas JPQL
+   - [x] UI para exibição de relatórios
 
 ### Refinamento e Qualidade
 
@@ -156,7 +155,7 @@ O projeto utiliza uma abordagem focada em entregas semanais, priorizando configu
 
 ### Entrega Final
 
-- [ ] **Email com assunto exato:** `INF008 T2 <seu-nome-completo>`
+- [ ] **Email com assunto exato:** `INF008 T2 Andrey Gomes da Silva Nascimento`
 - [ ] Anexar arquivo compactado do projeto
 - [ ] Incluir instruções de execução
 

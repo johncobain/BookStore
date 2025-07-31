@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
-<?import java.net.URL?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.ifba.inf008.plugins.report.ui.ReportManagementController">
 
@@ -22,22 +18,61 @@
     <URL value="@css/report-styles.css" />
   </stylesheets>
 
+  <fx:define>
+    <ToggleGroup fx:id="searchTypeToggleGroup" />
+  </fx:define>
+
   <padding>
     <Insets bottom="15" left="15" right="15" top="15" />
   </padding>
     
   <left>
-    <VBox spacing="10" prefWidth="400" styleClass="left-panel">
+    <VBox prefWidth="400" spacing="10" styleClass="left-panel">
       <padding>
-        <Insets right="15" left="15" bottom="10"/>
+        <Insets bottom="10" left="15" right="15" />
       </padding>
       <children>
-        
-        <Button fx:id="saveButton" text="Export CSV" maxWidth="150" styleClass="button-success"/>
+        <VBox spacing="8" styleClass="content-box" VBox.vgrow="ALWAYS">
+          <children>
+            <Label styleClass="title" text="Search Type:" />
+            <HBox alignment="TOP_LEFT" minHeight="80" spacing="48">
+              <children>  
+                <VBox spacing="8">
+                  <RadioButton selected="true" text="All Time" userData="allTime">
+                              <toggleGroup>
+                                 <ToggleGroup fx:id="searchTypeToggleGroup" />
+                              </toggleGroup></RadioButton>
+                  <RadioButton text="Before" toggleGroup="$searchTypeToggleGroup" userData="before" />
+                  <RadioButton text="After" toggleGroup="$searchTypeToggleGroup" userData="after" />
+                  <RadioButton text="On Date" toggleGroup="$searchTypeToggleGroup" userData="onDate" />
+                  <RadioButton text="Between" toggleGroup="$searchTypeToggleGroup" userData="between" />
+                </VBox>
+                <VBox spacing="8">
+                  <Label fx:id="initialDateLabel" text="Initial Date:" />
+                  <DatePicker fx:id="initialDatePicker" promptText="Select initial date" />
+                  <Label fx:id="finalDateLabel" text="Final Date:" />
+                  <DatePicker fx:id="finalDatePicker" promptText="Select final date" />
+                </VBox>
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+        <VBox alignment="BOTTOM_CENTER" spacing="8" styleClass="content-box" VBox.vgrow="ALWAYS">
+          <children>
+            <Button maxWidth="Infinity" onAction="#handleAllLoans" styleClass="button-primary" text="All Loans" />
+            <Button maxWidth="Infinity" onAction="#handleActiveLoans" styleClass="button-primary" text="Active Loans" />
+            <Button maxWidth="Infinity" onAction="#handleReturnedLoans" styleClass="button-primary" text="Returned Loans" />
+          </children>
+        </VBox>
       </children>
     </VBox>
   </left>
   <center>
-    <ListView fx:id="loanListView" styleClass="loan-list-view" />
+    <VBox alignment="TOP_RIGHT" prefWidth="600" spacing="8" styleClass="center-panel">
+      <children>
+        <TableView fx:id="loanTableView" styleClass="report-table-view" VBox.vgrow="ALWAYS" />
+        <Button styleClass="button-export" text="Export Report" />
+      </children>
+    </VBox>
   </center>    
 </BorderPane>

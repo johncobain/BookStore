@@ -25,7 +25,6 @@
 
 - [ ] Botão refresh
 - [ ] Clicar num card já aberto abre a tab correspondente
-- [ ] ComboBox ao inves de checkBox nas pesquisas
 - [ ] Informação em quem está sendo editado
 - [ ] Botões em cima das tabelas com texto ao invés de emoji na linha
 - [ ] Ver se é viável transformar as listas em tabelas
@@ -35,14 +34,12 @@
 
 #### Report Plugin - Prioridade MÉDIA
 
-- [ ] **Relatórios Básicos**:
-  - [ ] Empréstimos ativos
-  - [ ] Usuários mais ativos
-  - [ ] Livros mais emprestados
-  - [ ] Estatísticas gerais
-  - [ ] Título, autor, nome do usuário, data do empréstimo
-- [ ] **Exportação**: PDF ou CSV
-- [ ] **Filtros**: Por período, usuário, livro
+- [x] **Relatórios Básicos**:
+  - [x] Todos os Empréstimos
+  - [x] Empréstimos ativos
+  - [x] Empréstimos finalizados
+- [x] **Filtros**: Por período, usuário, livro
+- [ ] **Exportação**: CSV
 
 #### Melhorias Gerais - Prioridade BAIXA
 
@@ -57,6 +54,6 @@
 - [x] ✅ User CRUD (100%)
 - [x] ✅ Book CRUD (100%)
 - [x] ✅ Loan CRUD (100%)
-- [ ] 🔄 Basic Reports (0%)
+- [x] ✅ Basic Reports (0%)
 
 > 🎯 **Meta Principal**: Sistema funcional completo até 05/08/2025 com todas as funcionalidades básicas implementadas e testadas.

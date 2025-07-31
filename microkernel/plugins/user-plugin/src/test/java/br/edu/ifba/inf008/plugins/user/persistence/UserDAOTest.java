@@ -27,7 +27,6 @@ public class UserDAOTest {
       throw new RuntimeException("User was not properly saved - no ID assigned");
     }
     createdUsers.add(user);
-    System.out.println("✅ Saved user: " + user.getName() + " with ID: " + user.getUserId());
     return user;
   }
 

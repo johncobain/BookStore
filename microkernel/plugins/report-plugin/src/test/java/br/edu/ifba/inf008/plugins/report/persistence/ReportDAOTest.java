@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -137,37 +136,5 @@ public class ReportDAOTest {
     List<Loan> loans = reportDAO.findByStatus(false);
     assertTrue(loans != null && !loans.isEmpty());
     assertTrue(loans.stream().anyMatch(l -> l.getLoanId().equals(loan.getLoanId())));
-  }
-
-  @Test
-  void testFindMostActiveUsers() {
-    User user1 = createUser("User8", "user8@test.com");
-    User user2 = createUser("User9", "user9@test.com");
-    Book book = createBook("Book8", "Author8", "888", 2022, 2);
-
-    createLoan(user1, book, LocalDate.now(), null);
-    createLoan(user2, book, LocalDate.now(), null);
-    createLoan(user1, book, LocalDate.now(), null);
-
-    List<UserLoanCount> users = reportDAO.findMostActiveUsers();
-    assertNotNull(users);
-    assertTrue(users.get(0).getUser().getName().equals("User8"));
-    assertTrue(users.get(0).getCount() >= 2); // User8 has 2 loans
-  }
-
-  @Test
-  void testFindMostBorrowedBooks() {
-    User user = createUser("User10", "user10@test.com");
-    Book book1 = createBook("Book9A", "Author9A", "999A", 2022, 1);
-    Book book2 = createBook("Book9B", "Author9B", "999B", 2022, 1);
-
-    createLoan(user, book1, LocalDate.now(), null);
-    createLoan(user, book2, LocalDate.now(), null);
-    createLoan(user, book1, LocalDate.now(), null);
-
-    List<BookLoanCount> books = reportDAO.findMostBorrowedBooks();
-    assertNotNull(books);
-    assertTrue(books.get(0).getBook().getTitle().equals("Book9A"));
-    assertTrue(books.get(0).getCount() >= 2); // Book9A has 2 loans
   }
 }

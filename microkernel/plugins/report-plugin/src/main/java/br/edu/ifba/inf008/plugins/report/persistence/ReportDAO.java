@@ -17,10 +17,10 @@ public class ReportDAO extends BaseDAO<Loan, Integer>{
         return baseQuery;
       }
       case "before" -> {
-        return baseQuery + " WHERE l.loanDate < :initialDate";
+        return baseQuery + " WHERE l.loanDate <= :initialDate";
       }
       case "after" -> {
-        return baseQuery + " WHERE l.loanDate > :initialDate";
+        return baseQuery + " WHERE l.loanDate >= :initialDate";
       }
       case "onDate" -> {
         return baseQuery + " WHERE l.loanDate = :initialDate";
@@ -138,32 +138,6 @@ public class ReportDAO extends BaseDAO<Loan, Integer>{
           ).setParameter("initialDate", initialDate)
           .setParameter("finalDate", finalDate)
           .getResultList();
-      } finally {
-        em.close();
-      }
-    }
-  }
-
-  public List<UserLoanCount> findMostActiveUsers(){
-    try (EntityManager em = getEntityManager()) {
-      try{
-        return em.createQuery(
-          "SELECT new br.edu.ifba.inf008.plugins.report.persistence.UserLoanCount(l.user, COUNT(l)) " +
-          "FROM Loan l GROUP BY l.user ORDER BY COUNT(l) DESC", UserLoanCount.class
-        ).getResultList();
-      } finally {
-        em.close();
-      }
-    }
-  }
-
-  public List<BookLoanCount> findMostBorrowedBooks(){
-    try (EntityManager em = getEntityManager()) {
-      try{
-        return em.createQuery(
-          "SELECT new br.edu.ifba.inf008.plugins.report.persistence.BookLoanCount(l.book, COUNT(l)) " +
-          "FROM Loan l GROUP BY l.book ORDER BY COUNT(l) DESC", BookLoanCount.class
-        ).getResultList();
       } finally {
         em.close();
       }
