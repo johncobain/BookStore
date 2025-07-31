@@ -71,7 +71,7 @@
     <VBox alignment="TOP_RIGHT" prefWidth="600" spacing="8" styleClass="center-panel">
       <children>
         <TableView fx:id="loanTableView" styleClass="report-table-view" VBox.vgrow="ALWAYS" />
-        <Button styleClass="button-export" text="Export Report" />
+        <Button onAction="#handleExportReport" styleClass="button-export" text="Export Report" />
       </children>
     </VBox>
   </center>    

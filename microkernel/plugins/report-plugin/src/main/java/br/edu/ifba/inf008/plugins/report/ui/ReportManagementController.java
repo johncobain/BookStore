@@ -1,5 +1,8 @@
 package br.edu.ifba.inf008.plugins.report.ui;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -11,7 +14,7 @@ import br.edu.ifba.inf008.plugins.report.persistence.ReportDAO;
 import br.edu.ifba.inf008.shell.model.Loan;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.DateCell;
+import javafx.stage.FileChooser;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -95,6 +98,55 @@ public class ReportManagementController {
       default -> reportDAO.findByStatus(false);
     };
     loanTableView.setItems(FXCollections.observableArrayList(loans));
+  }
+
+  @FXML
+  private void handleExportReport(){
+    List<Loan> loans = loanTableView.getItems();
+    if (loans == null || loans.isEmpty()) {
+      uiController.showAlert("No Data", "No loans available to export.");
+      return;
+    }
+
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Export Report to CSV");
+    fileChooser.setInitialFileName("report.csv");
+    fileChooser.getExtensionFilters().addAll(
+      new FileChooser.ExtensionFilter("CSV Files", "*.csv"),
+      new FileChooser.ExtensionFilter("All Files", "*.*")
+    );
+
+    File file = fileChooser.showSaveDialog(loanTableView.getScene().getWindow());
+    if (file == null) return;
+
+    try(PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8)) {
+      writer.println("Loan ID,User Name,User Email,Book Title,Book Author,Loan Date,Return Date");
+      DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+      for (Loan loan : loans) {
+        String line = String.format("%d,%s,%s,%s,%s,%s,%s",
+          loan.getLoanId(),
+          escapeCsv(loan.getUser().getName()),
+          escapeCsv(loan.getUser().getEmail()),
+          escapeCsv(loan.getBook().getTitle()),
+          escapeCsv(loan.getBook().getAuthor()),
+          loan.getLoanDate() != null ? loan.getLoanDate().format(dateFormatter) : "",
+          loan.getReturnDate() != null ? loan.getReturnDate().format(dateFormatter) : ""
+        );
+        writer.println(line); 
+      }
+
+      uiController.showAlert("Export Success", "Report exported to " + file.getAbsolutePath());
+    } catch (Exception e) {
+      uiController.showAlert("Export Error", "Failed to export report: " + e.getMessage());
+    }
+  }
+
+  private String escapeCsv(String value) {
+    if (value == null) return "";
+    if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
+      return "\"" + value.replace("\"", "\"\"") + "\"";
+    }
+    return value;
   }
 
   private void configureDatePicker(){
