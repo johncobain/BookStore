@@ -1,59 +1,11 @@
 # 📋 Plano de Desenvolvimento - BookStore
 
-> Roadmap detalhado e tarefas pendentes para o sistema BookStore
+## Geral
 
-## 🚀 Status Atual (Semana 2 - 14/07/2025)
-
-### ✅ Implementado
-
-- **Core Microkernel**: Sistema base funcionando
-- **Plugin System**: Carregamento dinâmico de plugins
-- **User Management**: CRUD completo com interface JavaFX
-- **Book Management**: CRUD completo com interface JavaFX
-- **Loan Management**: CRUD completo com interface JavaFX
-- **Persistence Layer**: Hibernate + BaseDAO genérico
-- **UI Framework**: Interface modular com cards dinâmicos
-- **Documentation**: Arquitetura e guias de desenvolvimento
-
-### 🔄 Em Progresso
-
-- **Report Plugin**: Interface básica criada, precisa de implementação
-
-## 📅 Cronograma Detalhado
-
-### Geral
-
-- [ ] Botão refresh
+- [ ] Ao deletar um Usuário que tiver um empréstimo, deletar o empréstimo e incrementar o contador de copias disponíveis no livro
+- [ ] Ver se é viável transformar as listas em tabelas
 - [ ] Clicar num card já aberto abre a tab correspondente
+- [ ] Clicar numa tab atualiza a tabela correspondente
 - [ ] Informação em quem está sendo editado
 - [ ] Botões em cima das tabelas com texto ao invés de emoji na linha
-- [ ] Ver se é viável transformar as listas em tabelas
-- [ ] Ao deletar um Usuário que tiver um empréstimo, deletar o empréstimo e incrementar o contador de copias disponíveis no livro
-
-### Semana 4 (22-28/07): Finalização e Polimento
-
-#### Report Plugin - Prioridade MÉDIA
-
-- [x] **Relatórios Básicos**:
-  - [x] Todos os Empréstimos
-  - [x] Empréstimos ativos
-  - [x] Empréstimos finalizados
-- [x] **Filtros**: Por período, usuário, livro
-- [ ] **Exportação**: CSV
-
-#### Melhorias Gerais - Prioridade BAIXA
-
 - [ ] **Validações**: Input validation em todos os formulários
-- [ ] **Logs**: Sistema de logging estruturado
-- [ ] **Performance**: Otimizações de query e UI
-
-## 🔧 Tarefas Técnicas Específicas
-
-### Funcionalidades (até 05/08)
-
-- [x] ✅ User CRUD (100%)
-- [x] ✅ Book CRUD (100%)
-- [x] ✅ Loan CRUD (100%)
-- [x] ✅ Basic Reports (0%)
-
-> 🎯 **Meta Principal**: Sistema funcional completo até 05/08/2025 com todas as funcionalidades básicas implementadas e testadas.
