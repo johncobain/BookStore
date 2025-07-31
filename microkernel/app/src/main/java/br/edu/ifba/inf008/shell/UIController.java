@@ -266,6 +266,13 @@ public class UIController extends Application implements IUIController{
 
     @Override
     public boolean createTab(String tabText, Node contents) {
+        for(Tab tab : tabPane.getTabs()){
+            if(tab.getText().equals(tabText)){
+                tabPane.getSelectionModel().select(tab);
+                return false;
+            }
+        }
+        
         Tab tab = new Tab();
         tab.setText(tabText);
         tab.setContent(contents);
