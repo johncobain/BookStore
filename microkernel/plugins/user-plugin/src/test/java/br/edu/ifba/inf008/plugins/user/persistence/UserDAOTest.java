@@ -1,5 +1,6 @@
 package br.edu.ifba.inf008.plugins.user.persistence;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import br.edu.ifba.inf008.shell.model.Book;
+import br.edu.ifba.inf008.shell.model.Loan;
 import br.edu.ifba.inf008.shell.model.User;
 import jakarta.persistence.EntityManager;
  
@@ -20,6 +23,7 @@ public class UserDAOTest {
   private UserDAO userDAO;
   private User testUser;
   private List<User> createdUsers;
+  private EntityManager em;
 
   private User saveAndTrack(User user){
     userDAO.save(user);
@@ -30,10 +34,43 @@ public class UserDAOTest {
     return user;
   }
 
+  private Book createBook(String title, String author, String isbn, int year, int copies) {
+    Book book = new Book(title, author, isbn, year, copies);
+    em.getTransaction().begin();
+    em.persist(book);
+    em.getTransaction().commit();
+    return book;
+  }
+
+  private Loan createLoan(User user, Book book, LocalDate loanDate, LocalDate returnDate) {
+    Loan loan = new Loan(user, book, loanDate, returnDate);
+    em.getTransaction().begin();
+    
+    if (returnDate == null) {
+        Book managedBook = em.find(Book.class, book.getBookId());
+        managedBook.setCopiesAvailable(managedBook.getCopiesAvailable() - 1);
+        em.merge(managedBook);
+    }
+    
+    em.persist(loan);
+    em.getTransaction().commit();
+    return loan;
+  }
+
   @BeforeEach
   void setUp(){
     userDAO = new UserDAO();
     createdUsers = new ArrayList<>();
+    em = TestJPAUtil.getEntityManager();
+
+    em.getTransaction().begin();
+    try {
+        em.createQuery("DELETE FROM Loan").executeUpdate();
+        em.createQuery("DELETE FROM Book").executeUpdate();
+        em.createQuery("DELETE FROM User").executeUpdate();
+    } catch (Exception e) {
+    }
+    em.getTransaction().commit();
 
     String uniqueEmail = "test_" + System.currentTimeMillis() + "@test.com";
     testUser = new User("Test User", uniqueEmail);
@@ -42,25 +79,26 @@ public class UserDAOTest {
   @AfterEach
   void cleanup(){
     if (createdUsers != null) {
-      try (EntityManager em = TestJPAUtil.getEntityManager()) {
-        em.getTransaction().begin();
+      try (EntityManager cleanupEm = TestJPAUtil.getEntityManager()) {
+        cleanupEm.getTransaction().begin();
         for (User user : createdUsers) {
           try {
             if (user.getUserId() != null) {
-              User managed = em.find(User.class, user.getUserId());
+              User managed = cleanupEm.find(User.class, user.getUserId());
               if (managed != null) {
-                em.remove(managed);
+                cleanupEm.remove(managed);
               }
             }
           } catch (Exception e) {
             System.err.println("Error cleaning user: " + user.getEmail() + " - " + e.getMessage());
           }
         }
-        em.getTransaction().commit();
+        cleanupEm.getTransaction().commit();
       } catch (Exception e) {
       }
       createdUsers.clear();
     }
+    if (em != null && em.isOpen()) em.close();
   }
   
   @AfterAll
@@ -176,5 +214,39 @@ public class UserDAOTest {
     userDAO.delete(createdUser);
     User deletedUser = userDAO.findById(createdUser.getUserId());
     assertNull(deletedUser, "Deleted user should be null");
+  }
+
+   @Test
+  void testDeleteUserWithActiveLoans(){
+    User createdUser = saveAndTrack(testUser);
+    Book book = createBook("Test Book", "Test Author", "123456789", 2022, 2);
+    createLoan(createdUser, book, LocalDate.now(), null);
+
+    Book managedBook = em.find(Book.class, book.getBookId());
+    assertEquals(1, managedBook.getCopiesAvailable());
+
+    em.clear();
+
+    userDAO.delete(createdUser);
+
+    try (EntityManager freshEm = TestJPAUtil.getEntityManager()) {
+      Book afterDeleteBook = freshEm.find(Book.class, book.getBookId());
+      assertEquals(2, afterDeleteBook.getCopiesAvailable());
+    }
+
+    User deletedUser = userDAO.findById(createdUser.getUserId());
+    assertNull(deletedUser, "Deleted user should be null");
+  }
+
+  @Test
+  void testHasLoans(){
+    User createdUser = saveAndTrack(testUser);
+
+    assertFalse(userDAO.hasLoans(createdUser));
+
+    Book book = createBook("Test Book", "Test Author", "987654321", 2022, 1);
+    createLoan(createdUser, book, LocalDate.now(), null);
+
+    assertTrue(userDAO.hasLoans(createdUser));
   }
 }
