@@ -167,20 +167,44 @@ public class UserManagementController {
     }
 
     private void handleDelete(User user) {
-        uiController.showConfirmation(
+        boolean hasLoans = userDAO.hasLoans(user);
+
+        if(hasLoans){
+          String warningMessage = String.format("""
+            \u26a0\ufe0f WARNING: User '%s' has loan records in the system!
+            
+            Deleting this user will:
+            \u2022 Delete ALL loan records for this user
+            \u2022 Return any currently borrowed books (increment available copies)
+            \u2022 This action CANNOT be undone
+            
+            Are you sure you want to proceed?""",
+            user.getName()
+          );
+
+          uiController.showConfirmation(
+            "Delete User with Loans", 
+            warningMessage,
+            () -> deleteUser(user)
+          );
+        }else{
+          uiController.showConfirmation(
             "Delete User", 
             "Are you sure you want to delete the user " + user.getName() + "?", 
-            () ->{
-                try {
-                    userDAO.delete(user);
-                    users.remove(user);
-                    userListView.setItems(users);
-                    uiController.showAlert("Success", "User deleted successfully!");
-                } catch (Exception e) {
-                    uiController.showAlert("Error", "Failed to delete user: " + e.getMessage());
-                }
-            }
-        );
+            () -> deleteUser(user)
+            );
+        }
+    }
+
+    private void deleteUser(User user){
+        try {
+            userDAO.delete(user);
+            users.remove(user);
+            userListView.setItems(users);
+            uiController.showAlert("Success", "User deleted successfully!");
+        } catch (Exception e) {
+            uiController.showAlert("Error", "Failed to delete user: " + e.getMessage());
+        }
     }
 
     private void handleUpdate(User user) {
