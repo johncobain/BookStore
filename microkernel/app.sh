@@ -31,6 +31,9 @@ case "$1" in
     fi
     mvn clean install
     ;;
+  "clean")
+    mvn clean
+    ;;
   "run")
     echo -e "${YELLOW}🚀 Running application...${NC}"
     if ! docker exec bookstore-db mariadb -u bookstore_user -pBookStore@777 -e "SELECT 1;" bookstore &>/dev/null; then
@@ -65,25 +68,10 @@ case "$1" in
     echo -e "${YELLOW}🛑 Stopping database...${NC}"
     docker compose down
     ;;
-  "rebuild")
-    echo -e "${YELLOW}🔨 Rebuilding images...${NC}"
-    docker compose down
-    docker compose up --build -d
-    ;;
-  "logs")
-    docker compose logs -f
-    ;;
-  "status")
-    docker compose ps
-    ;;
-  "clean")
+  "clean-db")
     echo -e "${YELLOW}🧹 Cleaning everything...${NC}"
     docker compose down -v --rmi all
     docker system prune -f
-    ;;
-  "clean-vol")
-    echo -e "${YELLOW}🧹 Cleaning volumes...${NC}"
-    docker compose down -v
     ;;
   "reset-db")
     echo -e "${YELLOW}🗄️  Resetting database...${NC}"
@@ -101,6 +89,16 @@ case "$1" in
       echo -e "${RED}❌ Operation canceled${NC}"
     fi
     ;;
+  "logs")
+    docker compose logs -f
+    ;;
+  "status")
+    docker compose ps
+    ;;
+  "clean-vol")
+    echo -e "${YELLOW}🧹 Cleaning volumes...${NC}"
+    docker compose down -v
+    ;;
   "fix")
     echo -e "${YELLOW}🔧 Fixing container conflicts...${NC}"
     docker compose down --remove-orphans
@@ -111,23 +109,23 @@ case "$1" in
     echo -e "${BLUE}BookStore Blackbird - Docker Manager${NC}"
     echo
     echo -e "${YELLOW}Application commands:${NC}"
-    echo -e "  ${GREEN}build${NC}       - Build application"
-    echo -e "  ${GREEN}run${NC}         - Run application"
-    echo -e "  ${GREEN}test${NC}       - Run tests"
-    echo -e "  ${GREEN}kickstart${NC}  - Build and run application"
+    echo -e "  ${GREEN}build${NC}         - Build application"
+    echo -e "  ${GREEN}clean${NC}         - Clean application"
+    echo -e "  ${GREEN}run${NC}           - Run application"
+    echo -e "  ${GREEN}test${NC}          - Run tests"
+    echo -e "  ${GREEN}kickstart${NC}     - Build and run application"
     echo
     echo -e "${YELLOW}Database commands:${NC}"
-    echo -e "  ${GREEN}start-db/up${NC}    - Start database"
-    echo -e "  ${GREEN}stop-db/down${NC}   - Stop database"
-    echo -e "  ${GREEN}rebuild${NC}     - Rebuild everything"
-    echo -e "  ${GREEN}reset-db${NC}    - Reset database (all data will be lost)"
-    echo -e "  ${GREEN}fix${NC}         - Fix container conflicts"
+    echo -e "  ${GREEN}start-db/up${NC}   - Start database"
+    echo -e "  ${GREEN}stop-db/down${NC}  - Stop database"
+    echo -e "  ${GREEN}clean-db${NC}      - Clean database"
+    echo -e "  ${GREEN}reset-db${NC}      - Reset database (all data will be lost)"
+    echo -e "  ${GREEN}fix${NC}           - Fix container conflicts"
     echo
     echo -e "${YELLOW}Utils:${NC}"
-    echo -e "  ${GREEN}logs${NC}        - View logs"
-    echo -e "  ${GREEN}status${NC}      - Container status"
-    echo -e "  ${GREEN}clean${NC}       - Clean everything"
-    echo -e "  ${GREEN}clean-vol${NC}   - Clean volumes"
+    echo -e "  ${GREEN}logs${NC}          - View logs"
+    echo -e "  ${GREEN}status${NC}        - Container status"
+    echo -e "  ${GREEN}clean-vol${NC}     - Clean volumes"
     echo
     exit 1
     ;;
