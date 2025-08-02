@@ -6,8 +6,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -75,6 +75,16 @@
     </VBox>
   </left>
   <center>
-    <ListView fx:id="loanListView" styleClass="loan-list-view" />
+    <VBox alignment="TOP_RIGHT" prefWidth="600" spacing="8" styleClass="center-panel">
+      <children>
+        <TableView fx:id="loanTableView" styleClass="loan-table-view" VBox.vgrow="ALWAYS" />
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+          <children>
+            <Button fx:id="updateButton" text="Update" onAction="#handleUpdateSelected" styleClass="button-info"/>
+            <Button fx:id="deleteButton" text="Delete" onAction="#handleDeleteSelected" styleClass="button-danger"/>
+          </children>
+        </HBox>
+      </children>
+    </VBox>
   </center>    
 </BorderPane>

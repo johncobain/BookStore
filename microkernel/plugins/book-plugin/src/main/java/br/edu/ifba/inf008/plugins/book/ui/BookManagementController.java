@@ -1,5 +1,6 @@
 package br.edu.ifba.inf008.plugins.book.ui;
 
+import java.util.Arrays;
 import java.util.List;
 
 import br.edu.ifba.inf008.interfaces.ICore;
@@ -10,17 +11,14 @@ import br.edu.ifba.inf008.shell.model.Book;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class BookManagementController implements IRefreshable{
   BookDAO bookDAO = new BookDAO();
@@ -34,7 +32,9 @@ public class BookManagementController implements IRefreshable{
   @FXML private TextField formYearField;
   @FXML private TextField formCopiesField;
   @FXML private Button saveButton;
-  @FXML private ListView<Book> bookListView;
+  @FXML private TableView<Book> bookTableView;
+  @FXML private Button updateButton;
+  @FXML private Button deleteButton;
 
   private IUIController uiController;
   private final ObservableList<Book> books = FXCollections.observableArrayList();
@@ -44,10 +44,8 @@ public class BookManagementController implements IRefreshable{
   @Override
   public void refresh() {
     loadInitialData();
-    
     searchField.clear();
     availableOnlyCheckBox.setSelected(false);
-
     handleClear();
   }
 
@@ -68,49 +66,33 @@ public class BookManagementController implements IRefreshable{
     });
 
     loadInitialData();
-    bookListView.setItems(books);
-
-    configureBookCellFactory();
+    configureBookTableView();
+    setupButtonStates();
   }
 
   private void loadInitialData() {
     books.setAll(bookDAO.findAll());
+    bookTableView.setItems(books);
   }
 
-  private void configureBookCellFactory() {
-    bookListView.setCellFactory(lv -> new ListCell<Book>(){
-      private final HBox hbox = new HBox(10);
-      private final Label label = new Label();
-      private final Button infoButton = new Button("ℹ️");
-      private final Button updateButton = new Button("✏️");
-      private final Button deleteButton = new Button("🗑️");
-      private final Pane spacer = new Pane();
+  @FXML
+  private void handleUpdateSelected() {
+    Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+    if (selectedBook != null) {
+      handleUpdate(selectedBook);
+    } else {
+      uiController.showAlert("No Selection", "Please select a Book to Update.");
+    }
+  }
 
-      {
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        hbox.setAlignment(Pos.CENTER_LEFT);
-        hbox.getChildren().addAll(label, spacer, infoButton, updateButton, deleteButton);
-        
-        deleteButton.getStyleClass().add("button-danger");
-        updateButton.getStyleClass().add("button-info");
-      }
-
-      @Override
-      protected void updateItem(Book book, boolean empty) {
-      super.updateItem(book, empty);
-      if (empty || book == null) {
-          setText(null);
-          setGraphic(null);
-      } else {
-          label.setText("ID: " + book.getBookId() + " | " +book.getTitle() + " (" + book.getPublishedYear() + ") - " + book.getAuthor() + " - ISBN: " + book.getIsbn() + " - Copies: " + book.getCopiesAvailable());
-          setGraphic(hbox);
-
-          infoButton.setOnAction(event -> handleInfo(getItem()));
-          updateButton.setOnAction(event -> handleUpdate(getItem()));
-          deleteButton.setOnAction(event -> handleDelete(getItem()));
-        }
-      }
-    });
+  @FXML
+  private void handleDeleteSelected() {
+    Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+    if (selectedBook != null) {
+      handleDelete(selectedBook);
+    } else {
+      uiController.showAlert("No Selection", "Please select a Book to Delete.");
+    }
   }
 
   @FXML
@@ -150,7 +132,6 @@ public class BookManagementController implements IRefreshable{
               try {
                   bookDAO.update(updatedBook);
                   books.set(bookIndex, updatedBook);
-                  bookListView.setItems(books);
                   uiController.showAlert("Success", "Book updated successfully!");
               } catch (Exception e) {
                   uiController.showAlert("Error", "Failed to update book: " + e.getMessage());
@@ -166,7 +147,6 @@ public class BookManagementController implements IRefreshable{
               try {
                   bookDAO.save(newBook);
                   books.add(newBook);
-                  bookListView.setItems(books);
                   uiController.showAlert("Success", "Book created successfully!");
               } catch (Exception e) {
                   uiController.showAlert("Error", "Failed to create book: " + e.getMessage());
@@ -187,7 +167,6 @@ public class BookManagementController implements IRefreshable{
       } else {
         books.setAll(bookDAO.findAll());
       }
-      bookListView.setItems(books);
       return;
     }
     String searchType = (String) searchTypeToggleGroup.getSelectedToggle().getUserData();
@@ -205,8 +184,6 @@ public class BookManagementController implements IRefreshable{
     } else {
       books.clear();
     }
-
-    bookListView.setItems(books);
   }
 
   @FXML
@@ -219,6 +196,7 @@ public class BookManagementController implements IRefreshable{
     formYearField.clear();
     formCopiesField.clear();
     saveButton.setText("Create Book");
+    bookTableView.getSelectionModel().clearSelection();
   }
 
   private void handleDelete(Book book){
@@ -229,7 +207,6 @@ public class BookManagementController implements IRefreshable{
             try {
                 bookDAO.delete(book);
                 books.remove(book);
-                bookListView.setItems(books);
                 uiController.showAlert("Success", "Book deleted successfully!");
             } catch (Exception e) {
                 uiController.showAlert("Error", "Failed to delete book: " + e.getMessage());
@@ -249,8 +226,40 @@ public class BookManagementController implements IRefreshable{
     saveButton.setText("Update Book");
   }
 
-  private void handleInfo(Book book){
-    uiController.showAlert("Book info", "Id: " + book.getBookId() + "\nTitle: " + book.getTitle() + "\nAuthor: " + book.getAuthor() +
-        "\nPublished Year: " + book.getPublishedYear() + "\nISBN: " + book.getIsbn() + "\nCopies Available: " + book.getCopiesAvailable());
-}
+  private void configureBookTableView() {
+    bookTableView.setPlaceholder(new Label("No books found"));
+
+    TableColumn<Book, Integer> idColumn = new TableColumn<>("ID");
+    idColumn.setCellValueFactory(new PropertyValueFactory<>("bookId"));
+
+    TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
+    titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+
+    TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
+    authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+
+    TableColumn<Book, String> isbnColumn = new TableColumn<>("ISBN");
+    isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+
+    TableColumn<Book, Integer> yearColumn = new TableColumn<>("Published Year");
+    yearColumn.setCellValueFactory(new PropertyValueFactory<>("publishedYear"));
+
+    TableColumn<Book, Integer> copiesColumn = new TableColumn<>("Copies Available");
+    copiesColumn.setCellValueFactory(new PropertyValueFactory<>("copiesAvailable"));
+
+    bookTableView.getColumns().addAll(
+      Arrays.asList(idColumn, titleColumn, authorColumn, isbnColumn, yearColumn, copiesColumn));
+    bookTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+  }
+
+  private void setupButtonStates() {
+    updateButton.setDisable(true);
+    deleteButton.setDisable(true);
+
+    bookTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+      boolean hasSelection = newSelection != null;
+      updateButton.setDisable(!hasSelection);
+      deleteButton.setDisable(!hasSelection);
+    });
+  }
 }

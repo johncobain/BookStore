@@ -140,7 +140,7 @@ public class ReportManagementController implements IRefreshable{
           escapeCsv(loan.getBook().getTitle()),
           escapeCsv(loan.getBook().getAuthor()),
           loan.getLoanDate() != null ? loan.getLoanDate().format(dateFormatter) : "",
-          loan.getReturnDate() != null ? loan.getReturnDate().format(dateFormatter) : ""
+          loan.getReturnDate() != null ? loan.getReturnDate().format(dateFormatter) : "Active"
         );
         writer.println(line); 
       }
@@ -236,7 +236,16 @@ public class ReportManagementController implements IRefreshable{
       @Override
       protected void updateItem(LocalDate date, boolean empty) {
         super.updateItem(date, empty);
-        setText(empty || date == null ? "" : date.format(dateFormatter));
+        if (empty){
+          setText("");
+          setStyle("");
+        } else if (date == null) {
+          setText("Active");
+          setStyle("-fx-text-fill: #ff6b35; -fx-font-weight: bold;");
+        }else{
+          setText(date.format(dateFormatter));
+          setStyle("-fx-text-fill: #28a745; -fx-font-weight: bold;");
+        }
       }
     });
 

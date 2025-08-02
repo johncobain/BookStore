@@ -3,8 +3,7 @@
   background-color: #f4f4f9; /* For compatibility */
 }
 
-.left-panel,
-.center-panel {
+.left-panel {
   -fx-background-color: #ffffff;
   -fx-border-color: #e0e0e0;
   -fx-border-width: 0 1px 0 0;
@@ -45,6 +44,41 @@
 
   font-size: 16px;
   font-weight: bold;
+}
+
+.report-table-view {
+  -fx-background-color: #ffffff;
+  -fx-border-color: #cccccc;
+  background-color: #ffffff;
+  border-color: #cccccc;
+}
+
+.report-table-view .table-row-cell {
+  -fx-background-color: #ffffff;
+  background-color: #ffffff;
+}
+
+.report-table-view .table-row-cell:hover {
+  -fx-background-color: #e8f0fe;
+  background-color: #e8f0fe;
+}
+
+.report-table-view .table-row-cell:selected {
+  -fx-background-color: #4285f4;
+  -fx-text-fill: white;
+  background-color: #4285f4;
+  color: white;
+}
+
+.center-panel {
+  -fx-background-color: #ffffff;
+  -fx-border-color: #e0e0e0;
+  -fx-border-width: 0 0 0 1px;
+  -fx-padding: 15px;
+  background-color: #ffffff;
+  border-color: #e0e0e0;
+  border-width: 0 0 0 1px;
+  padding: 15px;
 }
 
 .button-primary {
