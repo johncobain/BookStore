@@ -12,6 +12,13 @@ public class JPAUtil {
     
   private static final EntityManagerFactory FACTORY = 
     Persistence.createEntityManagerFactory("bookstore-pu");
+
+  static {
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      System.out.println("Closing database connections...");
+      closeFactory();
+    }));
+  }
     
   public static EntityManager getEntityManager() {
     return FACTORY.createEntityManager();
@@ -29,8 +36,12 @@ public class JPAUtil {
   }
     
   public static void closeFactory() {
-    if (FACTORY != null) {
-      FACTORY.close();
+    if (FACTORY != null && FACTORY.isOpen()) {
+      try{
+        FACTORY.close();
+      } catch (Exception e){
+        System.err.println("Error closing EntityManagerFactory: " + e.getMessage());
+      }
     }
   }
     

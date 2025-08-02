@@ -8,9 +8,10 @@ public interface IUIController
 {
     public abstract MenuItem createMenuItem(String menuText, String menuItemText);
     public abstract boolean createTab(String tabText, Node contents);
+    public abstract boolean createRefreshableTab(String tabText, Node contents, IRefreshable controller);
     public abstract void showAlert(String title, String message);
     public abstract void showConfirmation(String title, String message, Runnable onConfirm);
 
-    void addPluginCard(String pluginName, ImageView icon, String title, String description, Runnable action);
-    void removePluginCard(String pluginName);
+    public abstract void addPluginCard(String pluginName, ImageView icon, String title, String description, Runnable action);
+    public abstract void removePluginCard(String pluginName);
 }

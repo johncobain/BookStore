@@ -3,10 +3,13 @@ package br.edu.ifba.inf008.shell;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.edu.ifba.inf008.interfaces.IRefreshable;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.shell.persistence.JPAUtil;
 import br.edu.ifba.inf008.shell.util.IconHelper;
 import static br.edu.ifba.inf008.shell.util.IconHelper.createIconView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -37,6 +40,8 @@ public class UIController extends Application implements IUIController{
     private VBox welcomeContent;
 
     private final Map<String, VBox> pluginCards = new HashMap<>();
+    private final Map<Tab, IRefreshable> refreshableControllers = new HashMap<>();
+
 
     public UIController() {
     }
@@ -53,12 +58,21 @@ public class UIController extends Application implements IUIController{
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("BookStore Blackbird");
+        primaryStage.setOnCloseRequest(event -> {
+            System.out.println("🔄 Application shutting down...");
+
+            JPAUtil.closeFactory();
+
+            Platform.exit();
+            
+            System.exit(0);
+        });
 
         Image appIcon = IconHelper.loadIcon("/icons/bookStore-icon.png");
         if (appIcon != null) {
             primaryStage.getIcons().add(appIcon);
         } else {
-            System.out.println("⚠️ Application icon not found, using default");
+            System.out.println("Application icon not found, using default");
         }
 
         menuBar = new MenuBar();
@@ -68,6 +82,15 @@ public class UIController extends Application implements IUIController{
 
         tabPane = new TabPane();
         tabPane.setSide(Side.BOTTOM);
+        tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            if (newTab != null && refreshableControllers.containsKey(newTab)) {
+                try {
+                    refreshableControllers.get(newTab).refresh();
+                } catch (Exception e) {
+                    System.err.println("Error refreshing tab " + newTab.getText() + ": " + e.getMessage());
+                }
+            }
+        });
 
         VBox.setVgrow(tabPane, Priority.ALWAYS);
 
@@ -281,6 +304,19 @@ public class UIController extends Application implements IUIController{
         tabPane.getSelectionModel().select(tab);
 
         return true;
+    }
+
+    @Override
+    public boolean createRefreshableTab(String tabText, Node contents, IRefreshable controller) {
+        boolean isNewTab = createTab(tabText, contents);
+        
+        for(Tab tab : tabPane.getTabs()){
+            if(tab.getText().equals(tabText)){
+                refreshableControllers.put(tab, controller);
+                break;
+            }
+        }
+        return isNewTab;
     }
 
     @Override

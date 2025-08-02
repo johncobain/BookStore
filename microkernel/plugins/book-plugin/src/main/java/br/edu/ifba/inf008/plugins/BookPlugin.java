@@ -5,6 +5,7 @@ import java.io.IOException;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.plugins.book.ui.BookManagementController;
 import br.edu.ifba.inf008.shell.persistence.JPAUtil;
 import static br.edu.ifba.inf008.shell.util.IconHelper.createIconView;
 import javafx.fxml.FXMLLoader;
@@ -35,7 +36,9 @@ public class BookPlugin implements IPlugin {
           
           loader.setClassLoader(classLoader);
           Node content = loader.load();
-          uiController.createTab("Book Management", content);
+
+          BookManagementController controller = loader.getController();
+          uiController.createRefreshableTab("Book Management", content, controller);
 
         } catch (IOException e) {
           System.err.println("Error opening Books interface: " + e.getMessage());

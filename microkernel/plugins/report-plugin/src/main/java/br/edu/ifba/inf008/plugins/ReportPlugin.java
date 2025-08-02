@@ -5,6 +5,7 @@ import java.io.IOException;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.plugins.report.ui.ReportManagementController;
 import br.edu.ifba.inf008.shell.persistence.JPAUtil;
 import static br.edu.ifba.inf008.shell.util.IconHelper.createIconView;
 import javafx.fxml.FXMLLoader;
@@ -35,8 +36,10 @@ public class ReportPlugin implements IPlugin {
 
           loader.setClassLoader(classLoader);
           Node content = loader.load();
-          uiController.createTab("Report Management", content);
-    
+          
+          ReportManagementController controller = loader.getController();
+          uiController.createRefreshableTab("Report Management", content, controller);
+
         } catch (IOException e) {
           System.err.println("Error loading Report Management Interface: " + e.getMessage());
           uiController.showAlert("Error", "Failed to open Report Management Interface: " + e.getMessage());
