@@ -8,39 +8,13 @@ The User Plugin is responsible for complete user management in the BookStore sys
 
 ## ✨ Features
 
-### 🔧 CRUD Operations
+- **👥 Complete User Management**: Create, read, update, and delete users
+- **🔍 Advanced Search**: Search by user name or email
+- **⚠️ Deleting Users with Loans**: Warns before deleting users with active loans
+- **📱 Modern TableView**: Responsive table with organized columns
+- **🔄 Auto-refresh**: Automatic updates when switching tabs
 
-- ✅ **Create users**: Form with required field validation
-- ✅ **List users**: Modern TableView with date formatting
-- ✅ **Update users**: Edit name and email
-- ✅ **Delete users**: Intelligent system that manages related loans
-
-### 🔍 Search System
-
-- **Search by name**: Locate users by full or partial name
-- **Search by email**: Filter by full or partial email address
-
-### 🧠 Intelligent Features
-
-- **Safe deletion**: When deleting a user with active loans:
-  - Removes all loan records for the user
-  - Automatically increments available copies of borrowed books
-  - Maintains referential integrity in the database
-- **Loan validation**: Checks if user has loans before deletion
-- **Atomic transactions**: All operations performed in safe transactions
-
-### 🎨 Modern Interface
-
-- **Responsive TableView**: Displays ID, Name, Email and Registration Date
-- **Date formatting**: Brazilian standard (dd/MM/yyyy HH:mm:ss)
-- **Contextual buttons**: Enabled/disabled based on selection
-- **Validated forms**: Required field verification
-- **Smart confirmations**: Different alerts for users with loans
-- **Auto-refresh**: Automatic updates when switching tabs
-
-## 🏗️ Architecture
-
-### Main Components
+## 🏗️ Structure
 
 ```text
 user-plugin/
@@ -66,69 +40,28 @@ user-plugin/
             └── persistence.xml          # Test configuration (H2)
 ```
 
-### Implemented Patterns
+## 🔧 Key Components
 
-- **IPlugin**: Interface for microkernel integration
-- **IRefreshable**: Enables automatic interface refresh
-- **BaseDAO**: Inherits generic CRUD operations from core
-- **FXML + Controller**: Separation between interface and logic
-- **Test Environment Detection**: Automatic switching between H2 (tests) and MariaDB (production)
+### UserDAO
 
-## 🔌 System Integration
+- Advanced search with multiple fields
+- Has loans filtering
+- Advanced deletion
+- Test environment detection
+- Transaction safety
 
-### Navigation Menu
+### UserManagementController
 
-The plugin automatically adds:
+- TableView with formatted columns
+- Form validation and confirmation dialogs
+- Delete with loan validation
 
-- **Menu item**: `Management > Users`
-- **Home card**: "User Management" with icon and description
+## 🚀 Usage
 
-### Dependencies
-
-- **Core interfaces**: Communication with the microkernel
-- **Shell models**: Access to User, Loan and Book models
-- **JavaFX**: Modern graphical interface
-- **Hibernate**: JPA persistence
-- **JUnit**: Unit testing
-
-### Data Model
-
-Uses the centralized `User` model from core:
-
-```java
-@Entity
-@Table(name = "users")
-public class User {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_id")
-  private Integer userId;
-
-  @Column(nullable = false, length = 255)
-  private String name;
-
-  @Column(nullable = false, unique = true, length = 255)
-  private String email;
-
-  @Column(name = "registered_at")
-  private LocalDateTime registeredAt;
-}
-```
-
-## 🧪 Testing
-
-The plugin includes comprehensive unit tests:
-
-- **12 automated tests** covering all operations
-- **H2 in-memory environment** for isolated tests
-- **Automatic cleanup** between test executions
-- **Complete coverage** of CRUD scenarios and relationships
-
-### Running Tests
-
-```bash
-mvn test -pl plugins/user-plugin
-```
+1. **Add User**: Fill form with name and email
+2. **Search**: Use search field with name or email
+3. **Update**: Select user from table and modify details
+4. **Delete**: Remove users with confirmation dialog
 
 ## ⚠️ Special Behaviors
 
@@ -143,4 +76,9 @@ When a user has active loans:
    - Removes the user from the system
 3. **Atomic transaction** ensures data consistency
 
-This functionality ensures there will be no orphaned data or inconsistencies in the system even during complex deletion operations.
+## 🔗 Dependencies
+
+- BookStore Core System
+- JavaFX 17+
+- Hibernate 6.5.2+
+- H2 (testing) / MariaDB (production)
