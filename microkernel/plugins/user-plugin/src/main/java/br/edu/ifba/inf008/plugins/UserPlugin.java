@@ -16,12 +16,6 @@ import javafx.scene.image.ImageView;
 public class UserPlugin implements IPlugin {
   @Override
   public boolean init(){
-    try {
-      JPAUtil.warmUp();
-    } catch (Exception e) {
-      System.err.println("Warning: Could not initialize database connection: " + e.getMessage());
-    }
-
     try{
       IUIController uiController = ICore.getInstance().getUIController();
 
