@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import br.edu.ifba.inf008.interfaces.ICore;
+import br.edu.ifba.inf008.interfaces.IRefreshable;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.plugins.user.persistence.UserDAO;
 import br.edu.ifba.inf008.shell.model.User;
@@ -21,7 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
-public class UserManagementController {
+public class UserManagementController implements IRefreshable {
     UserDAO userDAO = new UserDAO();
 
     @FXML private TextField searchField;
@@ -36,6 +37,14 @@ public class UserManagementController {
     private User currentUser = null;
     private boolean isUpdating = false;
     
+    @Override
+    public void refresh() {
+        loadInitialData();
+        
+        searchField.clear(); 
+        
+        handleClear();
+    }
 
     @FXML
     public void initialize() {
@@ -48,7 +57,7 @@ public class UserManagementController {
     }
 
     private void loadInitialData() {
-        users.addAll(userDAO.findAll());
+        users.setAll(userDAO.findAll());
     }
 
     private void configureUserCellFactory() {

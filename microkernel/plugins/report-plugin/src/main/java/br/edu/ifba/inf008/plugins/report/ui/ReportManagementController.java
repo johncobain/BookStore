@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.edu.ifba.inf008.interfaces.ICore;
+import br.edu.ifba.inf008.interfaces.IRefreshable;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.plugins.report.persistence.ReportDAO;
 import br.edu.ifba.inf008.shell.model.Loan;
@@ -23,7 +24,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 
-public class ReportManagementController {
+public class ReportManagementController implements IRefreshable{
   ReportDAO reportDAO = new ReportDAO();
 
   @FXML private ToggleGroup searchTypeToggleGroup;
@@ -35,6 +36,15 @@ public class ReportManagementController {
 
 
   private IUIController uiController;
+
+  @Override
+  public void refresh() {
+
+    loanTableView.getItems().clear();
+
+    initialDatePicker.setValue(LocalDate.now());
+    finalDatePicker.setValue(LocalDate.now());
+  }
 
   @FXML
   public void initialize() {

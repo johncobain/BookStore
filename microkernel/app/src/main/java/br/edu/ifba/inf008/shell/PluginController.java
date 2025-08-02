@@ -1,12 +1,13 @@
 package br.edu.ifba.inf008.shell;
 
-import br.edu.ifba.inf008.App;
-import br.edu.ifba.inf008.interfaces.IPluginController;
-import br.edu.ifba.inf008.interfaces.IPlugin;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
+
+import br.edu.ifba.inf008.App;
+import br.edu.ifba.inf008.interfaces.IPlugin;
+import br.edu.ifba.inf008.interfaces.IPluginController;
 
 public class PluginController implements IPluginController
 {
@@ -15,7 +16,6 @@ public class PluginController implements IPluginController
         try {
             File currentDir = new File("./plugins");
 
-            // Define a FilenameFilter to include only .jar files
             FilenameFilter jarFilter = new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
@@ -37,7 +37,15 @@ public class PluginController implements IPluginController
                 IPlugin plugin = (IPlugin) Class.forName("br.edu.ifba.inf008.plugins." + pluginName, true, ulc).newInstance();
                 plugin.init();
             }
-
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (ulc != null) {
+                    try {
+                        ulc.close();
+                    } catch (Exception e) {
+                        System.err.println("Error closing plugin classloader: " + e.getMessage());
+                    }
+                }
+            }));
             return true;
         } catch (Exception e) {
             System.out.println("Error: " + e.getClass().getName() + " - " + e.getMessage());

@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import br.edu.ifba.inf008.interfaces.ICore;
+import br.edu.ifba.inf008.interfaces.IRefreshable;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.plugins.loan.persistence.LoanDAO;
 import br.edu.ifba.inf008.shell.model.Loan;
@@ -31,7 +32,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
-public class LoanManagementController {
+public class LoanManagementController implements IRefreshable {
   LoanDAO loanDAO = new LoanDAO();
 
   @FXML private TextField searchField;
@@ -50,6 +51,17 @@ public class LoanManagementController {
   private final ObservableList<Loan> loans = FXCollections.observableArrayList();
   private Loan currentLoan = null;
   private boolean isUpdating = false;
+
+  @Override
+  public void refresh() {
+    loadInitialData();
+
+    searchField.clear(); 
+
+    configureLoanComboBoxes();
+
+    handleClear();
+  }
   
   @FXML
   public void initialize() {

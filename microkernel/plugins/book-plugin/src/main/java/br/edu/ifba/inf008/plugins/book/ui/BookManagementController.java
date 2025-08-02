@@ -3,6 +3,7 @@ package br.edu.ifba.inf008.plugins.book.ui;
 import java.util.List;
 
 import br.edu.ifba.inf008.interfaces.ICore;
+import br.edu.ifba.inf008.interfaces.IRefreshable;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.plugins.book.persistence.BookDAO;
 import br.edu.ifba.inf008.shell.model.Book;
@@ -21,7 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
-public class BookManagementController {
+public class BookManagementController implements IRefreshable{
   BookDAO bookDAO = new BookDAO();
 
   @FXML private TextField searchField;
@@ -39,6 +40,16 @@ public class BookManagementController {
   private final ObservableList<Book> books = FXCollections.observableArrayList();
   private Book currentBook = null;
   private boolean isUpdating = false;
+
+  @Override
+  public void refresh() {
+    loadInitialData();
+    
+    searchField.clear();
+    availableOnlyCheckBox.setSelected(false);
+
+    handleClear();
+  }
 
   @FXML
     public void initialize() {
