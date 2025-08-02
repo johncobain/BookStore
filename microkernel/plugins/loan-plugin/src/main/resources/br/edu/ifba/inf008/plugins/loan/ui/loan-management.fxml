@@ -80,6 +80,7 @@
         <TableView fx:id="loanTableView" styleClass="loan-table-view" VBox.vgrow="ALWAYS" />
         <HBox spacing="10" alignment="CENTER_RIGHT">
           <children>
+            <Button fx:id="returnButton" text="Return" onAction="#handleReturnSelected" styleClass="button-return"/>
             <Button fx:id="updateButton" text="Update" onAction="#handleUpdateSelected" styleClass="button-info"/>
             <Button fx:id="deleteButton" text="Delete" onAction="#handleDeleteSelected" styleClass="button-danger"/>
           </children>

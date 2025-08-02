@@ -107,6 +107,24 @@
   background-color: #2c8f45;
 }
 
+.button-return {
+  -fx-background-color: #34a853;
+  -fx-text-fill: #ffffff;
+  -fx-background-radius: 5em;
+  -fx-min-width: 30px;
+  -fx-min-height: 30px;
+
+  background-color: #34a853;
+  color: #ffffff;
+  min-width: 30px;
+  min-height: 30px;
+}
+.button-return:hover {
+  -fx-background-color: #2c8f45;
+
+  background-color: #2c8f45;
+}
+
 .button-danger {
   -fx-background-color: #ea4335;
   -fx-text-fill: #ffffff;
