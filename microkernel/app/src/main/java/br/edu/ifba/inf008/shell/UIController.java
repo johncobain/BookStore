@@ -57,6 +57,12 @@ public class UIController extends Application implements IUIController{
 
     @Override
     public void start(Stage primaryStage) {
+        try {
+            JPAUtil.warmUp();
+        } catch (Exception e) {
+            System.err.println("Database connection failed: " + e.getMessage());
+        }
+
         primaryStage.setTitle("BookStore Blackbird");
         primaryStage.setOnCloseRequest(event -> {
             System.out.println("🔄 Application shutting down...");

@@ -38,32 +38,39 @@
   background-color: #ffffff;
 }
 
-.book-list-view {
+.book-table-view {
   -fx-background-color: #ffffff;
   -fx-border-color: #cccccc;
-
   background-color: #ffffff;
   border-color: #cccccc;
 }
 
-.book-list-view .list-cell {
-  -fx-padding: 10px;
-  -fx-font-size: 14px;
-  -fx-border-color: transparent transparent #e0e0e0 transparent;
-  -fx-border-width: 1px;
-
-  padding: 10px;
-  font-size: 14px;
-  border-color: transparent transparent #e0e0e0 transparent;
-  border-width: 1px;
+.book-table-view .table-row-cell {
+  -fx-background-color: #ffffff;
+  background-color: #ffffff;
 }
 
-.book-list-view .list-cell:hover {
+.book-table-view .table-row-cell:hover {
   -fx-background-color: #e8f0fe;
-  -fx-cursor: hand;
-
   background-color: #e8f0fe;
-  cursor: pointer;
+}
+
+.book-table-view .table-row-cell:selected {
+  -fx-background-color: #4285f4;
+  -fx-text-fill: white;
+  background-color: #4285f4;
+  color: white;
+}
+
+.center-panel {
+  -fx-background-color: #ffffff;
+  -fx-border-color: #e0e0e0;
+  -fx-border-width: 0 0 0 1px;
+  -fx-padding: 15px;
+  background-color: #ffffff;
+  border-color: #e0e0e0;
+  border-width: 0 0 0 1px;
+  padding: 15px;
 }
 
 .button-primary {

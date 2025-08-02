@@ -6,7 +6,6 @@ import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.plugins.loan.ui.LoanManagementController;
-import br.edu.ifba.inf008.shell.persistence.JPAUtil;
 import static br.edu.ifba.inf008.shell.util.IconHelper.createIconView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -16,12 +15,6 @@ import javafx.scene.image.ImageView;
 public class LoanPlugin implements IPlugin {
   @Override
   public boolean init(){
-    try {
-      JPAUtil.warmUp();
-    } catch (Exception e) {
-      System.err.println("Warning: Could not initialize database connection: " + e.getMessage());
-    }
-
     try{
       IUIController uiController = ICore.getInstance().getUIController();
 
