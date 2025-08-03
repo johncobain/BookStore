@@ -238,13 +238,10 @@ public class ReportManagementController implements IRefreshable{
         super.updateItem(date, empty);
         if (empty){
           setText("");
-          setStyle("");
         } else if (date == null) {
           setText("Active");
-          setStyle("-fx-text-fill: #ff6b35; -fx-font-weight: bold;");
         }else{
           setText(date.format(dateFormatter));
-          setStyle("-fx-text-fill: #28a745; -fx-font-weight: bold;");
         }
       }
     });

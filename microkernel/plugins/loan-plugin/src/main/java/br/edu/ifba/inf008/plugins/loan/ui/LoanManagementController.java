@@ -44,6 +44,7 @@ public class LoanManagementController implements IRefreshable {
   @FXML private DatePicker returnDatePicker;
   @FXML private TableView<Loan> loanTableView;
   @FXML private Button saveButton;
+  @FXML private Button returnButton;
   @FXML private Button updateButton;
   @FXML private Button deleteButton;
 
@@ -75,6 +76,16 @@ public class LoanManagementController implements IRefreshable {
     loans.setAll(loanDAO.findAll());
     loanTableView.setItems(loans);
   }
+  
+  @FXML
+  private void handleReturnSelected(){
+    Loan selectedLoan = loanTableView.getSelectionModel().getSelectedItem();
+    if(selectedLoan != null){
+      handleReturn(selectedLoan);
+    }else{
+      uiController.showAlert("No Selection", "Please select a loan to Return.");
+    }
+  }
 
   @FXML
   private void handleUpdateSelected(){
@@ -95,7 +106,6 @@ public class LoanManagementController implements IRefreshable {
       uiController.showAlert("No Selection", "Please select a loan to Delete.");
     }
   }
-
   
   @FXML
   private void handleSave(){
@@ -304,13 +314,10 @@ public class LoanManagementController implements IRefreshable {
         super.updateItem(date, empty);
         if (empty){
           setText("");
-          setStyle("");
         } else if (date == null) {
           setText("Active");
-          setStyle("-fx-text-fill: #ff6b35; -fx-font-weight: bold;");
         }else{
           setText(date.format(dateFormatter));
-          setStyle("-fx-text-fill: #28a745; -fx-font-weight: bold;");
         }
       }
     });
@@ -323,11 +330,13 @@ public class LoanManagementController implements IRefreshable {
   }
 
   private void setupButtonStates(){
+    returnButton.setDisable(true);
     updateButton.setDisable(true);
     deleteButton.setDisable(true);
 
     loanTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
       boolean hasSelection = newSelection != null;
+      returnButton.setDisable(!hasSelection || newSelection.getReturnDate() != null);
       updateButton.setDisable(!hasSelection);
       deleteButton.setDisable(!hasSelection);
     });
