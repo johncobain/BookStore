@@ -115,6 +115,9 @@ public class UIController extends Application implements IUIController{
 
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
+        primaryStage.setMinWidth(1024);
+        primaryStage.setMinHeight(768);
+        primaryStage.setMaximized(true);
         primaryStage.show();
 
         Core.getInstance().getPluginController().init();
