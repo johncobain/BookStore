@@ -45,6 +45,10 @@ mvn exec:java -pl app
 - **[📋 Loan Plugin](microkernel/plugins/loan-plugin/README.md)** - Loan system with automatic inventory
 - **[📊 Report Plugin](microkernel/plugins/report-plugin/README.md)** - Reports and analytics with CSV export
 
+## 📹 Video Demonstration
+
+Watch the video demonstration of the BookStore system [here (Demonstração BookStore Blackbird - Projeto POO JavaFX)](https://youtu.be/m16Ob3twXm8).
+
 ## 👥 Author
 
 Developed for INF008 course at IFBA by [Andrey Gomes](https://github.com/johncobain)
