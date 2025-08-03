@@ -138,14 +138,14 @@ The project uses a weekly delivery-focused approach, prioritizing robust configu
      - System usage guide
 
 3. **Delivery Preparation**
-   - [ ] Run `mvn clean` to clean temporary files
-   - [ ] Test compilation and execution in clean environment
-   - [ ] Compress source code (`.zip` or `.tar.gz`)
+   - [x] Run `mvn clean` to clean temporary files
+   - [x] Compress source code (`.zip` or `.tar.gz`)
+   - [x] Test compilation and execution in clean environment
 
 ### Final Delivery
 
-- [ ] **Email with exact subject:** `INF008 T2 Andrey Gomes da Silva Nascimento`
-- [ ] Attach compressed project file
-- [ ] Include execution instructions
+- [x] **Email with exact subject:** `INF008 T2 Andrey Gomes da Silva Nascimento`
+- [x] Attach compressed project file
+- [x] Include execution instructions
 
 ---
