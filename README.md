@@ -1,163 +1,50 @@
-# 📚 BookStore Blackbird - Sistema de Livraria com Microkernel
+# 📚 BookStore - Microkernel Library Management System
 
-Sistema completo de gerenciamento de livraria desenvolvido com **arquitetura de microkernel** e **plugins modulares**. Projeto acadêmico que demonstra conceitos avançados de engenharia de software.
+A complete library management system built with **microkernel architecture** and **modular plugins**. Academic project demonstrating advanced software engineering concepts.
 
-## 🏗️ Arquitetura
+## 🏗️ Architecture
 
-O projeto utiliza **padrão microkernel** com plugins modulares:
+This project uses a **microkernel pattern** with modular plugins:
 
-- **Core (app/)**: Núcleo do sistema com persistência centralizada
-- **Interfaces**: Contratos comuns para plugins
-- **Plugins**: Módulos independentes para diferentes funcionalidades
+- **Core System**: Basic infrastructure with plugin loading and persistence
+- **Plugins**: Independent modules handling specific business functionality
+- **Shared Models**: Common entities (User, Book, Loan) used across plugins
 
-```bash
-microkernel/
-├── app/                    # 🎯 Microkernel principal
-├── interfaces/             # 📋 Contratos dos plugins
-└── plugins/                # 🔌 Plugins modulares
-    ├── user-plugin/        # 👥 Gerenciamento de usuários
-    ├── book-plugin/        # 📖 Catálogo de livros
-    ├── loan-plugin/        # 📝 Sistema de empréstimos
-    └── report-plugin/      # 📊 Relatórios e analytics
-```
+## 🛠️ Technologies
 
-## 🛠️ Tecnologias
+- **Java 21+** - Programming language
+- **Maven** - Build and dependency management
+- **Hibernate 6.5** - ORM and persistence
+- **JavaFX** - Graphical user interface
+- **MariaDB** - Database
+- **Docker** - Database containerization
 
-- **Java 17+**
-- **Maven** - Gerenciamento de dependências e build
-- **Hibernate 6.5** - ORM e persistência
-- **Jakarta EE** - JPA para persistência de dados
-- **JavaFX** - Interface gráfica
-- **MariaDB** - Banco de dados
-- **Docker** - Containerização do banco
-
-## 🚀 Como Executar
-
-### 1. Pré-requisitos
-
-- Java 17 ou superior
-- Maven 3.6+
-- Docker e Docker Compose
-
-### 2. Configurar Banco de Dados
+## 🚀 Quick Start
 
 ```bash
-# Subir MariaDB com Docker
-cd docker/
-docker-compose up -d
-
-# Verificar se está rodando
-docker-compose logs mariadb
-```
-
-### 3. Compilar e Executar
-
-```bash
-# Compilar todo o projeto
+# Navigate to microkernel directory
 cd microkernel/
-mvn clean install
 
-# Executar a aplicação
+# Start database
+docker compose up -d
+
+# Build and run
+mvn clean install
 mvn exec:java -pl app
 ```
 
-## 🔧 Configuração do Banco
+## 📝 Documentation
 
-O sistema está configurado para usar MariaDB via Docker:
+- **[Main System Documentation](microkernel/README.md)** - Complete setup and usage guide
+- **[Development Pipeline](microkernel/PIPELINE.md)** - Project timeline and milestones
 
-- **Host**: localhost:3307
-- **Banco**: bookstore
-- **Usuário**: bookstore_user
-- **Senha**: BookStore@777
+### Plugin Documentation
 
-Para alterar as configurações, edite:
+- **[👥 User Plugin](microkernel/plugins/user-plugin/README.md)** - User management with smart deletion
+- **[📚 Book Plugin](microkernel/plugins/book-plugin/README.md)** - Book catalog with inventory control
+- **[📋 Loan Plugin](microkernel/plugins/loan-plugin/README.md)** - Loan system with automatic inventory
+- **[📊 Report Plugin](microkernel/plugins/report-plugin/README.md)** - Reports and analytics with CSV export
 
-- `docker/docker-compose.yml` - Configuração do MariaDB
-- `microkernel/app/src/main/resources/META-INF/persistence.xml` - Conexão da aplicação
+## 👥 Author
 
-## 🔌 Desenvolvendo Plugins
-
-### Criar Novo Plugin
-
-1. Crie uma pasta em `plugins/meu-plugin/`
-1. Adicione o módulo no `pom.xml` principal:
-
-```xml
-<modules>
-    <module>interfaces</module>
-    <module>app</module>
-    <module>plugins/meu-plugin</module>
-</modules>
-```
-
-1. Crie o `pom.xml` do plugin (use outro plugin como template)
-1. Implemente a interface `IPlugin`
-1. Use o namespace: `br.edu.ifba.inf008.plugins.meuplugin`
-
-### Estrutura de Plugin
-
-```java
-// Implementar IPlugin
-public class MeuPlugin implements IPlugin {
-    @Override
-    public String getName() { return "Meu Plugin"; }
-
-    @Override
-    public void execute() {
-        // Lógica do plugin
-    }
-}
-
-// Usar persistência compartilhada
-EntityManager em = JPAUtil.getEntityManager();
-```
-
-## 📊 Features Implementadas
-
-- ✅ **Microkernel funcional** com carregamento dinâmico de plugins
-- ✅ **Persistência centralizada** com Hibernate
-- ✅ **Sistema de plugins** modular e extensível
-- ✅ **Configuração Docker** para desenvolvimento
-- ✅ **Build automatizado** com Maven
-- 🔄 **CRUD de usuários** (em desenvolvimento)
-- 🔄 **Gestão de livros** (planejado)
-- 🔄 **Sistema de empréstimos** (planejado)
-- 🔄 **Relatórios** (planejado)
-
-## 🧪 Testes
-
-```bash
-# Testar conexão Hibernate
-cd plugins/user-plugin/
-mvn test -Dtest=HibernateTest
-
-# Executar todos os testes
-mvn test
-```
-
-## 📖 Documentação
-
-- [`ARCHITECTURE.md`](microkernel/ARCHITECTURE.md) - Arquitetura e padrões do sistema
-- [`SETUP.md`](microkernel/SETUP.md) - Configuração do ambiente e instalação
-- [`DEVELOPMENT.md`](microkernel/DEVELOPMENT.md) - Desenvolvimento de plugins
-- [`UI_GUIDE.md`](microkernel/UI_GUIDE.md) - Interface gráfica e testes
-
-## 🤝 Contribuindo
-
-1. Faça fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -am 'Add nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto é desenvolvido para fins acadêmicos.
-
-## 👥 Autores
-
-Projeto desenvolvido para a disciplina INF008 - IFBA por [Andrey Gomes](https://github.com/johncobain)
-
----
-
-⭐ **Gostou do projeto? Deixe uma estrela!**
+Developed for INF008 course at IFBA by [Andrey Gomes](https://github.com/johncobain)
